@@ -1,0 +1,1 @@
+sandfox-gen-jpa
