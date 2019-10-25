@@ -1,0 +1,425 @@
+<div id="candidate" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button mat-icon-button class="mr-0 mr-sm-16" [routerLink]="'/apps/e-commerce/actors'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div fxLayout="column" fxLayoutAlign="start start"
+                     [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    <div class="h2" *ngIf="pageType ==='edit'">
+                        Jelölt - {{current.name}} ({{current.id}})
+                    </div>
+                    <div class="h2" *ngIf="pageType ==='new'">
+                        Új Jelölt
+                    </div>
+                    <div class="subtitle secondary-text">
+                        <span>Kérem rögzítse fel az adatait</span>
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+            <button mat-raised-button
+                    class="save-actor-button"
+                    [disabled]="candidateForm.invalid"
+                    *ngIf="pageType ==='new'" (click)="addRecord()">
+                <span>ADD</span>
+            </button>
+
+            <button mat-raised-button
+                    class="save-actor-button"
+                    [disabled]="candidateForm.invalid || candidateForm.pristine"
+                    *ngIf="pageType ==='edit'" (click)="saveRecord()">
+                <span>MENTÉS</span>
+            </button>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <form name="candidateForm" [formGroup]="candidateForm" class="actor w-100-p" fxLayout="column" fxFlex>
+
+                    <mat-tab-group>
+
+                        <mat-tab label="Adatok">
+
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+
+                                <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                                    <mat-icon class="m-0 mr-16 secondary-text">account_circle</mat-icon>
+                                    <div class="h2 secondary-text">Személyes adatok</div>
+                                </div>
+								
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Ks Azonosító</mat-label>
+                                    <input matInput placeholder="RVTV - Ks Azonosító"
+                                           name="KID"
+										   formControlName="KID"
+                                           required>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Név</mat-label>
+                                    <input matInput placeholder="Jelölt neve"
+                                           name="name"
+                                           formControlName="name"
+                                           required>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Anyja neve</mat-label>
+                                    <input matInput placeholder="Anyja neve"
+                                           name="motherName"
+                                           formControlName="motherName"
+                                           required>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Születési hely</mat-label>
+                                    <input matInput placeholder="Születési hely"
+                                           name="birthPlace"
+										   formControlName="birthPlace"
+                                           required>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Születési idő</mat-label>
+                                    <input matInput placeholder="Születési idő"
+                                           name="birthDate"
+										   formControlName="birthDate"
+                                           required>
+                                </mat-form-field>
+
+                                <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                                    <mat-icon class="m-0 mr-16 secondary-text">business</mat-icon>
+                                    <div class="h2 secondary-text">Szervezeti adatok</div>
+                                </div>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Rendvédelmi szerv</mat-label>
+                                    <input matInput placeholder="Rendvédelmi szerv"
+                                           name="organizationHigh"
+                                           required>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Területi Szerv</mat-label>
+                                    <input matInput placeholder="Területi Szerv"
+                                           name="organizationMed"
+                                           required>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Helyi szerv</mat-label>
+                                    <input matInput placeholder="Helyi szerv"
+                                           name="organization"
+                                           required>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Szolgálati beosztás</mat-label>
+                                    <input matInput placeholder="Szolgálati beosztás"
+                                           name="employment"
+                                           required>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>Munkavégzés helye</mat-label>
+                                    <input matInput placeholder="Munkavégzés helye"
+                                           name="employment"
+                                           required>
+                                </mat-form-field>
+                            </div>
+
+                        </mat-tab>
+
+                        <mat-tab label="Hozzáférések">
+
+
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+								<button mat-raised-button class="mat-accent"
+									(click)="onAddCode()">
+									Új tesztkitöltő kód igénylése
+								</button>
+
+								<szem-candidate-codes (showHistory)="onShowHistory($event)"></szem-candidate-codes>
+                            </div>
+
+                        </mat-tab>
+
+                        <mat-tab [disabled]="!showHistory" label="Hozzáférés történet">
+
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+								<szem-candidate-history (showResult)="onShowResult()"></szem-candidate-history>
+                            </div>
+
+                        </mat-tab>
+
+                    <mat-tab [disabled]="!showResult" label="Eredménylap">
+
+                        <div class="invoice tab-content p-24" fusePerfectScrollbar>
+
+                            <div id="invoice" class="compact page-layout blank" fxLayout="row" fusePerfectScrollbar>
+
+                                <div class="invoice-container">
+
+                                    <!-- INVOICE -->
+                                    <div class="card">
+
+                                        <div class="header">
+                                            <div class="invoice-date">2019.05.21 18:20</div>
+
+                                            <div fxLayout="row" fxLayoutAlign="space-between stretch">
+                                                <div class="client">
+                                                    <div class="invoice-number" fxLayout="row"
+                                                         fxLayoutAlign="start center">
+                                                        <span class="title">Referencia Szám:</span>
+                                                        <span class="number">343432432423</span>
+                                                    </div>
+
+                                                    <div class="info">
+                                                        <div class="title">
+                                                            Fehér
+                                                            József
+                                                        </div>
+                                                        <div class="address">
+                                                            Budapest 1098, Akácos köz 4.
+                                                        </div>
+                                                        <div class="phone">+36 70 896 5551</div>
+                                                        <div class="email">jozsef.feher@gmail.com</div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="issuer accent" fxLayout="row" fxLayoutAlign="start center">
+                                                    <div class="logo">
+                                                        <img src="assets/images/logos/hungary.svg">
+                                                    </div>
+
+                                                    <div class="info">
+                                                        <div class="title">Belügyminisztérium Személyfejlesztési Főosztály</div>
+                                                        <div class="address">2090 Remeteszőlős, Nagykovácsi út 3.</div>
+                                                        <div class="phone">+36 (26) 795-900</div>
+                                                        <div class="email"> hivatal@bmkszf.hu</div>
+                                                        <div class="website">bmkszf.hu</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="content">
+
+                                            <table class="simple invoice-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Kompetencia</th>
+                                                        <th class="text-right">ST9</th>
+                                                        <th class="text-right">Jellemző</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr >
+                                                        <td>
+                                                            <div class="title">
+                                                                Attitűd
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            3
+                                                        </td>
+                                                        <td class="text-right">
+                                                            Gyengeség
+                                                        </td>
+                                                    </tr>
+                                                    <tr >
+                                                        <td>
+                                                            <div class="title">
+                                                                Kontroll
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            1
+                                                        </td>
+                                                        <td class="text-right">
+                                                            Gyengeség
+                                                        </td>
+                                                    </tr>
+                                                    <tr >
+                                                        <td>
+                                                            <div class="title">
+                                                                Morális felfogás
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            5
+                                                        </td>
+                                                        <td class="text-right">
+                                                            Átlagos
+                                                        </td>
+                                                    </tr>
+                                                    <tr >
+                                                        <td>
+                                                            <div class="title">
+                                                                Nyereség
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            5
+                                                        </td>
+                                                        <td class="text-right">
+                                                            Átlagos
+                                                        </td>
+                                                    </tr>
+                                                    <tr >
+                                                        <td>
+                                                            <div class="title">
+                                                                Önértékelés
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            2
+                                                        </td>
+                                                        <td class="text-right">
+                                                            Gyengeség
+                                                        </td>
+                                                    </tr>
+                                                    <tr >
+                                                        <td>
+                                                            <div class="title">
+                                                                Személyiség
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            7
+                                                        </td>
+                                                        <td class="text-right">
+                                                            Erősség
+                                                        </td>
+                                                    </tr>
+                                                    <tr >
+                                                        <td>
+                                                            <div class="title">
+                                                                Szervezi norma
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            5
+                                                        </td>
+                                                        <td class="text-right">
+                                                            Átlagos
+                                                        </td>
+                                                    </tr>
+                                                    <tr >
+                                                        <td>
+                                                            <div class="title">
+                                                                Szubjektív norma
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            2
+                                                        </td>
+                                                        <td class="text-right">
+                                                            Gyengeség
+                                                        </td>
+                                                    </tr>
+                                                    <tr >
+                                                        <td>
+                                                            <div class="title">
+                                                                Tapasztalat
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            5
+                                                        </td>
+                                                        <td class="text-right">
+                                                            Átlagos
+                                                        </td>
+                                                    </tr>
+                                                    <tr >
+                                                        <td>
+                                                            <div class="title">
+                                                                Társadalmi norma                                                            </div>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            8
+                                                        </td>
+                                                        <td class="text-right">
+                                                            Erősség
+                                                        </td>
+                                                    </tr>
+                                                    <tr >
+                                                        <td>
+                                                            <div class="title">
+                                                                Korrvesz
+															</div>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            6
+                                                        </td>
+                                                        <td class="text-right">
+                                                            Átlagos
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <table class="simple invoice-table-footer">
+                                                <tbody>
+                                                    <tr class="total">
+                                                        <td>ÁTLAG</td>
+                                                        <td>4.5</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="footer">
+                                            <div class="note"></div>
+                                            <div fxLayout="row" fxLayoutAlign="start start">
+                                                <div class="logo">
+                                                    <img src="assets/images/logos/hungary.svg">
+                                                </div>
+                                                <div class="small-note">
+                                                    Belügyminisztérium Rendészeti Vezetőkiválasztási, Vezetőképzési és Továbbképzési Főosztály. Működő szervezeti egységek:
+VEZETŐKIVÁLASZTÁSI ÉS VEZETŐKÉPZÉSI OSZTÁLY, KÉPZÉSFEJLESZTÉSI, MONITORING ÉS KÉPZÉSSZERVEZÉSI OSZTÁLY.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- / INVOICE -->
+
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+
+
+                    </mat-tab-group>
+
+                </form>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+
+</div>

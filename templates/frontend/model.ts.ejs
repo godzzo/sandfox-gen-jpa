@@ -1,0 +1,18 @@
+import { FuseUtils } from '@fuse/utils';
+
+export class <%= table.camelName %> {
+	id: string;
+
+<% table.columns.forEach((column) => { %><% if (!column.type.startsWith('relation') && column.name != 'id' ) { %>
+	<%= column.lowerCamelName %>: <%= column.type %>;
+<% } %><% }); %>
+
+    constructor(record?) {
+		record = record || {};
+		this.id = record.id || FuseUtils.generateGUID();
+		
+	<% table.columns.forEach((column) => { %><% if (!column.type.startsWith('relation') && column.name != 'id' ) { %>
+		this.<%= column.lowerCamelName %> = record.<%= column.lowerCamelName %> || '';
+	<% } %><% }); %>
+    }
+}

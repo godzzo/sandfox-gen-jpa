@@ -1,0 +1,11 @@
+<mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+	<mat-label> <%= column.caption %> </mat-label>
+	<mat-select formControlName="<%= column.lowerCamelName %>" 
+		placeholder="<%= column.caption %>" 
+		required
+	>
+		<mat-option [value]="1">First</mat-option>
+		<mat-option [value]="2">Second</mat-option>
+		<mat-option [value]="3">Third</mat-option>
+	</mat-select>
+</mat-form-field>

@@ -1,0 +1,29 @@
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity()
+export class <%= table.camelName %> {
+	@PrimaryGeneratedColumn()
+	id: number;
+
+<% table.columns.forEach((column) => { %>
+	<% if (!column.type.startsWith('relation') 
+			&& column.name != 'id'
+		) { %>
+	// <%= column.caption %>
+	@Column(<%- column.directiveSettings %>)
+	<%= column.lowerCamelName %>: <%= column.tsType %>;
+	<% } %>
+<% }); %>
+}
+
+
+@Entity
+public class Student {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
+     
+    private String name;
+     
+    // getters and setters
+}

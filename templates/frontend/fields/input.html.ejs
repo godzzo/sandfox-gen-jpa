@@ -1,0 +1,9 @@
+<mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+	<mat-label> <%= column.caption %> </mat-label>
+	<input matInput 
+		placeholder="<%= column.caption %>"
+		name="<%= column.lowerCamelName %>"
+		formControlName="<%= column.lowerCamelName %>"
+		required 
+	/>
+</mat-form-field>

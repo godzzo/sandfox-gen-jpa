@@ -1,0 +1,157 @@
+[
+	{
+		"CONSTRAINT_NAME" : "fk_address_city",
+		"TABLE_NAME" : "address",
+		"COLUMN_NAME" : "city_id",
+		"REFERENCED_TABLE_NAME" : "city",
+		"REFERENCED_COLUMN_NAME" : "city_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_city_country",
+		"TABLE_NAME" : "city",
+		"COLUMN_NAME" : "country_id",
+		"REFERENCED_TABLE_NAME" : "country",
+		"REFERENCED_COLUMN_NAME" : "country_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_customer_address",
+		"TABLE_NAME" : "customer",
+		"COLUMN_NAME" : "address_id",
+		"REFERENCED_TABLE_NAME" : "address",
+		"REFERENCED_COLUMN_NAME" : "address_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_customer_store",
+		"TABLE_NAME" : "customer",
+		"COLUMN_NAME" : "store_id",
+		"REFERENCED_TABLE_NAME" : "store",
+		"REFERENCED_COLUMN_NAME" : "store_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_film_language",
+		"TABLE_NAME" : "film",
+		"COLUMN_NAME" : "language_id",
+		"REFERENCED_TABLE_NAME" : "language",
+		"REFERENCED_COLUMN_NAME" : "language_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_film_language_original",
+		"TABLE_NAME" : "film",
+		"COLUMN_NAME" : "original_language_id",
+		"REFERENCED_TABLE_NAME" : "language",
+		"REFERENCED_COLUMN_NAME" : "language_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_film_actor_actor",
+		"TABLE_NAME" : "film_actor",
+		"COLUMN_NAME" : "actor_id",
+		"REFERENCED_TABLE_NAME" : "actor",
+		"REFERENCED_COLUMN_NAME" : "actor_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_film_actor_film",
+		"TABLE_NAME" : "film_actor",
+		"COLUMN_NAME" : "film_id",
+		"REFERENCED_TABLE_NAME" : "film",
+		"REFERENCED_COLUMN_NAME" : "film_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_film_category_category",
+		"TABLE_NAME" : "film_category",
+		"COLUMN_NAME" : "category_id",
+		"REFERENCED_TABLE_NAME" : "category",
+		"REFERENCED_COLUMN_NAME" : "category_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_film_category_film",
+		"TABLE_NAME" : "film_category",
+		"COLUMN_NAME" : "film_id",
+		"REFERENCED_TABLE_NAME" : "film",
+		"REFERENCED_COLUMN_NAME" : "film_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_inventory_film",
+		"TABLE_NAME" : "inventory",
+		"COLUMN_NAME" : "film_id",
+		"REFERENCED_TABLE_NAME" : "film",
+		"REFERENCED_COLUMN_NAME" : "film_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_inventory_store",
+		"TABLE_NAME" : "inventory",
+		"COLUMN_NAME" : "store_id",
+		"REFERENCED_TABLE_NAME" : "store",
+		"REFERENCED_COLUMN_NAME" : "store_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_payment_customer",
+		"TABLE_NAME" : "payment",
+		"COLUMN_NAME" : "customer_id",
+		"REFERENCED_TABLE_NAME" : "customer",
+		"REFERENCED_COLUMN_NAME" : "customer_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_payment_rental",
+		"TABLE_NAME" : "payment",
+		"COLUMN_NAME" : "rental_id",
+		"REFERENCED_TABLE_NAME" : "rental",
+		"REFERENCED_COLUMN_NAME" : "rental_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_payment_staff",
+		"TABLE_NAME" : "payment",
+		"COLUMN_NAME" : "staff_id",
+		"REFERENCED_TABLE_NAME" : "staff",
+		"REFERENCED_COLUMN_NAME" : "staff_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_rental_customer",
+		"TABLE_NAME" : "rental",
+		"COLUMN_NAME" : "customer_id",
+		"REFERENCED_TABLE_NAME" : "customer",
+		"REFERENCED_COLUMN_NAME" : "customer_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_rental_inventory",
+		"TABLE_NAME" : "rental",
+		"COLUMN_NAME" : "inventory_id",
+		"REFERENCED_TABLE_NAME" : "inventory",
+		"REFERENCED_COLUMN_NAME" : "inventory_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_rental_staff",
+		"TABLE_NAME" : "rental",
+		"COLUMN_NAME" : "staff_id",
+		"REFERENCED_TABLE_NAME" : "staff",
+		"REFERENCED_COLUMN_NAME" : "staff_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_staff_address",
+		"TABLE_NAME" : "staff",
+		"COLUMN_NAME" : "address_id",
+		"REFERENCED_TABLE_NAME" : "address",
+		"REFERENCED_COLUMN_NAME" : "address_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_staff_store",
+		"TABLE_NAME" : "staff",
+		"COLUMN_NAME" : "store_id",
+		"REFERENCED_TABLE_NAME" : "store",
+		"REFERENCED_COLUMN_NAME" : "store_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_store_address",
+		"TABLE_NAME" : "store",
+		"COLUMN_NAME" : "address_id",
+		"REFERENCED_TABLE_NAME" : "address",
+		"REFERENCED_COLUMN_NAME" : "address_id"
+	},
+	{
+		"CONSTRAINT_NAME" : "fk_store_staff",
+		"TABLE_NAME" : "store",
+		"COLUMN_NAME" : "manager_staff_id",
+		"REFERENCED_TABLE_NAME" : "staff",
+		"REFERENCED_COLUMN_NAME" : "staff_id"
+	}
+]
+

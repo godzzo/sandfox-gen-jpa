@@ -1,0 +1,120 @@
+import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Location } from '@angular/common';
+import { MatSnackBar, MatTabGroup } from '@angular/material';
+
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { fuseAnimations } from '@fuse/animations';
+
+import { <%= table.camelName %> } from './<%= table.periodName %>.model';
+import { <%= table.camelName %>Service } from './<%= table.periodName %>.service';
+
+@Component({
+    selector     : 'app-<%= table.hyphenName %>',
+    templateUrl  : './<%= table.periodName %>.component.html',
+    styleUrls    : ['./<%= table.periodName %>.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    animations   : fuseAnimations
+})
+export class <%= table.camelName %>Component implements OnInit, OnDestroy
+{
+    current: <%= table.camelName %>;
+    pageType: string;
+	form: FormGroup;
+
+	showHistory: boolean;
+	showResult: boolean;
+	@ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+
+    // Private
+    private _unsubscribeAll: Subject<any>;
+
+    constructor(
+        private _service: <%= table.camelName %>Service,
+        private _formBuilder: FormBuilder,
+        private _location: Location,
+		private _matSnackBar: MatSnackBar,
+    )
+    {
+        this.current = new <%= table.camelName %>();
+        this._unsubscribeAll = new Subject();
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Lifecycle hooks
+    // -----------------------------------------------------------------------------------------------------
+
+    ngOnInit(): void
+    {
+        this._service.onRecordChanged
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(record => {
+
+                if ( record )
+                {
+                    this.current = new <%= table.camelName %>(record);
+                    this.pageType = 'edit';
+                }
+                else
+                {
+                    this.pageType = 'new';
+                    this.current = new <%= table.camelName %>();
+                }
+
+                this.form = this.createForm();
+            });
+    }
+
+    ngOnDestroy(): void
+    {
+        // Unsubscribe from all subscriptions
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Public methods
+    // -----------------------------------------------------------------------------------------------------
+
+    createForm(): FormGroup
+    {
+        return this._formBuilder.group({
+		<% table.columns.forEach((column) => { %><% if (!column.type.startsWith('relation') ) { %>
+			<%= column.lowerCamelName %> : [this.current.<%= column.lowerCamelName %>],
+		<% } %><% }); %>});
+    }
+
+    saveRecord(): void {
+        const data = this.form.getRawValue();
+
+        this._service.saveRecord(data)
+            .then(() => {
+
+                this._service.onRecordChanged.next(data);
+
+                this._matSnackBar.open('Mentés sikerült', 'OK', {
+                    verticalPosition: 'top',
+                    duration        : 2000
+                });
+            });
+    }
+
+    addRecord(): void {
+        const data = this.form.getRawValue();
+
+        this._service.addRecord(data)
+            .then(() => {
+
+                this._service.onRecordChanged.next(data);
+
+                this._matSnackBar.open('Létrehozás sikerült', 'OK', {
+                    verticalPosition: 'top',
+                    duration        : 2000
+                });
+
+                this._location.go(this._service.rootUrl + this.current.id);
+            });
+    }
+}

@@ -1,0 +1,18 @@
+<mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+	<mat-label> <%= column.caption %> </mat-label>
+
+	<input matInput 
+		[matDatepicker]="<%= column.lowerCamelName %>DatePicker" 
+		name="<%= column.lowerCamelName %>" 
+		formControlName="<%= column.lowerCamelName %>"
+		placeholder="<%= column.caption %>"
+		required 
+	/>
+
+	<mat-datepicker-toggle 
+		matSuffix 
+		[for]="<%= column.lowerCamelName %>DatePicker"
+	></mat-datepicker-toggle>
+
+	<mat-datepicker #<%= column.lowerCamelName %>DatePicker></mat-datepicker>
+</mat-form-field>

@@ -1,0 +1,842 @@
+[
+	{
+		"TABLE_NAME" : "actor",
+		"COLUMN_NAME" : "actor_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "actor",
+		"COLUMN_NAME" : "first_name",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(45)"
+	},
+	{
+		"TABLE_NAME" : "actor",
+		"COLUMN_NAME" : "last_name",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "varchar(45)"
+	},
+	{
+		"TABLE_NAME" : "actor",
+		"COLUMN_NAME" : "last_update",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	},
+	{
+		"TABLE_NAME" : "address",
+		"COLUMN_NAME" : "address_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "address",
+		"COLUMN_NAME" : "address",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(50)"
+	},
+	{
+		"TABLE_NAME" : "address",
+		"COLUMN_NAME" : "address2",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(50)"
+	},
+	{
+		"TABLE_NAME" : "address",
+		"COLUMN_NAME" : "district",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(20)"
+	},
+	{
+		"TABLE_NAME" : "address",
+		"COLUMN_NAME" : "city_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "address",
+		"COLUMN_NAME" : "postal_code",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(10)"
+	},
+	{
+		"TABLE_NAME" : "address",
+		"COLUMN_NAME" : "phone",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(20)"
+	},
+	{
+		"TABLE_NAME" : "address",
+		"COLUMN_NAME" : "last_update",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	},
+	{
+		"TABLE_NAME" : "category",
+		"COLUMN_NAME" : "category_id",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "tinyint(3) unsigned"
+	},
+	{
+		"TABLE_NAME" : "category",
+		"COLUMN_NAME" : "name",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(25)"
+	},
+	{
+		"TABLE_NAME" : "category",
+		"COLUMN_NAME" : "last_update",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	},
+	{
+		"TABLE_NAME" : "city",
+		"COLUMN_NAME" : "city_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "city",
+		"COLUMN_NAME" : "city",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(50)"
+	},
+	{
+		"TABLE_NAME" : "city",
+		"COLUMN_NAME" : "country_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "city",
+		"COLUMN_NAME" : "last_update",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	},
+	{
+		"TABLE_NAME" : "company",
+		"COLUMN_NAME" : "id",
+		"DATA_TYPE" : "int",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "int(11)"
+	},
+	{
+		"TABLE_NAME" : "company",
+		"COLUMN_NAME" : "name",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(40)"
+	},
+	{
+		"TABLE_NAME" : "company",
+		"COLUMN_NAME" : "created",
+		"DATA_TYPE" : "datetime",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "datetime"
+	},
+	{
+		"TABLE_NAME" : "company",
+		"COLUMN_NAME" : "active",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "smallint(6)"
+	},
+	{
+		"TABLE_NAME" : "company",
+		"COLUMN_NAME" : "description",
+		"DATA_TYPE" : "text",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "text"
+	},
+	{
+		"TABLE_NAME" : "company",
+		"COLUMN_NAME" : "value",
+		"DATA_TYPE" : "bigint",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "bigint(20)"
+	},
+	{
+		"TABLE_NAME" : "company",
+		"COLUMN_NAME" : "rank",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "smallint(6)"
+	},
+	{
+		"TABLE_NAME" : "company",
+		"COLUMN_NAME" : "effectivity",
+		"DATA_TYPE" : "float",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "float"
+	},
+	{
+		"TABLE_NAME" : "country",
+		"COLUMN_NAME" : "country_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "country",
+		"COLUMN_NAME" : "country",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(50)"
+	},
+	{
+		"TABLE_NAME" : "country",
+		"COLUMN_NAME" : "last_update",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	},
+	{
+		"TABLE_NAME" : "customer",
+		"COLUMN_NAME" : "customer_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "customer",
+		"COLUMN_NAME" : "store_id",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "tinyint(3) unsigned"
+	},
+	{
+		"TABLE_NAME" : "customer",
+		"COLUMN_NAME" : "first_name",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(45)"
+	},
+	{
+		"TABLE_NAME" : "customer",
+		"COLUMN_NAME" : "last_name",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "varchar(45)"
+	},
+	{
+		"TABLE_NAME" : "customer",
+		"COLUMN_NAME" : "email",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(50)"
+	},
+	{
+		"TABLE_NAME" : "customer",
+		"COLUMN_NAME" : "address_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "customer",
+		"COLUMN_NAME" : "active",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "tinyint(1)"
+	},
+	{
+		"TABLE_NAME" : "customer",
+		"COLUMN_NAME" : "create_date",
+		"DATA_TYPE" : "datetime",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "datetime"
+	},
+	{
+		"TABLE_NAME" : "customer",
+		"COLUMN_NAME" : "last_update",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	},
+	{
+		"TABLE_NAME" : "employee",
+		"COLUMN_NAME" : "id",
+		"DATA_TYPE" : "int",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "int(11)"
+	},
+	{
+		"TABLE_NAME" : "employee",
+		"COLUMN_NAME" : "first_name",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(50)"
+	},
+	{
+		"TABLE_NAME" : "employee",
+		"COLUMN_NAME" : "last_name",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(50)"
+	},
+	{
+		"TABLE_NAME" : "employee",
+		"COLUMN_NAME" : "salary",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(50)"
+	},
+	{
+		"TABLE_NAME" : "employee",
+		"COLUMN_NAME" : "entered",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	},
+	{
+		"TABLE_NAME" : "employee",
+		"COLUMN_NAME" : "position",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(50)"
+	},
+	{
+		"TABLE_NAME" : "employee",
+		"COLUMN_NAME" : "level",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "smallint(6)"
+	},
+	{
+		"TABLE_NAME" : "employee",
+		"COLUMN_NAME" : "closed",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "smallint(6)"
+	},
+	{
+		"TABLE_NAME" : "film",
+		"COLUMN_NAME" : "film_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "film",
+		"COLUMN_NAME" : "title",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "varchar(255)"
+	},
+	{
+		"TABLE_NAME" : "film",
+		"COLUMN_NAME" : "description",
+		"DATA_TYPE" : "text",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "text"
+	},
+	{
+		"TABLE_NAME" : "film",
+		"COLUMN_NAME" : "release_year",
+		"DATA_TYPE" : "year",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "year(4)"
+	},
+	{
+		"TABLE_NAME" : "film",
+		"COLUMN_NAME" : "language_id",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "tinyint(3) unsigned"
+	},
+	{
+		"TABLE_NAME" : "film",
+		"COLUMN_NAME" : "original_language_id",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "tinyint(3) unsigned"
+	},
+	{
+		"TABLE_NAME" : "film",
+		"COLUMN_NAME" : "rental_duration",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "tinyint(3) unsigned"
+	},
+	{
+		"TABLE_NAME" : "film",
+		"COLUMN_NAME" : "rental_rate",
+		"DATA_TYPE" : "decimal",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "decimal(4,2)"
+	},
+	{
+		"TABLE_NAME" : "film",
+		"COLUMN_NAME" : "length",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "film",
+		"COLUMN_NAME" : "replacement_cost",
+		"DATA_TYPE" : "decimal",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "decimal(5,2)"
+	},
+	{
+		"TABLE_NAME" : "film",
+		"COLUMN_NAME" : "rating",
+		"DATA_TYPE" : "enum",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "enum('G','PG','PG-13','R','NC-17')"
+	},
+	{
+		"TABLE_NAME" : "film",
+		"COLUMN_NAME" : "special_features",
+		"DATA_TYPE" : "set",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "set('Trailers','Commentaries','Deleted Scenes','Behind the Scenes')"
+	},
+	{
+		"TABLE_NAME" : "film",
+		"COLUMN_NAME" : "last_update",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	},
+	{
+		"TABLE_NAME" : "film_actor",
+		"COLUMN_NAME" : "actor_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "film_actor",
+		"COLUMN_NAME" : "film_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "film_actor",
+		"COLUMN_NAME" : "last_update",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	},
+	{
+		"TABLE_NAME" : "film_category",
+		"COLUMN_NAME" : "film_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "film_category",
+		"COLUMN_NAME" : "category_id",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "tinyint(3) unsigned"
+	},
+	{
+		"TABLE_NAME" : "film_category",
+		"COLUMN_NAME" : "last_update",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	},
+	{
+		"TABLE_NAME" : "film_text",
+		"COLUMN_NAME" : "film_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "smallint(6)"
+	},
+	{
+		"TABLE_NAME" : "film_text",
+		"COLUMN_NAME" : "title",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "varchar(255)"
+	},
+	{
+		"TABLE_NAME" : "film_text",
+		"COLUMN_NAME" : "description",
+		"DATA_TYPE" : "text",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "text"
+	},
+	{
+		"TABLE_NAME" : "inventory",
+		"COLUMN_NAME" : "inventory_id",
+		"DATA_TYPE" : "mediumint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "mediumint(8) unsigned"
+	},
+	{
+		"TABLE_NAME" : "inventory",
+		"COLUMN_NAME" : "film_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "inventory",
+		"COLUMN_NAME" : "store_id",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "tinyint(3) unsigned"
+	},
+	{
+		"TABLE_NAME" : "inventory",
+		"COLUMN_NAME" : "last_update",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	},
+	{
+		"TABLE_NAME" : "language",
+		"COLUMN_NAME" : "language_id",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "tinyint(3) unsigned"
+	},
+	{
+		"TABLE_NAME" : "language",
+		"COLUMN_NAME" : "name",
+		"DATA_TYPE" : "char",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "char(20)"
+	},
+	{
+		"TABLE_NAME" : "language",
+		"COLUMN_NAME" : "last_update",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	},
+	{
+		"TABLE_NAME" : "payment",
+		"COLUMN_NAME" : "payment_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "payment",
+		"COLUMN_NAME" : "customer_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "payment",
+		"COLUMN_NAME" : "staff_id",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "tinyint(3) unsigned"
+	},
+	{
+		"TABLE_NAME" : "payment",
+		"COLUMN_NAME" : "rental_id",
+		"DATA_TYPE" : "int",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "int(11)"
+	},
+	{
+		"TABLE_NAME" : "payment",
+		"COLUMN_NAME" : "amount",
+		"DATA_TYPE" : "decimal",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "decimal(5,2)"
+	},
+	{
+		"TABLE_NAME" : "payment",
+		"COLUMN_NAME" : "payment_date",
+		"DATA_TYPE" : "datetime",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "datetime"
+	},
+	{
+		"TABLE_NAME" : "payment",
+		"COLUMN_NAME" : "last_update",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	},
+	{
+		"TABLE_NAME" : "rental",
+		"COLUMN_NAME" : "rental_id",
+		"DATA_TYPE" : "int",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "int(11)"
+	},
+	{
+		"TABLE_NAME" : "rental",
+		"COLUMN_NAME" : "rental_date",
+		"DATA_TYPE" : "datetime",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "datetime"
+	},
+	{
+		"TABLE_NAME" : "rental",
+		"COLUMN_NAME" : "inventory_id",
+		"DATA_TYPE" : "mediumint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "mediumint(8) unsigned"
+	},
+	{
+		"TABLE_NAME" : "rental",
+		"COLUMN_NAME" : "customer_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "rental",
+		"COLUMN_NAME" : "return_date",
+		"DATA_TYPE" : "datetime",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "datetime"
+	},
+	{
+		"TABLE_NAME" : "rental",
+		"COLUMN_NAME" : "staff_id",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "tinyint(3) unsigned"
+	},
+	{
+		"TABLE_NAME" : "rental",
+		"COLUMN_NAME" : "last_update",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	},
+	{
+		"TABLE_NAME" : "staff",
+		"COLUMN_NAME" : "staff_id",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "tinyint(3) unsigned"
+	},
+	{
+		"TABLE_NAME" : "staff",
+		"COLUMN_NAME" : "first_name",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(45)"
+	},
+	{
+		"TABLE_NAME" : "staff",
+		"COLUMN_NAME" : "last_name",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(45)"
+	},
+	{
+		"TABLE_NAME" : "staff",
+		"COLUMN_NAME" : "address_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "staff",
+		"COLUMN_NAME" : "picture",
+		"DATA_TYPE" : "blob",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "blob"
+	},
+	{
+		"TABLE_NAME" : "staff",
+		"COLUMN_NAME" : "email",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(50)"
+	},
+	{
+		"TABLE_NAME" : "staff",
+		"COLUMN_NAME" : "store_id",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "tinyint(3) unsigned"
+	},
+	{
+		"TABLE_NAME" : "staff",
+		"COLUMN_NAME" : "active",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "tinyint(1)"
+	},
+	{
+		"TABLE_NAME" : "staff",
+		"COLUMN_NAME" : "username",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(16)"
+	},
+	{
+		"TABLE_NAME" : "staff",
+		"COLUMN_NAME" : "password",
+		"DATA_TYPE" : "varchar",
+		"IS_NULLABLE" : "YES",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "varchar(40)"
+	},
+	{
+		"TABLE_NAME" : "staff",
+		"COLUMN_NAME" : "last_update",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	},
+	{
+		"TABLE_NAME" : "store",
+		"COLUMN_NAME" : "store_id",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "PRI",
+		"COLUMN_TYPE" : "tinyint(3) unsigned"
+	},
+	{
+		"TABLE_NAME" : "store",
+		"COLUMN_NAME" : "manager_staff_id",
+		"DATA_TYPE" : "tinyint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "UNI",
+		"COLUMN_TYPE" : "tinyint(3) unsigned"
+	},
+	{
+		"TABLE_NAME" : "store",
+		"COLUMN_NAME" : "address_id",
+		"DATA_TYPE" : "smallint",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "MUL",
+		"COLUMN_TYPE" : "smallint(5) unsigned"
+	},
+	{
+		"TABLE_NAME" : "store",
+		"COLUMN_NAME" : "last_update",
+		"DATA_TYPE" : "timestamp",
+		"IS_NULLABLE" : "NO",
+		"COLUMN_KEY" : "",
+		"COLUMN_TYPE" : "timestamp"
+	}
+]

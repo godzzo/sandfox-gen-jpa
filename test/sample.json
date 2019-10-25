@@ -1,0 +1,83 @@
+[
+	[{
+		"pos": "number",
+		"name": "string",
+		"caption": "string",
+		"menu": "boolean"
+	}, {
+		"pos": 1,
+		"name": "user",
+		"caption": "Felhasználó",
+		"menu": "yes"
+	}, {
+		"pos": 2,
+		"name": "user_history",
+		"caption": "Történet",
+		"menu": "no"
+	}],
+	[{
+		"name": "string",
+		"caption": "string",
+		"type": "string",
+		"edit": "string",
+		"needed": "boolean"
+	}, {
+		"name": "id",
+		"caption": "azonosító",
+		"type": "primary",
+		"edit": "show",
+		"needed": "no"
+	}, {
+		"name": "name",
+		"caption": "név",
+		"type": "string",
+		"edit": "input",
+		"needed": "yes"
+	}, {
+		"name": "age",
+		"caption": "életkor",
+		"type": "number",
+		"edit": "input",
+		"needed": "yes"
+	}, {
+		"name": "description",
+		"caption": "leírás",
+		"type": "string",
+		"edit": "input",
+		"needed": "no"
+	}, {
+		"name": "history",
+		"caption": "történet",
+		"type": "relation.many.history",
+		"edit": "table.sub"
+	}],
+	[{
+		"name": "string",
+		"caption": "string",
+		"type": "string",
+		"edit": "string",
+		"needed": "boolean"
+	}, {
+		"name": "id",
+		"caption": "azonosító",
+		"type": "primary",
+		"edit": "show",
+		"needed": "no"
+	}, {
+		"name": "user_id",
+		"caption": "felhasználó",
+		"type": "relation.one.user"
+	}, {
+		"name": "action",
+		"caption": "akció",
+		"type": "string",
+		"edit": "select",
+		"needed": "yes"
+	}, {
+		"name": "action_date",
+		"caption": "időpont",
+		"type": "date",
+		"edit": "datepicker",
+		"needed": "yes"
+	}]
+]

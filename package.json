@@ -1,0 +1,18 @@
+{
+  "name": "sandfox-gen-jpa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "@types/ejs": "^2.6.3",
+    "ejs": "^2.6.1",
+    "google-spreadsheet-to-json": "^1.0.0"
+  }
+}
