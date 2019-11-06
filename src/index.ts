@@ -1,17 +1,20 @@
 
-import { Log, LogObj, ReadJsonFile, WriteJsonFile } from "./lib/common";
+import { Log, LogObj, ReadFile, WriteJsonFile } from "./lib/common";
 import { ProcGenerate } from "./lib/proc";
 import { ParseCliArgs } from "./lib/cli.args";
-import { LoadSpreadsheetData } from "./lib/common";
+import { LoadMeta, LoadGSMeta } from "./lib/meta";
+const chalk = require('chalk');
 
 
 console.log('Hello 2 :), SandFox GEN JPA - Loaded!');
 
 const options = ParseCliArgs();
 
-LogObj(options, 'ParseCliArgs');
-
 (async () => {
+	LogObj(options, 'ParseCliArgs');
+
+	await PrintLogo(options);
+
 	try {
 		if (options.command == "info") {
 			await InfoGSMeta(options);
@@ -28,6 +31,12 @@ LogObj(options, 'ParseCliArgs');
 		console.log(err);
 	}
 })();
+
+async function PrintLogo(options: any) {
+	const logo = await ReadFile(`${options.directory}/config/logo.txt`);
+
+	Log(chalk.yellow.bgRed.bold(logo));
+}
 
 async function InfoGSMeta(options: any) {
 	const data = await LoadGSMeta(options);
@@ -47,39 +56,6 @@ async function InvokeGenerate(options: any) {
 	const {tables, data} = await LoadMeta(options);
 
 	await ProcGenerate(options.project, tables, data);
-}
-
-async function LoadGSMeta(options: any) {
-	if (options.sheetId == 'NONE') {
-		throw new Error('Missing sheetId parameter!');
-	}
-
-	const credPath = `${options.directory}/${options.credential}`;
-
-	Log(`credential: ${credPath}, sheetId: ${options.sheetId}`);
-
-	const data = await LoadSpreadsheetData(
-		options.sheetId,
-		credPath
-	);
-
-	return data;
-}
-
-async function LoadMeta(options: any) {
-	let data = null;
-
-	if (options.sheetId != 'NONE') {
-		data = await LoadGSMeta(options);
-	} else {
-		const jsonPath = `${options.directory}/config/${options.project}.json`;
-
-		data = await ReadJsonFile(jsonPath);
-	}
-
-	const tables = data.shift();
-
-	return {tables, data};
 }
 
 export const NgModelGen = (name: string) => 'Hello '+name;

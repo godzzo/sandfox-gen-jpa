@@ -20,11 +20,15 @@ export function Log(msg: string) {
 	console.log(msg);
 }
 
-export async function ReadJsonFile(filePath: string): Promise<any> {
+export async function ReadFile(filePath: string): Promise<string> {
 	const readFile = util.promisify(fs.readFile);
 
 	const buffer = await readFile(filePath, {encoding: 'utf8'});
-	const text = buffer.toString();
+	return buffer.toString();
+}
+
+export async function ReadJsonFile(filePath: string): Promise<any> {
+	const text = await ReadFile(filePath);
 
 	const data = JSON.parse(text);
 
