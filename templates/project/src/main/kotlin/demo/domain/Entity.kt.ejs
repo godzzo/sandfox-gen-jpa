@@ -11,11 +11,11 @@ data class <%= table.camelName %>(
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	val id: Long = 0,
 
-<% table.columns.forEach((column) => { %>
+<% table.columns.forEach((column, idx) => { %>
 	<% if (!column.type.startsWith('relation') && column.name != 'id') { %>
 	// <%= column.caption %>
-	<%= column.annotations %>
-	val <%= column.lowerCamelName %>: <%= column.ktType %>,
+	<%- column.annotations %>
+	val <%= column.lowerCamelName %>: <%= column.ktType %> <% if (table.columns.length-1 > idx) { %>,<% } %>
 	<% } %>
 <% }); %>
 
