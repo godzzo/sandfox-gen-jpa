@@ -8,6 +8,7 @@ export function ParseCliArgs() {
 		{ name: 'command', defaultOption: true, type: String, defaultValue: 'info' },
 		{ name: 'directory', alias: 'd', type: String, defaultValue: '.' },
 		{ name: 'project', alias: 'p', type: String, defaultValue: 'sample' },
+		{ name: 'showLogo', type: String, defaultValue: 'yes' },
 		{ name: 'credential', alias: 'c', type: String, defaultValue: 'credentials/gd-drive-access.json' },
 		{ name: 'sheetId', alias: 's', type: String, defaultValue: 'NONE' } // 1A-CnEIWo4YUtYWqw8QZGkfOJzzw0TBXEL1kll3C9nbE
 	];

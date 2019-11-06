@@ -33,9 +33,11 @@ const options = ParseCliArgs();
 })();
 
 async function PrintLogo(options: any) {
-	const logo = await ReadFile(`${options.directory}/config/logo.txt`);
+	if (options.showLogo == 'yes') {
+		const logo = await ReadFile(`${options.directory}/config/logo.txt`);
 
-	Log(chalk.yellow.bgRed.bold(logo));
+		Log(chalk.yellow.bgRed.bold(logo));
+	}
 }
 
 async function InfoGSMeta(options: any) {
