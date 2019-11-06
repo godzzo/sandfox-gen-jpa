@@ -43,6 +43,17 @@ export async function render(templatePath: string, model: any, outputPath: strin
 	}
 }
 
+export function SetColumnAnnotation(column: any): string {
+	let more = '';
+
+	more += column.length? `, length=${column.length}`: ''; 
+	more += column.needed && column.needed == 'yes' ? `, nullable=false`: ', nullable=true'; 
+	more += column.precision? `, precision=${column.precision}`: ''; 
+	more += column.scale? `, precision=${column.scale}`: ''; 
+ 
+	return `@Column(name="${column.name}"${more})`;
+}
+
 export function SetColumnDirective(column: any): string {
 	// {name: "first_name", type: "varchar", length: 200}
 	// {name: "last_update", type: "timestamp"}

@@ -20,6 +20,17 @@ export function Log(msg: string) {
 	console.log(msg);
 }
 
+export async function MkDir(srcPath: string) {
+	const mkdir = util.promisify(fs.mkdir);
+	await mkdir(srcPath, {recursive: true});
+}
+
+export async function CopyFile(srcPath: string, destPath: string) {
+	const copyFile = util.promisify(fs.copyFile);
+
+	await copyFile(srcPath, destPath);
+}
+
 export async function ReadFile(filePath: string): Promise<string> {
 	const readFile = util.promisify(fs.readFile);
 

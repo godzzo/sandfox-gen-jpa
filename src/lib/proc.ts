@@ -1,21 +1,17 @@
 import util = require("util");
 import fs = require("fs");
 
-import { SetNames, SetColumnDirective, render } from "../lib/generate";
+import { SetNames, SetColumnAnnotation, render } from "./generate";
+import { CopyFile, MkDir } from "./common";
 
 
-export async function ProcGenerate(project: string, tables: Array<any>, data: Array<any>) {
-	await ParseTables(project, tables, data);
+export async function ProcGenerate(options: string, project: string, tables: Array<any>, data: Array<any>) {
+	await GenerateProject(options, project, tables);
+
+	await ParseTables(options, project, tables, data);
 }
 
-async function Generate(project: string, meta: any) {
-	console.log("GENERATE TABLE: ", JSON.stringify(meta, null, 4));
-	
-	// await GenerateBackEnd(project, meta);
-	// await GenerateFrontEnd(project, meta);
-}
-
-async function ParseTables(project: string, tables: Array<any>, data: Array<any>) {
+async function ParseTables(options: string, project: string, tables: Array<any>, data: Array<any>) {
 	for (const idx in  tables)	{
 		const table = tables[idx];
 		const columns = data[table.pos - 1];
@@ -25,14 +21,71 @@ async function ParseTables(project: string, tables: Array<any>, data: Array<any>
 		columns.forEach(SetNames);
 
 		columns.forEach((column: any) => {
-			column.directiveSettings = SetColumnDirective(column);
-			column.tsType = column.type;
+			column.annotations = SetColumnAnnotation(column);
+			column.ktType = column.type;
 		});
 
 		table.columns = columns;
 
-		await Generate(project, {table});
+		await Generate(options, project, {table, options, project});
 	};
+}
+
+async function GenerateProject(options: any, project: string, meta: any) {
+	options.tmpl = `${options.foxPath}/templates/project`;
+	options.packagePath = options.package.replace(/\./g, '/');
+
+	const tmpl = options.tmpl;
+	const out = options.directory;
+
+	await CopyFile(`${tmpl}/gradlew.bat`, `${out}/gradlew.bat`);	
+	await CopyFile(`${tmpl}/README.md`, `${out}/README.md`);	
+	await CopyFile(`${tmpl}/.gitignore`, `${out}/.gitignore`);	
+
+	await render(`${tmpl}/build.gradle.kts.ejs`, options, `${out}/build.gradle.kts`);
+	await render(`${tmpl}/settings.gradle.kts.ejs`, options, `${out}/settings.gradle.kts`);
+
+	await MkDir(`${out}/gradle/wrapper`);
+	await CopyFile(`${tmpl}/gradle/wrapper/gradle-wrapper.jar`, `${out}/gradle/wrapper/gradle-wrapper.jar`);	
+	await CopyFile(`${tmpl}/gradle/wrapper/gradle-wrapper.properties`, `${out}/gradle/wrapper/gradle-wrapper.properties`);	
+
+	await MkDir(`${out}/src/main/resources`);
+	await render(`${tmpl}/src/main/resources/application.properties.ejs`
+		, options, `${out}/src/main/resources/application.properties`);
+	await MkDir(`${out}/src/main/kotlin/${options.packagePath}`);
+	await render(`${tmpl}/src/main/kotlin/demo/Application.kt.ejs`
+		, options, `${out}/src/main/kotlin/${options.packagePath}/Application.kt`);
+	await MkDir(`${out}/src/test/kotlin/${options.packagePath}`);
+	await render(`${tmpl}/src/test/kotlin/demo/ApplicationTests.kt.ejs`
+		, options, `${out}/src/test/kotlin/${options.packagePath}/ApplicationTests.kt`);
+}
+
+async function Generate(options: any, project: string, meta: any) {
+	console.log("GENERATE TABLE: ", JSON.stringify(meta, null, 4));
+
+	/*
+./src/test/kotlin/org/godzzo/sb/sbkvscone/repository/TestUserRepository.kt	GEN
+	*/
+
+	const domainPath = `${options.directory}/src/main/kotlin/${options.packagePath}/domain`;
+	await MkDir(domainPath);
+	
+	await render(
+		`${options.tmpl}/src/main/kotlin/demo/domain/Entity.kt.ejs`, 
+		meta, 
+		`${domainPath}/${meta.table.camelName}.kt`
+	);
+
+	const repoPath = `${options.directory}/src/main/kotlin/${options.packagePath}/repository`;
+	await MkDir(repoPath);
+	
+	if (meta.table.menu && meta.table.menu == 'yes') {
+		await render(
+			`${options.tmpl}/src/main/kotlin/demo/repository/Repository.kt.ejs`, 
+			meta, 
+			`${repoPath}/${meta.table.camelName}Repository.kt`
+		);
+	}
 }
 
 async function GenerateBackEnd(project: string, meta: any) {

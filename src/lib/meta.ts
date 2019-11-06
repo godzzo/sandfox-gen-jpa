@@ -8,7 +8,7 @@ export async function LoadGSMeta(options: any) {
 		throw new Error('Missing sheetId parameter!');
 	}
 
-	const credPath = `${options.directory}/${options.credential}`;
+	const credPath = `${options.foxPath}/${options.credential}`;
 
 	Log(`credential: ${credPath}, sheetId: ${options.sheetId}`);
 

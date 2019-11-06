@@ -32,7 +32,7 @@
             "type": "primary",
             "columntype": "bigint",
             "edit": "show",
-            "needed": "no",
+            "needed": "yes",
             "resulttype": "text"
         },
         {
@@ -78,7 +78,7 @@
             "type": "primary",
             "columntype": "bigint",
             "edit": "show",
-            "needed": "no",
+            "needed": "yes",
             "resulttype": "text"
         },
         {
@@ -115,7 +115,7 @@
             "type": "primary",
             "columntype": "bigint",
             "edit": "text",
-            "needed": "no",
+            "needed": "yes",
             "resulttype": "text"
         },
         {
@@ -201,7 +201,7 @@
             "type": "primary",
             "columntype": "bigint",
             "edit": "text",
-            "needed": "no",
+            "needed": "yes",
             "resulttype": "text"
         },
         {
