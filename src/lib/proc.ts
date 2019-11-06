@@ -12,8 +12,7 @@ export async function ProcGenerate(options: string, project: string, tables: Arr
 }
 
 async function ParseTables(options: string, project: string, tables: Array<any>, data: Array<any>) {
-	for (const idx in  tables)	{
-		const table = tables[idx];
+	tables.forEach((table: any) => {
 		const columns = data[table.pos - 1];
 
 		SetNames(table);
@@ -26,9 +25,23 @@ async function ParseTables(options: string, project: string, tables: Array<any>,
 		});
 
 		table.columns = columns;
+	});
 
+	tables.forEach((table: any) => {
+		table.columns.forEach((column: any) => {
+			if (column.type.startsWith('relation') ) {
+				const relName = column.type.split('.')[2];
+				const relTable = tables.find(table => table.name == relName);
+				
+				column.relation = relTable;
+			}
+		});
+	});
+
+	for (const idx in  tables)	{
+		const table = tables[idx];
 		await Generate(options, project, {table, options, project});
-	};
+	}
 }
 
 async function GenerateProject(options: any, project: string, meta: any) {
@@ -62,7 +75,7 @@ async function GenerateProject(options: any, project: string, meta: any) {
 }
 
 async function Generate(options: any, project: string, meta: any) {
-	console.log("GENERATE TABLE: ", JSON.stringify(meta, null, 4));
+	// console.log("GENERATE TABLE: ", JSON.stringify(meta, null, 4));
 
 	/*
 ./src/test/kotlin/org/godzzo/sb/sbkvscone/repository/TestUserRepository.kt	GEN
@@ -86,38 +99,5 @@ async function Generate(options: any, project: string, meta: any) {
 			meta, 
 			`${repoPath}/${meta.table.camelName}Repository.kt`
 		);
-	}
-}
-
-async function GenerateBackEnd(project: string, meta: any) {
-	const mkdir = util.promisify(fs.mkdir);
-
-	try {
-		const outDir = `out/${project}/backend/${meta.table.name}`;
-		await mkdir(outDir, {recursive: true});
-
-		render('templates/backend/controller.ts.ejs', meta, `${outDir}/${meta.table.periodName}.controller.ts`);
-		render('templates/backend/entity.ts.ejs', meta, `${outDir}/${meta.table.periodName}.entity.ts`);
-		render('templates/backend/module.ts.ejs', meta, `${outDir}/${meta.table.periodName}.module.ts`);
-		render('templates/backend/service.ts.ejs', meta, `${outDir}/${meta.table.periodName}.service.ts`);
-	} catch(error) {
-		console.log(error);
-	}
-}
-
-async function GenerateFrontEnd(project: string, meta: any) {
-	const mkdir = util.promisify(fs.mkdir);
-
-	try {
-		const outDir = `out/${project}/frontend/${meta.table.name}`;
-		await mkdir(outDir, {recursive: true});
-
-		render('templates/frontend/component.html.ejs', meta, `${outDir}/${meta.table.periodName}.component.html`);
-		render('templates/frontend/component.scss.ejs', meta, `${outDir}/${meta.table.periodName}.component.scss`);
-		render('templates/frontend/component.ts.ejs', meta, `${outDir}/${meta.table.periodName}.component.ts`);
-		render('templates/frontend/model.ts.ejs', meta, `${outDir}/${meta.table.periodName}.model.ts`);
-		render('templates/frontend/service.ts.ejs', meta, `${outDir}/${meta.table.periodName}.service.ts`);
-	} catch(error) {
-		console.log(error);
 	}
 }
