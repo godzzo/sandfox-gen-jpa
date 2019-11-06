@@ -15,7 +15,7 @@ data class <%= table.camelName %>(
 	<% if (!column.type.startsWith('relation') && column.name != 'id') { %>
 	// <%= column.caption %>
 	<%= column.annotations %>
-	val <%= column.lowerCamelName %>: <%= column.ktType %>;
+	val <%= column.lowerCamelName %>: <%= column.ktType %>,
 	<% } %>
 <% }); %>
 

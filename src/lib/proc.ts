@@ -38,6 +38,7 @@ async function GenerateProject(options: any, project: string, meta: any) {
 	const tmpl = options.tmpl;
 	const out = options.directory;
 
+	await CopyFile(`${tmpl}/gradlew`, `${out}/gradlew`);	
 	await CopyFile(`${tmpl}/gradlew.bat`, `${out}/gradlew.bat`);	
 	await CopyFile(`${tmpl}/README.md`, `${out}/README.md`);	
 	await CopyFile(`${tmpl}/.gitignore`, `${out}/.gitignore`);	
