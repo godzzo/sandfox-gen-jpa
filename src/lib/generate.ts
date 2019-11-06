@@ -62,6 +62,8 @@ export function SetColumnDirective(column: any): string {
 	return JSON.stringify(cfg);
 }
 
+/*
 console.log(SetNames({name: 'hello'}));
 console.log(SetNames({name: 'hello_world'}));
 console.log(SetNames({name: 'hello_world_how_are_u'}));
+*/

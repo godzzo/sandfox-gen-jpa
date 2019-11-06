@@ -1,0 +1,235 @@
+[
+    [
+        {
+            "pos": 1,
+            "name": "user",
+            "caption": "Felhasználó",
+            "menu": "yes"
+        },
+        {
+            "pos": 2,
+            "name": "user_history",
+            "caption": "Történet",
+            "menu": "no"
+        },
+        {
+            "pos": 3,
+            "name": "customer",
+            "caption": "Vásárló",
+            "menu": "yes"
+        },
+        {
+            "pos": 4,
+            "name": "store",
+            "caption": "Bolt",
+            "menu": "yes"
+        }
+    ],
+    [
+        {
+            "name": "id",
+            "caption": "azonosító",
+            "type": "primary",
+            "columntype": "bigint",
+            "edit": "show",
+            "needed": "no",
+            "resulttype": "text"
+        },
+        {
+            "name": "name",
+            "caption": "név",
+            "type": "string",
+            "columntype": "varchar",
+            "length": 200,
+            "edit": "input",
+            "needed": "yes",
+            "resulttype": "text"
+        },
+        {
+            "name": "age",
+            "caption": "életkor",
+            "type": "number",
+            "columntype": "smallint",
+            "edit": "input",
+            "needed": "yes",
+            "resulttype": "text"
+        },
+        {
+            "name": "description",
+            "caption": "leírás",
+            "type": "string",
+            "columntype": "varchar",
+            "edit": "input",
+            "needed": "no",
+            "resulttype": "text"
+        },
+        {
+            "name": "history",
+            "caption": "történet",
+            "type": "relation.many.history",
+            "edit": "table.sub",
+            "resulttype": "text"
+        }
+    ],
+    [
+        {
+            "name": "id",
+            "caption": "azonosító",
+            "type": "primary",
+            "columntype": "bigint",
+            "edit": "show",
+            "needed": "no",
+            "resulttype": "text"
+        },
+        {
+            "name": "user_id",
+            "caption": "felhasználó",
+            "type": "relation.one.user",
+            "columntype": "bigint",
+            "resulttype": "text"
+        },
+        {
+            "name": "action",
+            "caption": "akció",
+            "type": "string",
+            "columntype": "varchar",
+            "length": 200,
+            "edit": "select",
+            "needed": "yes",
+            "resulttype": "text"
+        },
+        {
+            "name": "action_date",
+            "caption": "időpont",
+            "type": "Date",
+            "columntype": "timestamp",
+            "edit": "datepicker",
+            "needed": "yes",
+            "resulttype": "text"
+        }
+    ],
+    [
+        {
+            "name": "customer_id",
+            "caption": "azonosító",
+            "type": "primary",
+            "columntype": "bigint",
+            "edit": "text",
+            "needed": "no",
+            "resulttype": "text"
+        },
+        {
+            "name": "store_id",
+            "caption": "bolt / raktár",
+            "type": "number",
+            "columntype": "bigint",
+            "edit": "text",
+            "needed": "yes",
+            "resulttype": "text"
+        },
+        {
+            "name": "first_name",
+            "caption": "elő név",
+            "type": "string",
+            "columntype": "varchar",
+            "length": 200,
+            "edit": "text",
+            "needed": "yes",
+            "resulttype": "text"
+        },
+        {
+            "name": "last_name",
+            "caption": "utó név",
+            "type": "string",
+            "columntype": "varchar",
+            "length": 200,
+            "edit": "text",
+            "needed": "yes",
+            "resulttype": "text"
+        },
+        {
+            "name": "email",
+            "caption": "e-mail",
+            "type": "string",
+            "columntype": "varchar",
+            "length": 200,
+            "edit": "text",
+            "needed": "yes",
+            "resulttype": "text"
+        },
+        {
+            "name": "address_id",
+            "caption": "cím",
+            "type": "number",
+            "columntype": "bigint",
+            "edit": "text",
+            "needed": "yes",
+            "resulttype": "text"
+        },
+        {
+            "name": "active",
+            "caption": "aktív",
+            "type": "boolean",
+            "columntype": "tinyint",
+            "edit": "checkbox",
+            "needed": "no",
+            "resulttype": "text"
+        },
+        {
+            "name": "create_date",
+            "caption": "készült",
+            "type": "Date",
+            "columntype": "datetime",
+            "edit": "date",
+            "needed": "yes",
+            "resulttype": "text"
+        },
+        {
+            "name": "last_update",
+            "caption": "módosult",
+            "type": "Date",
+            "columntype": "timestamp",
+            "edit": "date",
+            "needed": "yes",
+            "resulttype": "text"
+        }
+    ],
+    [
+        {
+            "name": "store_id",
+            "caption": "azonosító",
+            "type": "primary",
+            "columntype": "bigint",
+            "edit": "text",
+            "needed": "no",
+            "resulttype": "text"
+        },
+        {
+            "name": "manager_staff_id",
+            "caption": "főnök",
+            "type": "number",
+            "columntype": "bigint",
+            "edit": "text",
+            "needed": "yes",
+            "resulttype": "text"
+        },
+        {
+            "name": "address_id",
+            "caption": "cím",
+            "type": "number",
+            "columntype": "bigint",
+            "edit": "text",
+            "needed": "yes",
+            "resulttype": "text"
+        },
+        {
+            "name": "last_update",
+            "caption": "módosult",
+            "type": "Date",
+            "columntype": "timestamp",
+            "edit": "date",
+            "needed": "yes",
+            "resulttype": "text"
+        }
+    ]
+]

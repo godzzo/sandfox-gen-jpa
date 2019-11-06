@@ -13,6 +13,7 @@
   "dependencies": {
     "@types/ejs": "^2.6.3",
     "ejs": "^2.6.1",
-    "google-spreadsheet-to-json": "^1.0.0"
+    "google-spreadsheet-to-json": "^1.0.0",
+    "command-line-args": "^5.1.1"
   }
 }

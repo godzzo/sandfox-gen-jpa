@@ -1,85 +1,85 @@
 
-import util = require("util");
-import fs = require("fs");
-
+import { Log, LogObj, ReadJsonFile, WriteJsonFile } from "./lib/common";
+import { ProcGenerate } from "./lib/proc";
+import { ParseCliArgs } from "./lib/cli.args";
 import { LoadSpreadsheetData } from "./lib/common";
-import { SetNames, SetColumnDirective, render } from "./lib/generate";
+
+
+console.log('Hello 2 :), SandFox GEN JPA - Loaded!');
+
+const options = ParseCliArgs();
+
+LogObj(options, 'ParseCliArgs');
 
 (async () => {
 	try {
-		const data = await LoadSpreadsheetData(
-			'1A-CnEIWo4YUtYWqw8QZGkfOJzzw0TBXEL1kll3C9nbE',
-			"credentials/gd-drive-access-a930341b5052.json"
-		);
+		if (options.command == "info") {
+			await InfoGSMeta(options);
+		} else if (options.command == "save") {
+			await SaveGSMeta(options);
+		} else if (options.command == "generate") {
+			await InvokeGenerate(options);
+		} else {
+			Log(`Don't known this command: ${options.command} :(`);
+		}
 
-		console.log(JSON.stringify(data));
-
-		ParseWorkSheets("sample", data);
+		Log('Bye :)');
 	} catch (err) {
 		console.log(err);
 	}
 })();
 
-async function generate(project: string, meta: any) {
-	await generateBackEnd(project, meta);
-	await generateFrontEnd(project, meta);
+async function InfoGSMeta(options: any) {
+	const data = await LoadGSMeta(options);
+	LogObj(data, 'InfoGSMeta');
 }
 
-async function generateBackEnd(project: string, meta: any) {
-	const mkdir = util.promisify(fs.mkdir);
+async function SaveGSMeta(options: any) {
+	const data = await LoadGSMeta(options);
+	const jsonPath = `${options.directory}/config/${options.project}.json`;
 
-	try{
-		const outDir = `out/${project}/backend/${meta.table.name}`;
-		await mkdir(outDir, {recursive: true});
+	Log(`Write GoogleSheet meta to JsonFile: ${jsonPath} `);
 
-		render('templates/backend/controller.ts.ejs', meta, `${outDir}/${meta.table.periodName}.controller.ts`);
-		render('templates/backend/entity.ts.ejs', meta, `${outDir}/${meta.table.periodName}.entity.ts`);
-		render('templates/backend/module.ts.ejs', meta, `${outDir}/${meta.table.periodName}.module.ts`);
-		render('templates/backend/service.ts.ejs', meta, `${outDir}/${meta.table.periodName}.service.ts`);
-	}catch(error){
-		console.log(error);
+	WriteJsonFile(jsonPath, data);
+}
+
+async function InvokeGenerate(options: any) {
+	const {tables, data} = await LoadMeta(options);
+
+	await ProcGenerate(options.project, tables, data);
+}
+
+async function LoadGSMeta(options: any) {
+	if (options.sheetId == 'NONE') {
+		throw new Error('Missing sheetId parameter!');
 	}
+
+	const credPath = `${options.directory}/${options.credential}`;
+
+	Log(`credential: ${credPath}, sheetId: ${options.sheetId}`);
+
+	const data = await LoadSpreadsheetData(
+		options.sheetId,
+		credPath
+	);
+
+	return data;
 }
 
-async function generateFrontEnd(project: string, meta: any) {
-	const mkdir = util.promisify(fs.mkdir);
+async function LoadMeta(options: any) {
+	let data = null;
 
-	try{
-		const outDir = `out/${project}/frontend/${meta.table.name}`;
-		await mkdir(outDir, {recursive: true});
+	if (options.sheetId != 'NONE') {
+		data = await LoadGSMeta(options);
+	} else {
+		const jsonPath = `${options.directory}/config/${options.project}.json`;
 
-		render('templates/frontend/component.html.ejs', meta, `${outDir}/${meta.table.periodName}.component.html`);
-		render('templates/frontend/component.scss.ejs', meta, `${outDir}/${meta.table.periodName}.component.scss`);
-		render('templates/frontend/component.ts.ejs', meta, `${outDir}/${meta.table.periodName}.component.ts`);
-		render('templates/frontend/model.ts.ejs', meta, `${outDir}/${meta.table.periodName}.model.ts`);
-		render('templates/frontend/service.ts.ejs', meta, `${outDir}/${meta.table.periodName}.service.ts`);
-	} catch(error) {
-		console.log(error);
+		data = await ReadJsonFile(jsonPath);
 	}
-}
 
-function ParseWorkSheets(project: string, data: Array<any>) {
-	const meta = data.shift();
+	const tables = data.shift();
 
-	meta.forEach((table: any) => {
-		const columns = data[table.pos - 1];
-
-		SetNames(table);
-
-		columns.forEach(SetNames);
-
-		columns.forEach((column: any) => {
-
-			column.directiveSettings = SetColumnDirective(column);
-			column.tsType = column.type;
-		});
-
-		table.columns = columns;
-
-		console.log("TABLE: ", JSON.stringify(table, null, 4));
-
-		generate(project, {table});
-	});
+	return {tables, data};
 }
 
 export const NgModelGen = (name: string) => 'Hello '+name;

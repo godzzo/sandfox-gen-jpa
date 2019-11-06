@@ -16,14 +16,30 @@ export class <%= table.camelName %> {
 <% }); %>
 }
 
+/*
+>>>>> Kotlin
+*/
+
+package <%= project.package %>.domain
+
+import javax.persistence.*
+import javax.validation.constraints.*
 
 @Entity
-public class Student {
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
-     
-    private String name;
-     
-    // getters and setters
-}
+@Table(name = "<%= table.name %>")
+data class <%= table.camelName %>(
+
+	<% if (table.hasId) { %>
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	val id: Long = 0,
+	<% } %>
+
+	@NotNull
+	@Size(min = 1, max = 50)
+	@Column(length = 50, unique = true, nullable = false)
+	val login: String,
+
+	@OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
+	val history: MutableList<UserHistory> = mutableListOf()
+)
