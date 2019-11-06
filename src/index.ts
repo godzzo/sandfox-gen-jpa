@@ -6,12 +6,14 @@ import { LoadMeta, LoadGSMeta } from "./lib/meta";
 const chalk = require('chalk');
 
 
-console.log('Hello 2 :), SandFox GEN JPA - Loaded!');
+console.log('SandFox GEN JPA - Loaded...');
 
 const options = ParseCliArgs();
 
 (async () => {
-	LogObj(options, 'ParseCliArgs');
+	if (options.showArgs == 'yes'){
+		LogObj(options, 'ParseCliArgs');
+	}
 
 	await PrintLogo(options);
 
