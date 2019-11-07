@@ -1,6 +1,3 @@
-import util = require("util");
-import fs = require("fs");
-
 import { SetNames, SetColumnAnnotation, render } from "./generate";
 import { CopyFile, MkDir } from "./common";
 

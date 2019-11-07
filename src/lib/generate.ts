@@ -46,7 +46,7 @@ export async function render(templatePath: string, model: any, outputPath: strin
 export function SetColumnAnnotation(column: any): string {
 	let more = '';
 
-	more += column.length? `, length=${column.length}`: ''; 
+	more += column.length && column.length != 'null' ? `, length=${column.length}`: ''; 
 	more += column.needed && column.needed == 'yes' ? `, nullable=false`: ', nullable=true'; 
 	more += column.precision? `, precision=${column.precision}`: ''; 
 	more += column.scale? `, precision=${column.scale}`: ''; 

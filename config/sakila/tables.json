@@ -1,0 +1,51 @@
+[
+    {
+        "table_name" : "actor"
+    },
+    {
+        "table_name" : "address"
+    },
+    {
+        "table_name" : "category"
+    },
+    {
+        "table_name" : "city"
+    },
+    {
+        "table_name" : "country"
+    },
+    {
+        "table_name" : "customer"
+    },
+    {
+        "table_name" : "film"
+    },
+    {
+        "table_name" : "film_actor"
+    },
+    {
+        "table_name" : "film_category"
+    },
+    {
+        "table_name" : "film_text"
+    },
+    {
+        "table_name" : "inventory"
+    },
+    {
+        "table_name" : "language"
+    },
+    {
+        "table_name" : "payment"
+    },
+    {
+        "table_name" : "rental"
+    },
+    {
+        "table_name" : "staff"
+    },
+    {
+        "table_name" : "store"
+    }
+]
+    

@@ -21,3 +21,27 @@ SELECT
 		TABLE_SCHEMA='sakila' AND 
 		REFERENCED_TABLE_NAME IS NOT NULL
 ;
+
+SELECT 
+		c.table_name, c.column_name, c.data_type, c.is_nullable,
+		c.character_maximum_length, c.numeric_scale, c.numeric_precision,
+		c.column_key, c.column_type,
+		k.referenced_table_name, k.referenced_column_name
+	FROM 
+		information_schema.columns c 
+		JOIN
+			information_schema.tables t
+		ON
+			c.TABLE_NAME = t.TABLE_NAME AND c.TABLE_SCHEMA = t.TABLE_SCHEMA
+		LEFT OUTER JOIN
+			information_schema.KEY_COLUMN_USAGE k
+		ON
+			c.COLUMN_NAME = k.COLUMN_NAME AND c.TABLE_NAME = k.TABLE_NAME
+			AND k.CONSTRAINT_SCHEMA='sakila' AND k.CONSTRAINT_NAME!='PRIMARY'
+	WHERE 
+		t.table_schema='sakila' AND t.table_type = 'BASE TABLE' 
+	ORDER BY
+		c.TABLE_NAME, c.ORDINAL_POSITION
+;
+
+SELECT table_name FROM information_schema.tables WHERE table_schema='sakila' AND table_type='BASE TABLE';

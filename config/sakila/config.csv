@@ -1,0 +1,124 @@
+actor
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+actor_id	actor_id	number	Short	smallint	null	text	yes	text
+first_name	first_name	string	String	varchar	45	text	yes	text
+last_name	last_name	string	String	varchar	45	text	yes	text
+last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
+address
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+address_id	address_id	number	Short	smallint	null	text	yes	text
+address	address	string	String	varchar	50	text	yes	text
+address2	address2	string	String	varchar	50	text	no	text
+district	district	string	String	varchar	20	text	yes	text
+city_id	city_id	relation.one.city	Short	smallint	null	text	yes	text
+postal_code	postal_code	string	String	varchar	10	text	no	text
+phone	phone	string	String	varchar	20	text	yes	text
+last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
+category
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+category_id	category_id	number	Short	tinyint	null	text	yes	text
+name	name	string	String	varchar	25	text	yes	text
+last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
+city
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+city_id	city_id	number	Short	smallint	null	text	yes	text
+city	city	string	String	varchar	50	text	yes	text
+country_id	country_id	relation.one.country	Short	smallint	null	text	yes	text
+last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
+country
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+country_id	country_id	number	Short	smallint	null	text	yes	text
+country	country	string	String	varchar	50	text	yes	text
+last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
+customer
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+customer_id	customer_id	number	Short	smallint	null	text	yes	text
+store_id	store_id	relation.one.store	Short	tinyint	null	text	yes	text
+first_name	first_name	string	String	varchar	45	text	yes	text
+last_name	last_name	string	String	varchar	45	text	yes	text
+email	email	string	String	varchar	50	text	no	text
+address_id	address_id	relation.one.address	Short	smallint	null	text	yes	text
+active	active	number	Short	tinyint	null	text	yes	text
+create_date	create_date	Date	ZonedDateTime	datetime	null	text	yes	text
+last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
+film
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+film_id	film_id	number	Short	smallint	null	text	yes	text
+title	title	string	String	varchar	255	text	yes	text
+description	description	string	String	text	65535	text	no	text
+release_year	release_year	number	Short	year	null	text	no	text
+language_id	language_id	relation.one.language	Short	tinyint	null	text	yes	text
+original_language_id	original_language_id	relation.one.language	Short	tinyint	null	text	no	text
+rental_duration	rental_duration	number	Short	tinyint	null	text	yes	text
+rental_rate	rental_rate	number	Double	decimal	null	text	yes	text
+length	length	number	Short	smallint	null	text	no	text
+replacement_cost	replacement_cost	number	Double	decimal	null	text	yes	text
+rating	rating	string	String	enum	5	text	no	text
+special_features	special_features	string	String	set	54	text	no	text
+last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
+film_actor
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+actor_id	actor_id	relation.one.actor	Short	smallint	null	text	yes	text
+film_id	film_id	relation.one.film	Short	smallint	null	text	yes	text
+last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
+film_category
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+film_id	film_id	relation.one.film	Short	smallint	null	text	yes	text
+category_id	category_id	relation.one.category	Short	tinyint	null	text	yes	text
+last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
+film_text
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+film_id	film_id	number	Short	smallint	null	text	yes	text
+title	title	string	String	varchar	255	text	yes	text
+description	description	string	String	text	65535	text	no	text
+inventory
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+inventory_id	inventory_id	number	Int	mediumint	null	text	yes	text
+film_id	film_id	relation.one.film	Short	smallint	null	text	yes	text
+store_id	store_id	relation.one.store	Short	tinyint	null	text	yes	text
+last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
+language
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+language_id	language_id	number	Short	tinyint	null	text	yes	text
+name	name	string	Char	char	20	text	yes	text
+last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
+payment
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+payment_id	payment_id	number	Short	smallint	null	text	yes	text
+customer_id	customer_id	relation.one.customer	Short	smallint	null	text	yes	text
+staff_id	staff_id	relation.one.staff	Short	tinyint	null	text	yes	text
+rental_id	rental_id	relation.one.rental	Int	int	null	text	no	text
+amount	amount	number	Double	decimal	null	text	yes	text
+payment_date	payment_date	Date	ZonedDateTime	datetime	null	text	yes	text
+last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
+rental
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+rental_id	rental_id	number	Int	int	null	text	yes	text
+rental_date	rental_date	Date	ZonedDateTime	datetime	null	text	yes	text
+inventory_id	inventory_id	number	Int	mediumint	null	text	yes	text
+inventory_id	inventory_id	relation.one.inventory	Int	mediumint	null	text	yes	text
+customer_id	customer_id	number	Short	smallint	null	text	yes	text
+customer_id	customer_id	relation.one.customer	Short	smallint	null	text	yes	text
+return_date	return_date	Date	ZonedDateTime	datetime	null	text	no	text
+staff_id	staff_id	relation.one.staff	Short	tinyint	null	text	yes	text
+last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
+staff
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+staff_id	staff_id	number	Short	tinyint	null	text	yes	text
+first_name	first_name	string	String	varchar	45	text	yes	text
+last_name	last_name	string	String	varchar	45	text	yes	text
+address_id	address_id	relation.one.address	Short	smallint	null	text	yes	text
+picture	picture	string	String	blob	65535	text	no	text
+email	email	string	String	varchar	50	text	no	text
+store_id	store_id	relation.one.store	Short	tinyint	null	text	yes	text
+active	active	number	Short	tinyint	null	text	yes	text
+username	username	string	String	varchar	16	text	yes	text
+password	password	string	String	varchar	40	text	no	text
+last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
+store
+name	caption	type	ktType	columnType	length	edit	needed	resultType
+store_id	store_id	number	Short	tinyint	null	text	yes	text
+manager_staff_id	manager_staff_id	number	Short	tinyint	null	text	yes	text
+manager_staff_id	manager_staff_id	relation.one.staff	Short	tinyint	null	text	yes	text
+address_id	address_id	relation.one.address	Short	smallint	null	text	yes	text
+last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
