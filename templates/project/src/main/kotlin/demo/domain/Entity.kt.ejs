@@ -1,5 +1,6 @@
 package <%= options.package %>.domain
 
+import java.time.*
 import javax.persistence.*
 import javax.validation.constraints.*
 
@@ -12,7 +13,6 @@ data class <%= table.camelName %>(
 	val <%= column.lowerCamelName %>: <%= column.ktType %>,
 <% } %><% }); %>
 <% table.columns.forEach((column, idx) => { %><% if (column.type.startsWith('relation.many')) { %>
-	OneToMany
 	@OneToMany(mappedBy = "<%= table.lowerCamelName %>", cascade = [CascadeType.ALL])
 	val <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf(),
 <% } %><% }); %>

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 import { Log, LogObj, ReadFile, WriteJsonFile, MkDir } from "./lib/common";
 import { ProcGenerate } from "./lib/proc";

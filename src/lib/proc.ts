@@ -21,7 +21,7 @@ async function ParseTables(options: string, project: string, tables: Array<any>,
 
 		columns.forEach((column: any) => {
 			column.annotations = SetColumnAnnotation(column);
-			column.ktType = column.type;
+			column.ktType = column.kttype;
 		});
 
 		table.columns = columns;
