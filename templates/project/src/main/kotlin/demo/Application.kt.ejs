@@ -1,4 +1,4 @@
-package <%= package %>.<%= project %>
+package <%= package %>
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
@@ -6,16 +6,16 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class DemoApplication : SpringBootServletInitializer()
+class Application : SpringBootServletInitializer()
 
 fun configure(application: SpringApplicationBuilder): SpringApplicationBuilder {
-	println(">>>>> DemoApplication - configure - Called :)")
+	println(">>>>> Application - configure - Called :)")
 
-	return application.sources(DemoApplication::class.java)
+	return application.sources(Application::class.java)
 }
 
 fun main(args: Array<String>) {
-	println(">>>>> DemoApplication - main - Called :)")
+	println(">>>>> Application - main - Called :)")
 
-	runApplication<DemoApplication>(*args)
+	runApplication<Application>(*args)
 }
