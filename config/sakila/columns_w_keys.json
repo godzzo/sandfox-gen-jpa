@@ -10,7 +10,8 @@
         "column_key" : "PRI",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "actor",
@@ -23,7 +24,8 @@
         "column_key" : "",
         "column_type" : "varchar(45)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "actor",
@@ -36,7 +38,8 @@
         "column_key" : "MUL",
         "column_type" : "varchar(45)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "actor",
@@ -49,7 +52,8 @@
         "column_key" : "",
         "column_type" : "timestamp",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "address",
@@ -62,7 +66,8 @@
         "column_key" : "PRI",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "address",
@@ -75,7 +80,8 @@
         "column_key" : "",
         "column_type" : "varchar(50)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "address",
@@ -88,7 +94,8 @@
         "column_key" : "",
         "column_type" : "varchar(50)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "address",
@@ -101,7 +108,8 @@
         "column_key" : "",
         "column_type" : "varchar(20)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "address",
@@ -114,7 +122,8 @@
         "column_key" : "MUL",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : "city",
-        "referenced_column_name" : "city_id"
+        "referenced_column_name" : "city_id",
+        "constraint_name" : "fk_address_city"
     },
     {
         "table_name" : "address",
@@ -127,7 +136,8 @@
         "column_key" : "",
         "column_type" : "varchar(10)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "address",
@@ -140,7 +150,8 @@
         "column_key" : "",
         "column_type" : "varchar(20)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "address",
@@ -153,7 +164,8 @@
         "column_key" : "",
         "column_type" : "timestamp",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "category",
@@ -166,7 +178,8 @@
         "column_key" : "PRI",
         "column_type" : "tinyint(3) unsigned",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "category",
@@ -179,7 +192,8 @@
         "column_key" : "",
         "column_type" : "varchar(25)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "category",
@@ -192,7 +206,8 @@
         "column_key" : "",
         "column_type" : "timestamp",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "city",
@@ -205,7 +220,8 @@
         "column_key" : "PRI",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "city",
@@ -218,7 +234,8 @@
         "column_key" : "",
         "column_type" : "varchar(50)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "city",
@@ -231,7 +248,8 @@
         "column_key" : "MUL",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : "country",
-        "referenced_column_name" : "country_id"
+        "referenced_column_name" : "country_id",
+        "constraint_name" : "fk_city_country"
     },
     {
         "table_name" : "city",
@@ -244,7 +262,8 @@
         "column_key" : "",
         "column_type" : "timestamp",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "country",
@@ -257,7 +276,8 @@
         "column_key" : "PRI",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "country",
@@ -270,7 +290,8 @@
         "column_key" : "",
         "column_type" : "varchar(50)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "country",
@@ -283,7 +304,8 @@
         "column_key" : "",
         "column_type" : "timestamp",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "customer",
@@ -296,7 +318,8 @@
         "column_key" : "PRI",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "customer",
@@ -309,7 +332,8 @@
         "column_key" : "MUL",
         "column_type" : "tinyint(3) unsigned",
         "referenced_table_name" : "store",
-        "referenced_column_name" : "store_id"
+        "referenced_column_name" : "store_id",
+        "constraint_name" : "fk_customer_store"
     },
     {
         "table_name" : "customer",
@@ -322,7 +346,8 @@
         "column_key" : "",
         "column_type" : "varchar(45)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "customer",
@@ -335,7 +360,8 @@
         "column_key" : "MUL",
         "column_type" : "varchar(45)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "customer",
@@ -348,7 +374,8 @@
         "column_key" : "",
         "column_type" : "varchar(50)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "customer",
@@ -361,7 +388,8 @@
         "column_key" : "MUL",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : "address",
-        "referenced_column_name" : "address_id"
+        "referenced_column_name" : "address_id",
+        "constraint_name" : "fk_customer_address"
     },
     {
         "table_name" : "customer",
@@ -374,7 +402,8 @@
         "column_key" : "",
         "column_type" : "tinyint(1)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "customer",
@@ -387,7 +416,8 @@
         "column_key" : "",
         "column_type" : "datetime",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "customer",
@@ -400,7 +430,8 @@
         "column_key" : "",
         "column_type" : "timestamp",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film",
@@ -413,7 +444,8 @@
         "column_key" : "PRI",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film",
@@ -426,7 +458,8 @@
         "column_key" : "MUL",
         "column_type" : "varchar(255)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film",
@@ -439,7 +472,8 @@
         "column_key" : "",
         "column_type" : "text",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film",
@@ -452,7 +486,8 @@
         "column_key" : "",
         "column_type" : "year(4)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film",
@@ -465,7 +500,8 @@
         "column_key" : "MUL",
         "column_type" : "tinyint(3) unsigned",
         "referenced_table_name" : "language",
-        "referenced_column_name" : "language_id"
+        "referenced_column_name" : "language_id",
+        "constraint_name" : "fk_film_language"
     },
     {
         "table_name" : "film",
@@ -478,7 +514,8 @@
         "column_key" : "MUL",
         "column_type" : "tinyint(3) unsigned",
         "referenced_table_name" : "language",
-        "referenced_column_name" : "language_id"
+        "referenced_column_name" : "language_id",
+        "constraint_name" : "fk_film_language_original"
     },
     {
         "table_name" : "film",
@@ -491,7 +528,8 @@
         "column_key" : "",
         "column_type" : "tinyint(3) unsigned",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film",
@@ -504,7 +542,8 @@
         "column_key" : "",
         "column_type" : "decimal(4,2)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film",
@@ -517,7 +556,8 @@
         "column_key" : "",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film",
@@ -530,7 +570,8 @@
         "column_key" : "",
         "column_type" : "decimal(5,2)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film",
@@ -543,7 +584,8 @@
         "column_key" : "",
         "column_type" : "enum('G','PG','PG-13','R','NC-17')",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film",
@@ -556,7 +598,8 @@
         "column_key" : "",
         "column_type" : "set('Trailers','Commentaries','Deleted Scenes','Behind the Scenes')",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film",
@@ -569,7 +612,8 @@
         "column_key" : "",
         "column_type" : "timestamp",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film_actor",
@@ -582,7 +626,8 @@
         "column_key" : "PRI",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : "actor",
-        "referenced_column_name" : "actor_id"
+        "referenced_column_name" : "actor_id",
+        "constraint_name" : "fk_film_actor_actor"
     },
     {
         "table_name" : "film_actor",
@@ -595,7 +640,8 @@
         "column_key" : "PRI",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : "film",
-        "referenced_column_name" : "film_id"
+        "referenced_column_name" : "film_id",
+        "constraint_name" : "fk_film_actor_film"
     },
     {
         "table_name" : "film_actor",
@@ -608,7 +654,8 @@
         "column_key" : "",
         "column_type" : "timestamp",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film_category",
@@ -621,7 +668,8 @@
         "column_key" : "PRI",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : "film",
-        "referenced_column_name" : "film_id"
+        "referenced_column_name" : "film_id",
+        "constraint_name" : "fk_film_category_film"
     },
     {
         "table_name" : "film_category",
@@ -634,7 +682,8 @@
         "column_key" : "PRI",
         "column_type" : "tinyint(3) unsigned",
         "referenced_table_name" : "category",
-        "referenced_column_name" : "category_id"
+        "referenced_column_name" : "category_id",
+        "constraint_name" : "fk_film_category_category"
     },
     {
         "table_name" : "film_category",
@@ -647,7 +696,8 @@
         "column_key" : "",
         "column_type" : "timestamp",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film_text",
@@ -660,7 +710,8 @@
         "column_key" : "PRI",
         "column_type" : "smallint(6)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film_text",
@@ -673,7 +724,8 @@
         "column_key" : "MUL",
         "column_type" : "varchar(255)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "film_text",
@@ -686,7 +738,8 @@
         "column_key" : "",
         "column_type" : "text",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "inventory",
@@ -699,7 +752,8 @@
         "column_key" : "PRI",
         "column_type" : "mediumint(8) unsigned",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "inventory",
@@ -712,7 +766,8 @@
         "column_key" : "MUL",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : "film",
-        "referenced_column_name" : "film_id"
+        "referenced_column_name" : "film_id",
+        "constraint_name" : "fk_inventory_film"
     },
     {
         "table_name" : "inventory",
@@ -725,7 +780,8 @@
         "column_key" : "MUL",
         "column_type" : "tinyint(3) unsigned",
         "referenced_table_name" : "store",
-        "referenced_column_name" : "store_id"
+        "referenced_column_name" : "store_id",
+        "constraint_name" : "fk_inventory_store"
     },
     {
         "table_name" : "inventory",
@@ -738,7 +794,8 @@
         "column_key" : "",
         "column_type" : "timestamp",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "language",
@@ -751,7 +808,8 @@
         "column_key" : "PRI",
         "column_type" : "tinyint(3) unsigned",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "language",
@@ -764,7 +822,8 @@
         "column_key" : "",
         "column_type" : "char(20)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "language",
@@ -777,7 +836,8 @@
         "column_key" : "",
         "column_type" : "timestamp",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "payment",
@@ -790,7 +850,8 @@
         "column_key" : "PRI",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "payment",
@@ -803,7 +864,8 @@
         "column_key" : "MUL",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : "customer",
-        "referenced_column_name" : "customer_id"
+        "referenced_column_name" : "customer_id",
+        "constraint_name" : "fk_payment_customer"
     },
     {
         "table_name" : "payment",
@@ -816,7 +878,8 @@
         "column_key" : "MUL",
         "column_type" : "tinyint(3) unsigned",
         "referenced_table_name" : "staff",
-        "referenced_column_name" : "staff_id"
+        "referenced_column_name" : "staff_id",
+        "constraint_name" : "fk_payment_staff"
     },
     {
         "table_name" : "payment",
@@ -829,7 +892,8 @@
         "column_key" : "MUL",
         "column_type" : "int(11)",
         "referenced_table_name" : "rental",
-        "referenced_column_name" : "rental_id"
+        "referenced_column_name" : "rental_id",
+        "constraint_name" : "fk_payment_rental"
     },
     {
         "table_name" : "payment",
@@ -842,7 +906,8 @@
         "column_key" : "",
         "column_type" : "decimal(5,2)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "payment",
@@ -855,7 +920,8 @@
         "column_key" : "",
         "column_type" : "datetime",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "payment",
@@ -868,7 +934,8 @@
         "column_key" : "",
         "column_type" : "timestamp",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "rental",
@@ -881,7 +948,8 @@
         "column_key" : "PRI",
         "column_type" : "int(11)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "rental",
@@ -894,20 +962,8 @@
         "column_key" : "MUL",
         "column_type" : "datetime",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
-    },
-    {
-        "table_name" : "rental",
-        "column_name" : "inventory_id",
-        "data_type" : "mediumint",
-        "is_nullable" : "NO",
-        "character_maximum_length" : null,
-        "numeric_scale" : 0,
-        "numeric_precision" : 7,
-        "column_key" : "MUL",
-        "column_type" : "mediumint(8) unsigned",
-        "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "rental",
@@ -920,20 +976,8 @@
         "column_key" : "MUL",
         "column_type" : "mediumint(8) unsigned",
         "referenced_table_name" : "inventory",
-        "referenced_column_name" : "inventory_id"
-    },
-    {
-        "table_name" : "rental",
-        "column_name" : "customer_id",
-        "data_type" : "smallint",
-        "is_nullable" : "NO",
-        "character_maximum_length" : null,
-        "numeric_scale" : 0,
-        "numeric_precision" : 5,
-        "column_key" : "MUL",
-        "column_type" : "smallint(5) unsigned",
-        "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : "inventory_id",
+        "constraint_name" : "fk_rental_inventory"
     },
     {
         "table_name" : "rental",
@@ -946,7 +990,8 @@
         "column_key" : "MUL",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : "customer",
-        "referenced_column_name" : "customer_id"
+        "referenced_column_name" : "customer_id",
+        "constraint_name" : "fk_rental_customer"
     },
     {
         "table_name" : "rental",
@@ -959,7 +1004,8 @@
         "column_key" : "",
         "column_type" : "datetime",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "rental",
@@ -972,7 +1018,8 @@
         "column_key" : "MUL",
         "column_type" : "tinyint(3) unsigned",
         "referenced_table_name" : "staff",
-        "referenced_column_name" : "staff_id"
+        "referenced_column_name" : "staff_id",
+        "constraint_name" : "fk_rental_staff"
     },
     {
         "table_name" : "rental",
@@ -985,7 +1032,8 @@
         "column_key" : "",
         "column_type" : "timestamp",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "staff",
@@ -998,7 +1046,8 @@
         "column_key" : "PRI",
         "column_type" : "tinyint(3) unsigned",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "staff",
@@ -1011,7 +1060,8 @@
         "column_key" : "",
         "column_type" : "varchar(45)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "staff",
@@ -1024,7 +1074,8 @@
         "column_key" : "",
         "column_type" : "varchar(45)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "staff",
@@ -1037,7 +1088,8 @@
         "column_key" : "MUL",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : "address",
-        "referenced_column_name" : "address_id"
+        "referenced_column_name" : "address_id",
+        "constraint_name" : "fk_staff_address"
     },
     {
         "table_name" : "staff",
@@ -1050,7 +1102,8 @@
         "column_key" : "",
         "column_type" : "blob",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "staff",
@@ -1063,7 +1116,8 @@
         "column_key" : "",
         "column_type" : "varchar(50)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "staff",
@@ -1076,7 +1130,8 @@
         "column_key" : "MUL",
         "column_type" : "tinyint(3) unsigned",
         "referenced_table_name" : "store",
-        "referenced_column_name" : "store_id"
+        "referenced_column_name" : "store_id",
+        "constraint_name" : "fk_staff_store"
     },
     {
         "table_name" : "staff",
@@ -1089,7 +1144,8 @@
         "column_key" : "",
         "column_type" : "tinyint(1)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "staff",
@@ -1102,7 +1158,8 @@
         "column_key" : "",
         "column_type" : "varchar(16)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "staff",
@@ -1115,7 +1172,8 @@
         "column_key" : "",
         "column_type" : "varchar(40)",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "staff",
@@ -1128,7 +1186,8 @@
         "column_key" : "",
         "column_type" : "timestamp",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "store",
@@ -1141,20 +1200,8 @@
         "column_key" : "PRI",
         "column_type" : "tinyint(3) unsigned",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
-    },
-    {
-        "table_name" : "store",
-        "column_name" : "manager_staff_id",
-        "data_type" : "tinyint",
-        "is_nullable" : "NO",
-        "character_maximum_length" : null,
-        "numeric_scale" : 0,
-        "numeric_precision" : 3,
-        "column_key" : "UNI",
-        "column_type" : "tinyint(3) unsigned",
-        "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     },
     {
         "table_name" : "store",
@@ -1167,7 +1214,8 @@
         "column_key" : "UNI",
         "column_type" : "tinyint(3) unsigned",
         "referenced_table_name" : "staff",
-        "referenced_column_name" : "staff_id"
+        "referenced_column_name" : "staff_id",
+        "constraint_name" : "fk_store_staff"
     },
     {
         "table_name" : "store",
@@ -1180,7 +1228,8 @@
         "column_key" : "MUL",
         "column_type" : "smallint(5) unsigned",
         "referenced_table_name" : "address",
-        "referenced_column_name" : "address_id"
+        "referenced_column_name" : "address_id",
+        "constraint_name" : "fk_store_address"
     },
     {
         "table_name" : "store",
@@ -1193,7 +1242,8 @@
         "column_key" : "",
         "column_type" : "timestamp",
         "referenced_table_name" : null,
-        "referenced_column_name" : null
+        "referenced_column_name" : null,
+        "constraint_name" : null
     }
 ]
-    
+   

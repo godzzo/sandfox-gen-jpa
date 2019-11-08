@@ -10,7 +10,13 @@ export async function ProcGenerate(options: string, project: string, tables: Arr
 
 async function ParseTables(options: string, project: string, tables: Array<any>, data: Array<any>) {
 	tables.forEach((table: any) => {
-		const columns = data[table.pos - 1];
+		let columns = null;
+
+		if (table.pos == 0) {
+			columns = data[0].filter((row: any) => row.table == table.name);
+		} else {
+			columns = data[table.pos - 1];
+		}
 
 		SetNames(table);
 

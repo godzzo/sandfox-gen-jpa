@@ -23,7 +23,7 @@ export function Log(msg: string) {
 }
 
 export function Warn(msg: string) {
-	console.log(chalk.red.bgWhite.bold(msg));
+	console.log(chalk.red.bgWhite(msg));
 }
 
 export async function MkDir(srcPath: string) {

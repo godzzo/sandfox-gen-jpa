@@ -1,41 +1,26 @@
-import { ReadJsonFile, Log } from "../lib/common";
+#!/usr/bin/env node
 
-const types: any = {};
-types.smallint = ['number', 'Short'];
-types.varchar = ['string', 'String'];
-types.timestamp = ['Date', 'ZonedDateTime'];
-types.tinyint = ['number', 'Short'];
-types.datetime = ['Date', 'ZonedDateTime'];
-types.text = ['string', 'String'];
-types.year = ['number', 'Short'];
-types.decimal = ['number', 'Double'];
-types.enum = ['string', 'String'];
-types.set = ['string', 'String'];
-types.mediumint = ['number', 'Int'];
-types.char = ['string', 'Char'];
-types.int = ['number', 'Int'];
-types.blob = ['string', 'String'];
+import { ReadJsonFile, Log, Warn } from "../lib/common";
+const CliArgs = require('command-line-args');
 
-/*
-node dist/index.js \
-save \
--p sakila \
--d ./out/sakila \
--k org.mysql.sakila \
--s 1Zt3ff5GsxVW9VVsRwdWoG66TawIQ0fWCxU4VCoq-ROA
 
-node dist/index.js \
-generate \
--p sakila \
--d ./out/sakila \
--k org.mysql.sakila 
+// https://github.com/75lb/command-line-args/blob/master/doc/option-definition.md
+const optDef = [
+    { name: 'command', defaultOption: true, type: String, defaultValue: 'cols' },
+];
 
-*/
+const options = CliArgs(optDef);
+
+//  node dist/sample/sakila.js > config/sakila/config.csv 
 
 (async () => {
-    // await PrintColTypes();
-    // await PrintColRows();
-    await PrintTables();
+    if (options.command == "cols") {
+        await PrintColRows();
+    } else if (options.command == "tables") {
+        await PrintTables();
+    } else if (options.command == "types") {
+        await PrintColTypes();
+    }
 })();
 
 async function PrintColTypes() {
@@ -58,17 +43,19 @@ async function PrintTables() {
 async function PrintColRows() {
     const cols = await ReadJsonFile('./config/sakila/columns_w_keys.json');
     const tables = await ReadJsonFile('./config/sakila/tables.json');
+    const types = GetTypes();
     
+    Log(`table	name	caption	type	ktType	columnType	length	edit	needed	resultType`);
+
     tables.forEach((tbl: any) => {
         
-        Log(`${tbl.table_name}`);
-
-        Log(`name	caption	type	ktType	columnType	length	edit	needed	resultType`);
+        // Log(`${tbl.table_name}`);
 
         cols
             .filter((col: any) => col.table_name == tbl.table_name )
             .forEach((col:any) => {
                 const row: any = {};
+                row.table = col.table_name;
                 row.name = col.column_name;
                 row.caption = col.column_name;
                 row.type = types[col.data_type][0];
@@ -85,12 +72,33 @@ async function PrintColRows() {
                     // const relation = cols.find((el: any) => el.referenced_table_name);
                 }
 
-                if (col.column_key = "PRI") {
+                if (col.column_key == "PRI") {
                     row.type = 'primary';
                 }
 
-                Log(`${row.name}	${row.caption}	${row.type}	${row.ktType}	${row.columnType}	${row.length}	${row.edit}	${row.needed}	${row.resultType}`);
+                Log(`${row.table}	${row.name}	${row.caption}	${row.type}	${row.ktType}	${row.columnType}	${row.length}	${row.edit}	${row.needed}	${row.resultType}`);
             });
 
     });
+}
+
+function GetTypes() {
+    const types: any = {};
+    
+    types.smallint = ['number', 'Short'];
+    types.varchar = ['string', 'String'];
+    types.timestamp = ['Date', 'ZonedDateTime'];
+    types.tinyint = ['number', 'Short'];
+    types.datetime = ['Date', 'ZonedDateTime'];
+    types.text = ['string', 'String'];
+    types.year = ['number', 'Short'];
+    types.decimal = ['number', 'Double'];
+    types.enum = ['string', 'String'];
+    types.set = ['string', 'String'];
+    types.mediumint = ['number', 'Int'];
+    types.char = ['string', 'Char'];
+    types.int = ['number', 'Int'];
+    types.blob = ['string', 'String'];
+    
+    return types;     
 }
