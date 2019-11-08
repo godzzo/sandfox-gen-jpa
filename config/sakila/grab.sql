@@ -45,3 +45,18 @@ SELECT
 ;
 
 SELECT table_name FROM information_schema.tables WHERE table_schema='sakila' AND table_type='BASE TABLE';
+
+
+MariaDB [(none)]> CREATE DATABASE sakila1 CHARACTER SET utf8;
+MariaDB [(none)]> CREATE DATABASE sakila2 CHARACTER SET utf8;
+MariaDB [(none)]> CREATE DATABASE sakila3 CHARACTER SET utf8;
+MariaDB [(none)]> CREATE DATABASE sakila4 CHARACTER SET utf8;
+MariaDB [(none)]> CREATE DATABASE sakila5 CHARACTER SET utf8;
+
+godzzo@godtpyoga1:~/Test/MySQL/sakila-db$ cat sakila-schema.sql | mysql -uuser -pabc123 sakila1
+godzzo@godtpyoga1:~/Test/MySQL/sakila-db$ cat sakila-schema.sql | mysql -uuser -pabc123 sakila2
+godzzo@godtpyoga1:~/Test/MySQL/sakila-db$ cat sakila-schema.sql | mysql -uuser -pabc123 sakila3
+
+godzzo@godtpyoga1:~/Test/MySQL/sakila-db$ cat sakila-data.sql | mysql -uuser -pabc123 sakila1
+godzzo@godtpyoga1:~/Test/MySQL/sakila-db$ cat sakila-data.sql | mysql -uuser -pabc123 sakila2
+godzzo@godtpyoga1:~/Test/MySQL/sakila-db$ cat sakila-data.sql | mysql -uuser -pabc123 sakila3
