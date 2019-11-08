@@ -7,20 +7,47 @@ import javax.validation.constraints.*
 @Entity
 @Table(name = "<%= table.name %>")
 data class <%= table.camelName %>(
-<% table.columns.forEach((column, idx) => { %><% if (!column.type.startsWith('relation') && column.name != 'id') { %>
+<% 
+table.columns.forEach((column, idx) => { 
+%><% 
+	if (!column.type.startsWith('relation') 
+		&& column.type != 'primary'
+		) { 
+%>
 	// <%= column.caption %>
 	<%- column.annotations %>
 	val <%= column.lowerCamelName %>: <%= column.ktType %>,
-<% } %><% }); %>
-<% table.columns.forEach((column, idx) => { %><% if (column.type.startsWith('relation.many')) { %>
-	@OneToMany(mappedBy = "<%= table.lowerCamelName %>", cascade = [CascadeType.ALL])
+<%	} 
+%><% 
+}); 
+%>
+<% 
+table.columns.forEach((column, idx) => { 
+%><% 
+	if (column.type.startsWith('relation.many')) { 
+%>
+	@OneToMany(mappedBy = "<%= table.lowerCamelName %>", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
 	val <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf(),
-<% } %><% }); %>
-<% table.columns.forEach((column, idx) => { %><% if (column.type.startsWith('relation.one')) { %>
-	@ManyToOne
-	@JoinColumn(name = "<%= column.relation.name %>_id")
-	val <%= column.relation.lowerCamelName %>: <%= column.relation.camelName %>,
-<% } %><% }); %>
+<% 
+	} 
+%><% 
+}); 
+%>
+<% 
+table.columns.forEach((column, idx) => { 
+%><% 
+	if (column.type.startsWith('relation.one')) { 
+%>
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "<%= column.name + (column.name.endsWith('_id')? '': '_id') %>")
+	val <%= column.lowerCamelName.endsWith('Id')? 
+		column.lowerCamelName.substring(0, column.lowerCamelName.length-2): 
+		column.lowerCamelName %>: <%= column.relation.camelName %>,
+<%
+	} 
+%><% 
+}); 
+%>
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "<%= table.primary.name %>")
