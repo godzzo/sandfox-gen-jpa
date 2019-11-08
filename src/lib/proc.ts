@@ -1,5 +1,5 @@
 import { SetNames, SetColumnAnnotation, render } from "./generate";
-import { CopyFile, MkDir } from "./common";
+import { CopyFile, MkDir, Warn } from "./common";
 
 
 export async function ProcGenerate(options: string, project: string, tables: Array<any>, data: Array<any>) {
@@ -19,7 +19,15 @@ async function ParseTables(options: string, project: string, tables: Array<any>,
 		columns.forEach((column: any) => {
 			column.annotations = SetColumnAnnotation(column);
 			column.ktType = column.kttype;
+			
+			if (column.type == 'primary') {
+				table.primary = column;
+			}
 		});
+
+		if (!table.primary) {
+			Warn(`Table not has primary ${table.name}!`);
+		}
 
 		table.columns = columns;
 	});
@@ -37,7 +45,12 @@ async function ParseTables(options: string, project: string, tables: Array<any>,
 
 	for (const idx in  tables)	{
 		const table = tables[idx];
-		await Generate(options, project, {table, options, project});
+
+		if (table.primary) {
+			await Generate(options, project, {table, options, project});
+		} else {
+			Warn(`Could not generate without primary: ${table.name}`);
+		}
 	}
 }
 

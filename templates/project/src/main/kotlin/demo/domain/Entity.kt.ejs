@@ -23,5 +23,6 @@ data class <%= table.camelName %>(
 <% } %><% }); %>
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "<%= table.primary.name %>")
 	val id: Long = 0
 )

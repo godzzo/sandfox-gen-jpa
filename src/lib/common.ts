@@ -2,6 +2,8 @@
 import gsjson = require('google-spreadsheet-to-json');
 import fs = require('fs');
 import util = require("util");
+const chalk = require('chalk');
+
 
 export async function LoadSpreadsheetData(spreadsheetId: string, credentials: string) {
 	return gsjson({
@@ -18,6 +20,10 @@ export function LogObj(obj: any, msg: string = '') {
 
 export function Log(msg: string) {
 	console.log(msg);
+}
+
+export function Warn(msg: string) {
+	console.log(chalk.red.bgWhite.bold(msg));
 }
 
 export async function MkDir(srcPath: string) {

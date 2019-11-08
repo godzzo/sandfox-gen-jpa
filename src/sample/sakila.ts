@@ -80,11 +80,13 @@ async function PrintColRows() {
                 row.resultType = 'text';
 
                 if (col.referenced_table_name != null) {
-
                     row.type = `relation.one.${col.referenced_table_name}`;
-
                 } else {
                     // const relation = cols.find((el: any) => el.referenced_table_name);
+                }
+
+                if (col.column_key = "PRI") {
+                    row.type = 'primary';
                 }
 
                 Log(`${row.name}	${row.caption}	${row.type}	${row.ktType}	${row.columnType}	${row.length}	${row.edit}	${row.needed}	${row.resultType}`);
