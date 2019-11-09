@@ -1,5 +1,6 @@
 package <%= options.package %>.domain
 
+import java.io.Serializable
 import java.time.*
 import javax.persistence.*
 import javax.validation.constraints.*
@@ -21,18 +22,6 @@ table.columns.forEach((column, idx) => {
 	<%- column.annotations %>
 	val <%= column.lowerCamelName %>: <%= column.ktType %>,
 <%	} 
-%><% 
-}); 
-%>
-<% 
-table.columns.forEach((column, idx) => { 
-%><% 
-	if (column.type.startsWith('relation.many')) { 
-%>
-	@OneToMany(mappedBy = "<%= table.lowerCamelName %>", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-	val <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf(),
-<% 
-	} 
 %><% 
 }); 
 %>
@@ -70,7 +59,20 @@ table.primaries.forEach((column, idx) => {
 });
 %>
 <%}%>
-)
+): Serializable {
+<% 
+table.columns.forEach((column, idx) => { 
+%><% 
+	if (column.type.startsWith('relation.many')) { 
+%>
+	@OneToMany(mappedBy = "<%= table.lowerCamelName %>", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+	val <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf()
+<% 
+	} 
+%><% 
+}); 
+%>
+}
 
 <%
 if (table.primaries.length > 1) {
