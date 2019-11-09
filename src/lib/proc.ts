@@ -50,12 +50,15 @@ async function ParseTables(options: string, project: string, tables: Array<any>,
 function PrepareColumns(table: any, columns: any) {
 	columns.forEach(SetNames);
 
+	table.primaries = [];
+
 	columns.forEach((column: any) => {
 		column.annotations = SetColumnAnnotation(column);
 		column.ktType = column.kttype;
 		
-		if (column.type == 'primary') {
+		if (column.type.startsWith('primary')) {
 			table.primary = column;
+			table.primaries.push(column);
 		}
 	});
 }
@@ -64,7 +67,7 @@ function LookRelationTables(relations: Array<any>, tables : any) {
 	// Lookup for tables whom targeted by relation
 	tables.forEach((table: any) => {
 		table.columns.forEach((column: any) => {
-			if (column.type.startsWith('relation') ) {
+			if (column.type.startsWith('relation') || column.type.startsWith('primary.')) {
 				const relName = column.type.split('.')[2];
 				const relType = column.type.split('.')[1];
 

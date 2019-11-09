@@ -11,7 +11,7 @@ const optDef = [
 
 const options = CliArgs(optDef);
 
-//  node dist/sample/sakila.js > config/sakila/config.csv 
+//  node dist/sample/sakila.js cols > config/sakila/config.csv 
 
 (async () => {
     if (options.command == "cols") {
@@ -73,7 +73,9 @@ async function PrintColRows() {
                 }
 
                 if (col.column_key == "PRI") {
-                    row.type = 'primary';
+                    row.type = col.referenced_table_name == null ? 
+                        'primary': 
+                        `primary.one.${col.referenced_table_name}`;
                 }
 
                 Log(`${row.table}	${row.name}	${row.caption}	${row.type}	${row.ktType}	${row.columnType}	${row.length}	${row.edit}	${row.needed}	${row.resultType}`);

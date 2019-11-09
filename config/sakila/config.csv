@@ -43,11 +43,11 @@ film	replacement_cost	replacement_cost	number	Double	decimal	null	text	yes	text
 film	rating	rating	string	String	enum	5	text	no	text
 film	special_features	special_features	string	String	set	54	text	no	text
 film	last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
-film_actor	actor_id	actor_id	primary	Short	smallint	null	text	yes	text
-film_actor	film_id	film_id	primary	Short	smallint	null	text	yes	text
+film_actor	actor_id	actor_id	primary.one.actor	Short	smallint	null	text	yes	text
+film_actor	film_id	film_id	primary.one.film	Short	smallint	null	text	yes	text
 film_actor	last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
-film_category	film_id	film_id	primary	Short	smallint	null	text	yes	text
-film_category	category_id	category_id	primary	Short	tinyint	null	text	yes	text
+film_category	film_id	film_id	primary.one.film	Short	smallint	null	text	yes	text
+film_category	category_id	category_id	primary.one.category	Short	tinyint	null	text	yes	text
 film_category	last_update	last_update	Date	ZonedDateTime	timestamp	null	text	yes	text
 film_text	film_id	film_id	primary	Short	smallint	null	text	yes	text
 film_text	title	title	string	String	varchar	255	text	yes	text

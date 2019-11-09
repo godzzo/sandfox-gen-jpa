@@ -6,12 +6,15 @@ import javax.validation.constraints.*
 
 @Entity
 @Table(name = "<%= table.name %>")
+<%if (table.primaries.length > 1) {
+	%>@IdClass(<%= table.camelName %>Id::class)<%
+}%>
 data class <%= table.camelName %>(
 <% 
 table.columns.forEach((column, idx) => { 
 %><% 
 	if (!column.type.startsWith('relation') 
-		&& column.type != 'primary'
+		&& !column.type.startsWith('primary')
 		) { 
 %>
 	// <%= column.caption %>
@@ -48,8 +51,42 @@ table.columns.forEach((column, idx) => {
 %><% 
 }); 
 %>
+
+<%if (table.primaries.length < 2) { %>
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "<%= table.primary.name %>")
 	val id: Long = 0
+<%} else {%><% 
+table.primaries.forEach((column, idx) => { 
+%>
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "<%= column.name + (column.name.endsWith('_id')? '': '_id') %>")
+	val <%= column.lowerCamelName.endsWith('Id')? 
+		column.lowerCamelName.substring(0, column.lowerCamelName.length-2): 
+		column.lowerCamelName %>: <%= column.relation.camelName %><%if (idx<table.primaries.length-1) {%>,<%}%>
+<%
+});
+%>
+<%}%>
 )
+
+<%
+if (table.primaries.length > 1) {
+%>
+// https://stackoverflow.com/questions/23837561/jpa-2-0-many-to-many-with-extra-column
+data class <%= table.camelName %>Id (
+<% 
+table.primaries.forEach((column, idx) => { 
+%>	<%if (idx>0) {%>,<%}%>
+	val <%= column.lowerCamelName.endsWith('Id')? 
+		column.lowerCamelName.substring(0, column.lowerCamelName.length-2): 
+		column.lowerCamelName %>: Long = 0
+<%
+});
+%>
+): Serializable
+<% 
+} 
+%>
