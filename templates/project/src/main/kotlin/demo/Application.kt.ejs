@@ -4,18 +4,23 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.boot.runApplication
+import org.slf4j.LoggerFactory
 
 @SpringBootApplication
-class Application : SpringBootServletInitializer()
+class Application : SpringBootServletInitializer() {
+	override fun configure(application: SpringApplicationBuilder): SpringApplicationBuilder {
+		println(">>>>> Application - configure - Called :)")
+		log.info(">>>>> Application - configure - Called :)")
 
-fun configure(application: SpringApplicationBuilder): SpringApplicationBuilder {
-	println(">>>>> Application - configure - Called :)")
-
-	return application.sources(Application::class.java)
+		return application.sources(Application::class.java)
+	}
 }
+
+private val log = LoggerFactory.getLogger(Application::class.java)
 
 fun main(args: Array<String>) {
 	println(">>>>> Application - main - Called :)")
+	log.info(">>>>> Application - main - Called :)")
 
 	runApplication<Application>(*args)
 }

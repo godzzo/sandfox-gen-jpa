@@ -2,6 +2,7 @@ import util = require("util");
 import fs = require("fs");
 import { renderFile } from "ejs";
 import pluralize = require('pluralize');
+import { Log } from "./common";
 
 
 export function SetNames(data: any): any {
@@ -38,7 +39,9 @@ export function SetNames(data: any): any {
 export async function render(templatePath: string, model: any, outputPath: string) {
 	const writeFile = util.promisify(fs.writeFile);
 
-	try{
+	// Log(`GENERATE? ${templatePath}\n -- TO: ${outputPath}`);
+
+	try {
 		const html = await renderFile(templatePath, model);
 
  		await writeFile(outputPath, html, "utf8");

@@ -1,0 +1,30 @@
+package <%= options.package %>
+
+import org.mysql.sakila.domain.*
+import org.slf4j.LoggerFactory
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer
+import org.springframework.stereotype.Component
+
+@Component
+class RepositoryRestCustomization : RepositoryRestConfigurer {
+    private val log = LoggerFactory.getLogger(RepositoryRestCustomization::class.java)
+
+    init {
+        println("RepositoryRestCustomization: INIT")
+        log.warn("configureRepositoryRestConfiguration: INIT")
+
+    }
+
+    override fun configureRepositoryRestConfiguration(config: RepositoryRestConfiguration?) {
+        println("RepositoryRestCustomization: CALLED")
+        log.warn("configureRepositoryRestConfiguration: CALLED")
+
+        config?.exposeIdsFor(<% 
+tables.forEach((table, idx) => { 
+%>
+            <%= table.camelName %>::class.java<%if (idx<tables.length-1) {%>,<%}%><%
+});%>
+        );
+    }
+}

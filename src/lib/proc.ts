@@ -4,6 +4,8 @@ import pluralize = require('pluralize');
 
 
 export async function ProcGenerate(options: string, project: string, tables: Array<any>, data: Array<any>) {
+	tables.forEach((table: any) => SetNames(table));
+
 	await GenerateProject(options, project, tables);
 
 	await ParseTables(options, project, tables, data);
@@ -20,8 +22,6 @@ async function ParseTables(options: string, project: string, tables: Array<any>,
 		} else {
 			columns = data[table.pos - 1];
 		}
-
-		SetNames(table);
 
 		PrepareColumns(table, columns);
 
@@ -89,9 +89,9 @@ function LookRelationTables(relations: Array<any>, tables : any) {
 
 function CheckBidirectionalRelation(relations: Array<any>, tables : any) {
 	relations.forEach((rel: any) => {
-		Log(`
+		/*Log(`
 ${rel.relType}: ${rel.srcTbl.name} >> ${rel.trgTbl.name} // ${rel.srcCol.name}
-		`);
+		`);*/
 
 		if (rel.relType == "one" && `${rel.trgTbl.name}_id` == rel.srcCol.name) {
 			const found = relations.find((rf: any) => 
@@ -113,12 +113,13 @@ ${rel.relType}: ${rel.srcTbl.name} >> ${rel.trgTbl.name} // ${rel.srcCol.name}
 
 				SetNames(newCol);
 
+				/*
 				Warn(`Bidirectional relation not Found!
 				rf.srcTbl.name == ${rel.trgTbl.name} &&
 				rf.trgTbl.name == ${rel.srcTbl.name} &&
 				rf.relType == 'many'
 				${colName}
-				`);
+				`);*/
 
 				rel.trgTbl.columns.push(newCol);
 			}
@@ -126,7 +127,7 @@ ${rel.relType}: ${rel.srcTbl.name} >> ${rel.trgTbl.name} // ${rel.srcCol.name}
 	})
 }
 
-async function GenerateProject(options: any, project: string, meta: any) {
+async function GenerateProject(options: any, project: string, tables: any) {
 	options.tmpl = `${options.foxPath}/templates/project`;
 	options.packagePath = options.package.replace(/\./g, '/');
 
@@ -151,6 +152,8 @@ async function GenerateProject(options: any, project: string, meta: any) {
 	await MkDir(`${out}/src/main/kotlin/${options.packagePath}`);
 	await render(`${tmpl}/src/main/kotlin/demo/Application.kt.ejs`
 		, options, `${out}/src/main/kotlin/${options.packagePath}/Application.kt`);
+	await render(`${tmpl}/src/main/kotlin/demo/RepositoryRestCustomization.kt.ejs`
+		, {options, tables}, `${out}/src/main/kotlin/${options.packagePath}/RepositoryRestCustomization.kt`);
 	await MkDir(`${out}/src/test/kotlin/${options.packagePath}`);
 	await render(`${tmpl}/src/test/kotlin/demo/ApplicationTests.kt.ejs`
 		, options, `${out}/src/test/kotlin/${options.packagePath}/ApplicationTests.kt`);
