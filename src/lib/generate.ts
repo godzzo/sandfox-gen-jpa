@@ -1,7 +1,8 @@
 import util = require("util");
 import fs = require("fs");
-
 import { renderFile } from "ejs";
+import pluralize = require('pluralize');
+
 
 export function SetNames(data: any): any {
 	const arrWords = data.name.split(/_/g);
@@ -23,10 +24,13 @@ export function SetNames(data: any): any {
 		arrHypen.push(word);
 	});
 
+	data.camelName = arrCapital.join('');
 	data.lowerCamelName = arrLowerCamel.join('');
+	data.pluralCamelName = pluralize.plural(data.camelName);
+	data.pluralLowerCamelName = pluralize.plural(data.lowerCamelName);
+	
 	data.hyphenName = arrHypen.join('-');
 	data.periodName = arrHypen.join('.');
-	data.camelName = arrCapital.join('');
 
 	return data;
 }

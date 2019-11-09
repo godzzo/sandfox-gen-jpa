@@ -1,5 +1,6 @@
 import { SetNames, SetColumnAnnotation, render } from "./generate";
-import { CopyFile, MkDir, Warn } from "./common";
+import { CopyFile, MkDir, Warn, Log } from "./common";
+import pluralize = require('pluralize');
 
 
 export async function ProcGenerate(options: string, project: string, tables: Array<any>, data: Array<any>) {
@@ -9,6 +10,8 @@ export async function ProcGenerate(options: string, project: string, tables: Arr
 }
 
 async function ParseTables(options: string, project: string, tables: Array<any>, data: Array<any>) {
+	const relations: Array<any> = [];
+
 	tables.forEach((table: any) => {
 		let columns = null;
 
@@ -20,16 +23,7 @@ async function ParseTables(options: string, project: string, tables: Array<any>,
 
 		SetNames(table);
 
-		columns.forEach(SetNames);
-
-		columns.forEach((column: any) => {
-			column.annotations = SetColumnAnnotation(column);
-			column.ktType = column.kttype;
-			
-			if (column.type == 'primary') {
-				table.primary = column;
-			}
-		});
+		PrepareColumns(table, columns);
 
 		if (!table.primary) {
 			Warn(`Table not has primary ${table.name}!`);
@@ -38,16 +32,9 @@ async function ParseTables(options: string, project: string, tables: Array<any>,
 		table.columns = columns;
 	});
 
-	tables.forEach((table: any) => {
-		table.columns.forEach((column: any) => {
-			if (column.type.startsWith('relation') ) {
-				const relName = column.type.split('.')[2];
-				const relTable = tables.find(table => table.name == relName);
-				
-				column.relation = relTable;
-			}
-		});
-	});
+	LookRelationTables(relations, tables)
+
+	CheckBidirectionalRelation(relations, tables);
 
 	for (const idx in  tables)	{
 		const table = tables[idx];
@@ -58,6 +45,82 @@ async function ParseTables(options: string, project: string, tables: Array<any>,
 			Warn(`Could not generate without primary: ${table.name}`);
 		}
 	}
+}
+
+function PrepareColumns(table: any, columns: any) {
+	columns.forEach(SetNames);
+
+	columns.forEach((column: any) => {
+		column.annotations = SetColumnAnnotation(column);
+		column.ktType = column.kttype;
+		
+		if (column.type == 'primary') {
+			table.primary = column;
+		}
+	});
+}
+
+function LookRelationTables(relations: Array<any>, tables : any) {
+	// Lookup for tables whom targeted by relation
+	tables.forEach((table: any) => {
+		table.columns.forEach((column: any) => {
+			if (column.type.startsWith('relation') ) {
+				const relName = column.type.split('.')[2];
+				const relType = column.type.split('.')[1];
+
+				const relTable = tables.find((table: any) => table.name == relName);
+				
+				column.relation = relTable;
+
+				relations.push({
+					srcTbl: table,
+					srcCol: column,
+					trgTbl: relTable,
+					trgCol: relTable.columns.find((col: any) => col.type == 'primary'),
+					relType
+				});
+			}
+		});
+	});
+}
+
+function CheckBidirectionalRelation(relations: Array<any>, tables : any) {
+	relations.forEach((rel: any) => {
+		Log(`
+${rel.relType}: ${rel.srcTbl.name} >> ${rel.trgTbl.name} // ${rel.srcCol.name}
+		`);
+
+		if (rel.relType == "one" && `${rel.trgTbl.name}_id` == rel.srcCol.name) {
+			const found = relations.find((rf: any) => 
+				rf.srcTbl.name == rel.trgTbl.name &&
+				rf.trgTbl.name == rel.srcTbl.name &&
+				rf.relType == 'many'
+			);
+
+			if (!found) {
+				const colName = pluralize.plural(
+					rel.srcTbl.name
+				);
+
+				const newCol: any = {
+					name: colName,
+					type: `relation.many.${rel.trgTbl.name}`,
+					relation: rel.srcTbl
+				};
+
+				SetNames(newCol);
+
+				Warn(`Bidirectional relation not Found!
+				rf.srcTbl.name == ${rel.trgTbl.name} &&
+				rf.trgTbl.name == ${rel.srcTbl.name} &&
+				rf.relType == 'many'
+				${colName}
+				`);
+
+				rel.trgTbl.columns.push(newCol);
+			}
+		}
+	})
 }
 
 async function GenerateProject(options: any, project: string, meta: any) {

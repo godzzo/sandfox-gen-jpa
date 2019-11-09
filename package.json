@@ -16,9 +16,11 @@
   "dependencies": {
     "@types/ejs": "^2.6.3",
     "@types/node": "^12.12.6",
+    "@types/pluralize": "0.0.29",
     "chalk": "^2.4.2",
     "command-line-args": "^5.1.1",
     "ejs": "^2.6.1",
-    "google-spreadsheet-to-json": "^1.0.0"
+    "google-spreadsheet-to-json": "^1.0.0",
+    "pluralize": "^8.0.0"
   }
 }
