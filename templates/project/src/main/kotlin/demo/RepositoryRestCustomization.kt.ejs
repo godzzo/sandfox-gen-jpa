@@ -1,10 +1,13 @@
 package <%= options.package %>
 
-import org.mysql.sakila.domain.*
+import <%= options.package %>.domain.*
 import org.slf4j.LoggerFactory
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer
 import org.springframework.stereotype.Component
+import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.validation.Validator
 
 @Component
 class RepositoryRestCustomization : RepositoryRestConfigurer {
@@ -26,5 +29,15 @@ tables.forEach((table, idx) => {
             <%= table.camelName %>::class.java<%if (idx<tables.length-1) {%>,<%}%><%
 });%>
         );
+    }
+
+    @Autowired
+    private val validator: Validator? = null
+
+    override fun configureValidatingRepositoryEventListener(
+            validatingListener: ValidatingRepositoryEventListener
+    ) {
+        validatingListener.addValidator("beforeCreate", validator)
+        validatingListener.addValidator("beforeSave", validator)
     }
 }
