@@ -166,13 +166,24 @@ async function Generate(options: any, project: string, meta: any) {
 ./src/test/kotlin/org/godzzo/sb/sbkvscone/repository/TestUserRepository.kt	GEN
 	*/
 
+	const prjPath = 'src/main/kotlin/demo';
+
 	const domainPath = `${options.directory}/src/main/kotlin/${options.packagePath}/domain`;
 	await MkDir(domainPath);
-	
+
 	await render(
-		`${options.tmpl}/src/main/kotlin/demo/domain/Entity.kt.ejs`, 
+		`${options.tmpl}/${prjPath}/domain/Entity.kt.ejs`, 
 		meta, 
 		`${domainPath}/${meta.table.camelName}.kt`
+	);
+
+	const controllerPath = `${options.directory}/src/main/kotlin/${options.packagePath}/controller`;
+	await MkDir(controllerPath);
+
+	await render(
+		`${options.tmpl}/${prjPath}/controller/FilterController.kt.ejs`, 
+		meta, 
+		`${controllerPath}/${meta.table.camelName}FilterController.kt`
 	);
 
 	const repoPath = `${options.directory}/src/main/kotlin/${options.packagePath}/repository`;
@@ -180,7 +191,7 @@ async function Generate(options: any, project: string, meta: any) {
 	
 	if (meta.table.menu && meta.table.menu == 'yes') {
 		await render(
-			`${options.tmpl}/src/main/kotlin/demo/repository/Repository.kt.ejs`, 
+			`${options.tmpl}/${prjPath}/repository/Repository.kt.ejs`, 
 			meta, 
 			`${repoPath}/${meta.table.camelName}Repository.kt`
 		);

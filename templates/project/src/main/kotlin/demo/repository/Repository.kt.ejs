@@ -2,8 +2,9 @@ package <%= options.package %>.repository
 
 import <%= options.package %>.domain.<%= table.camelName %>
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 
 @Repository
-interface <%= table.camelName %>Repository : JpaRepository<<%= table.camelName %>, Long> 
+interface <%= table.camelName %>Repository : JpaRepository<<%= table.camelName %>, Long>, JpaSpecificationExecutor<<%= table.camelName %>>
+

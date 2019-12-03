@@ -1,0 +1,54 @@
+package <%= options.package %>.controller
+
+import <%= options.package %>.domain.<%= table.camelName %>
+import <%= options.package %>.repository.<%= table.camelName %>Repository
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.domain.Specification
+import org.springframework.data.rest.webmvc.RepositoryRestController
+import org.springframework.data.web.PagedResourcesAssembler
+import org.springframework.hateoas.EntityModel
+import org.springframework.hateoas.PagedModel
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestParam
+import javax.persistence.criteria.Predicate
+
+
+@Controller
+@RepositoryRestController
+class <%= table.camelName %>FilterController(
+        @Autowired val repository: <%= table.camelName %>Repository
+) {
+    val log = LoggerFactory.getLogger(<%= table.camelName %>FilterController::class.java)
+
+    init {
+        log.info("<%= table.camelName %>FilterController INITIALIZED...");
+    }
+
+    @RequestMapping(value = ["/{repository}/<%= table.pluralLowerCamelName %>Filter"], method = arrayOf(RequestMethod.GET))
+    fun <%= table.pluralLowerCamelName %>Filter(@RequestParam("search") search : String,
+         pageable: Pageable,
+         assembler: PagedResourcesAssembler<<%= table.camelName %>>) : ResponseEntity<PagedModel<EntityModel<<%= table.camelName %>>>> {
+
+        val specifications = createSpecifications(search)
+        val result = repository.findAll(specifications, pageable);
+
+        return ResponseEntity(assembler.toModel(result), HttpStatus.OK);
+    }
+
+    fun createSpecifications(search: String): Specification<<%= table.camelName %>>? = Specification.where(
+        Specification { root, query, cb ->
+            val predicates = mutableListOf<Predicate>()
+
+            predicates.add(cb.like(root.get<String>("firstName"), "${search}%"))
+            predicates.add(cb.like(root.get<String>("lastName"), "${search}%"))
+
+            cb.or(*predicates.toTypedArray())
+        }
+    )
+}
