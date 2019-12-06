@@ -149,11 +149,17 @@ async function GenerateProject(options: any, project: string, tables: any) {
 	await MkDir(`${out}/src/main/resources`);
 	await render(`${tmpl}/src/main/resources/application.properties.ejs`
 		, options, `${out}/src/main/resources/application.properties`);
+
 	await MkDir(`${out}/src/main/kotlin/${options.packagePath}`);
 	await render(`${tmpl}/src/main/kotlin/demo/Application.kt.ejs`
 		, options, `${out}/src/main/kotlin/${options.packagePath}/Application.kt`);
 	await render(`${tmpl}/src/main/kotlin/demo/RepositoryRestCustomization.kt.ejs`
 		, {options, tables}, `${out}/src/main/kotlin/${options.packagePath}/RepositoryRestCustomization.kt`);
+
+	await MkDir(`${out}/src/main/kotlin/${options.packagePath}/util`);
+	await render(`${tmpl}/src/main/kotlin/demo/util/FilterHelper.kt.ejs`
+		, options, `${out}/src/main/kotlin/${options.packagePath}/util/FilterHelper.kt`);
+	
 	await MkDir(`${out}/src/test/kotlin/${options.packagePath}`);
 	await render(`${tmpl}/src/test/kotlin/demo/ApplicationTests.kt.ejs`
 		, options, `${out}/src/test/kotlin/${options.packagePath}/ApplicationTests.kt`);

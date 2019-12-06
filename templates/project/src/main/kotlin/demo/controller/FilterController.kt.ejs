@@ -2,6 +2,7 @@ package <%= options.package %>.controller
 
 import <%= options.package %>.domain.<%= table.camelName %>
 import <%= options.package %>.repository.<%= table.camelName %>Repository
+import <%= options.package %>.util.FilterHelper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
@@ -30,25 +31,55 @@ class <%= table.camelName %>FilterController(
         log.info("<%= table.camelName %>FilterController INITIALIZED...");
     }
 
-    @RequestMapping(value = ["/{repository}/<%= table.pluralLowerCamelName %>Filter"], method = arrayOf(RequestMethod.GET))
-    fun <%= table.pluralLowerCamelName %>Filter(@RequestParam("search") search : String,
+    @RequestMapping(value = ["/{repository}/filter<%= table.pluralCamelName %>"], method = arrayOf(RequestMethod.GET))
+    fun <%= table.pluralLowerCamelName %>Filter(filter : <%= table.camelName %>Filter,
          pageable: Pageable,
          assembler: PagedResourcesAssembler<<%= table.camelName %>>) : ResponseEntity<PagedModel<EntityModel<<%= table.camelName %>>>> {
 
-        val specifications = createSpecifications(search)
+        val specifications = createSpecifications(filter)
         val result = repository.findAll(specifications, pageable);
 
         return ResponseEntity(assembler.toModel(result), HttpStatus.OK);
     }
 
-    fun createSpecifications(search: String): Specification<<%= table.camelName %>>? = Specification.where(
+    fun createSpecifications(filter : <%= table.camelName %>Filter): Specification<<%= table.camelName %>>? = Specification.where(
         Specification { root, query, cb ->
             val predicates = mutableListOf<Predicate>()
 
-            predicates.add(cb.like(root.get<String>("firstName"), "${search}%"))
-            predicates.add(cb.like(root.get<String>("lastName"), "${search}%"))
+            // predicates.add(cb.like(root.get<String>("lastName"), "${search}%"))
+			// FilterHelper.like(root, query, cb, predicates, "firstName", search);
+			
+		<% 
+		table.columns.forEach((column, idx) => { 
+		%><% 
+			if (column.ktType === 'String') { 
+		%>
+			FilterHelper.like(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_like);
+			FilterHelper.equal(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_equal);
+		<%
+			} 
+		%><% 
+		}); 
+		%>
+			
+			cb.or(*predicates.toTypedArray())
+		}
+	)
+}
 
-            cb.or(*predicates.toTypedArray())
-        }
-    )
+data class <%= table.camelName %>Filter(
+<% 
+table.columns.forEach((column, idx) => { 
+%><% 
+	if (column.ktType === 'String') { 
+%>
+	val <%= column.lowerCamelName %>_like: <%= column.ktType %>?,
+	val <%= column.lowerCamelName %>_equal: <%= column.ktType %>?,
+<%
+	} 
+%><% 
+}); 
+%>
+	val fooBar: String? // Not needed, just a badly handled comma
+) {
 }
