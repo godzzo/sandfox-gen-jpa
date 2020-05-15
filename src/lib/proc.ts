@@ -197,11 +197,11 @@ async function Generate(options: any, project: string, meta: any) {
 	const repoPath = `${options.directory}/src/main/kotlin/${options.packagePath}/repository`;
 	await MkDir(repoPath);
 	
-	if (meta.table.menu && meta.table.menu == 'yes') {
+	// if (meta.table.menu && meta.table.menu == 'yes') {
 		await render(
 			`${options.tmpl}/${prjPath}/repository/Repository.kt.ejs`, 
 			meta, 
 			`${repoPath}/${meta.table.camelName}Repository.kt`
 		);
-	}
+	// }
 }
