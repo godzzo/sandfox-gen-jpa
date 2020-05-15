@@ -48,6 +48,8 @@ async function ParseTables(options: string, project: string, tables: Array<any>,
 }
 
 function PrepareColumns(table: any, columns: any) {
+	console.log("PrepareColumns: ", JSON.stringify(columns, null, 4));
+
 	columns.forEach(SetNames);
 
 	table.primaries = [];

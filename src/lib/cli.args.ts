@@ -10,7 +10,7 @@ export function ParseCliArgs() {
 		{ name: 'project', alias: 'p', type: String, defaultValue: 'sample' },
 		{ name: 'package', alias: 'k', type: String, defaultValue: 'demo' },
 		{ name: 'showLogo', type: String, defaultValue: 'yes' },
-		{ name: 'showArgs', type: String, defaultValue: 'no' },
+		{ name: 'showArgs', type: String, defaultValue: 'yes' },
 		{ name: 'credential', alias: 'c', type: String, defaultValue: 'credentials/gd-drive-access.json' },
 		{ name: 'sheetId', alias: 's', type: String, defaultValue: 'NONE' } // 1A-CnEIWo4YUtYWqw8QZGkfOJzzw0TBXEL1kll3C9nbE
 	];
