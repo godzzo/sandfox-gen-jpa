@@ -20,7 +20,7 @@ table.columns.forEach((column, idx) => {
 %>
 	// <%= column.caption %>
 	<%- column.annotations %>
-	val <%= column.lowerCamelName %>: <%= column.ktType %>,
+	val <%= column.lowerCamelName %>: <%= column.ktType %><%= column.needed != 'yes'? '?': ''  %>,
 <%	} 
 %><% 
 }); 
