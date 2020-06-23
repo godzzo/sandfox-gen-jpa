@@ -62,6 +62,10 @@ class <%= table.camelName %>FilterController(
 		}); 
 		%>
 			
+			if (predicates.size < 1) {
+				predicates.add(cb.isNotNull(root.get<String>("id")))
+			}
+
 			cb.or(*predicates.toTypedArray())
 		}
 	)
