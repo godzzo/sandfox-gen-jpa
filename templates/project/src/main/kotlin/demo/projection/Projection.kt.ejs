@@ -31,7 +31,7 @@ table.columns.forEach((column, idx) => {
 %>
 	fun get<%= column.lowerCamelName.endsWith('Id')? 
 		column.camelName.substring(0, column.lowerCamelName.length-2): 
-		column.camelName %>(): <%= column.relation.camelName %>,
+		column.camelName %>(): <%= column.relation.camelName %>
 <%
 	} 
 %><% 
