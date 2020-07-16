@@ -1,0 +1,41 @@
+package <%= options.package %>.projection
+
+import <%= options.package %>.domain.*
+import org.springframework.data.rest.core.config.Projection
+import java.time.*
+import javax.persistence.*
+
+@Projection(name = "<%= table.camelName %>Projection", types = [<%= table.camelName %>::class])
+interface <%= table.camelName %>Projection {
+
+<% 
+// A nem relációs vagyis egyszerű tulajdonságok generálása
+table.columns.forEach((column, idx) => { 
+%><% 
+    if (!column.type.startsWith('relation') 
+        && !column.type.startsWith('primary')
+        ) { 
+%>
+    // <%= column.caption %>
+    fun get<%= column.camelName %>(): <%= column.ktType %><%= column.needed != 'yes'? '?': ''  %>
+<%	} 
+%><% 
+}); 
+%>
+ 
+<% 
+// Az egy (1:N) oldalu relációk getter -ként berakása
+table.columns.forEach((column, idx) => { 
+%><% 
+	if (column.type.startsWith('relation.one')) { 
+%>
+	fun get<%= column.lowerCamelName.endsWith('Id')? 
+		column.camelName.substring(0, column.lowerCamelName.length-2): 
+		column.camelName %>(): <%= column.relation.camelName %>,
+<%
+	} 
+%><% 
+}); 
+%>
+
+}

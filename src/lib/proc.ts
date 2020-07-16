@@ -17,12 +17,14 @@ async function ParseTables(options: string, project: string, tables: Array<any>,
 	tables.forEach((table: any) => {
 		let columns = null;
 
+		// Handling ALL sheet - all table config in one sheet
 		if (table.pos == 0) {
 			columns = data[0].filter((row: any) => row.table == table.name);
 		} else {
 			columns = data[table.pos - 1];
 		}
 
+		// SetNames, Primary, Annotations
 		PrepareColumns(table, columns);
 
 		if (!table.primary) {
@@ -204,4 +206,14 @@ async function Generate(options: any, project: string, meta: any) {
 			`${repoPath}/${meta.table.camelName}Repository.kt`
 		);
 	// }
+
+	const projPath = `${options.directory}/src/main/kotlin/${options.packagePath}/projection`;
+	await MkDir(projPath);
+
+	await render(
+		`${options.tmpl}/${prjPath}/projection/Projection.kt.ejs`, 
+		meta, 
+		`${projPath}/${meta.table.camelName}Projection.kt`
+	);
+
 }

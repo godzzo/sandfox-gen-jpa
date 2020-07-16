@@ -1,6 +1,7 @@
 package <%= options.package %>
 
 import <%= options.package %>.domain.*
+import <%= options.package %>.projection.*
 import org.slf4j.LoggerFactory
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer
@@ -22,6 +23,12 @@ class RepositoryRestCustomization : RepositoryRestConfigurer {
     override fun configureRepositoryRestConfiguration(config: RepositoryRestConfiguration?) {
         println("RepositoryRestCustomization: CALLED")
         log.warn("configureRepositoryRestConfiguration: CALLED")
+
+        config?.getProjectionConfiguration()<% 
+tables.forEach((table, idx) => { 
+%>
+            ?.addProjection(<%= table.camelName %>Projection::class.java)<%
+});%>
 
         config?.exposeIdsFor(<% 
 tables.forEach((table, idx) => { 
