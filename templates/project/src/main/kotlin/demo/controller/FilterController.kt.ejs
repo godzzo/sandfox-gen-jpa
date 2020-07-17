@@ -67,7 +67,11 @@ class <%= table.camelName %>FilterController(
 				predicates.add(cb.isNotNull(root.get<String>("id")))
 			}
 
-			cb.or(*predicates.toTypedArray())
+			if (filter.isAnd) {
+				cb.and(*predicates.toTypedArray())
+			} else {
+				cb.or(*predicates.toTypedArray())
+			}
 		}
 	)
 }
@@ -85,6 +89,8 @@ table.columns.forEach((column, idx) => {
 %><% 
 }); 
 %>
-	val fullText_like: String?
+	val fullText_like: String?,
+
+	val isAnd : Boolean = false
 ) {
 }
