@@ -55,6 +55,7 @@ class <%= table.camelName %>FilterController(
 			if (column.ktType === 'String') { 
 		%>
 			FilterHelper.like(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_like);
+			FilterHelper.like(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.fullText_like);
 			FilterHelper.equal(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_equal);
 		<%
 			} 
@@ -84,6 +85,6 @@ table.columns.forEach((column, idx) => {
 %><% 
 }); 
 %>
-	val fooBar: String? // Not needed, just a badly handled comma
+	val fullText_like: String?
 ) {
 }
