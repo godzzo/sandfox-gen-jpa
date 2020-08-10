@@ -1,12 +1,15 @@
 package <%= options.package %>.projection
 
 import <%= options.package %>.domain.*
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.rest.core.config.Projection
 import java.time.*
 import javax.persistence.*
 
 @Projection(name = "<%= table.camelName %>Projection", types = [<%= table.camelName %>::class])
 interface <%= table.camelName %>Projection {
+	@Value("#{target.id}")
+	fun getId(): Int
 
 <% 
 // A nem relációs vagyis egyszerű tulajdonságok generálása
