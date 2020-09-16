@@ -14,6 +14,7 @@ import org.springframework.hateoas.PagedModel
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
@@ -22,6 +23,7 @@ import javax.persistence.criteria.Predicate
 
 @Controller
 @RepositoryRestController
+@CrossOrigin
 class <%= table.camelName %>FilterController(
         @Autowired val repository: <%= table.camelName %>Repository
 ) {
@@ -54,8 +56,14 @@ class <%= table.camelName %>FilterController(
 		%><% 
 			if (column.ktType === 'String') { 
 		%>
-			FilterHelper.like(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_like);
-			FilterHelper.like(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.fullText_like);
+			FilterHelper.fullLike(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_like);
+			FilterHelper.fullLike(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.fullText_like);
+			FilterHelper.equal(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_equal);
+		<%
+			} 
+		%><% 
+			if (column.ktType === 'Int') { 
+		%>
 			FilterHelper.equal(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_equal);
 		<%
 			} 
@@ -83,6 +91,12 @@ table.columns.forEach((column, idx) => {
 	if (column.ktType === 'String') { 
 %>
 	val <%= column.lowerCamelName %>_like: <%= column.ktType %>?,
+	val <%= column.lowerCamelName %>_equal: <%= column.ktType %>?,
+<%
+	} 
+%><% 
+	if (column.ktType === 'Int') { 
+%>
 	val <%= column.lowerCamelName %>_equal: <%= column.ktType %>?,
 <%
 	} 

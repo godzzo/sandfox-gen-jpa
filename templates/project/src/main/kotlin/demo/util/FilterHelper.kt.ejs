@@ -7,6 +7,20 @@ import javax.persistence.criteria.Root
 
 object FilterHelper {
 
+    fun greaterThan(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+             predicates: MutableList<Predicate>, name: String?, value: Int?) {
+        if (value != null) {
+            predicates.add(cb.greaterThan(root.get(name), value))
+        }
+    }
+
+    fun lessThan(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+            predicates: MutableList<Predicate>, name: String?, value: Int?) {
+        if (value != null) {
+            predicates.add(cb.lessThan(root.get(name), value))
+        }
+    }
+
     fun like(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
              predicates: MutableList<Predicate>, name: String?, value: String?) {
         if (value != null) {
@@ -14,8 +28,22 @@ object FilterHelper {
         }
     }
 
+    fun fullLike(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+             predicates: MutableList<Predicate>, name: String?, value: String?) {
+        if (value != null) {
+            predicates.add(cb.like(root.get(name), "%${value}%"))
+        }
+    }
+
     fun equal(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
-              predicates: MutableList<Predicate>, name: String?, value: String?) {
+            predicates: MutableList<Predicate>, name: String?, value: String?) {
+        if (value != null) {
+            predicates.add(cb.equal(root.get<String>(name), value))
+        }
+    }
+
+    fun equal(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+            predicates: MutableList<Predicate>, name: String?, value: Int?) {
         if (value != null) {
             predicates.add(cb.equal(root.get<String>(name), value))
         }
