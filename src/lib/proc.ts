@@ -157,6 +157,9 @@ async function GenerateProject(options: any, project: string, tables: any) {
 	await MkDir(`${out}/src/main/kotlin/${options.packagePath}`);
 	await render(`${tmpl}/src/main/kotlin/demo/Application.kt.ejs`
 		, options, `${out}/src/main/kotlin/${options.packagePath}/Application.kt`);
+	await render(`${tmpl}/src/main/kotlin/demo/SpecConfiguration.kt.ejs`
+		, options, `${out}/src/main/kotlin/${options.packagePath}/SpecConfiguration.kt`);
+
 	await render(`${tmpl}/src/main/kotlin/demo/RepositoryRestCustomization.kt.ejs`
 		, {options, tables}, `${out}/src/main/kotlin/${options.packagePath}/RepositoryRestCustomization.kt`);
 

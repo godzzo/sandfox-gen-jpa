@@ -2,11 +2,13 @@ package <%= options.package %>.controller
 
 import <%= options.package %>.domain.<%= table.camelName %>
 import <%= options.package %>.repository.<%= table.camelName %>Repository
+import <%= options.package %>.projection.<%= table.camelName %>Projection
 import <%= options.package %>.util.FilterHelper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
+import org.springframework.data.projection.ProjectionFactory
 import org.springframework.data.rest.webmvc.RepositoryRestController
 import org.springframework.data.web.PagedResourcesAssembler
 import org.springframework.hateoas.EntityModel
@@ -25,7 +27,8 @@ import javax.persistence.criteria.Predicate
 @RepositoryRestController
 @CrossOrigin
 class <%= table.camelName %>FilterController(
-        @Autowired val repository: <%= table.camelName %>Repository
+	@Autowired val repository: <%= table.camelName %>Repository,
+	@Autowired val factory: ProjectionFactory
 ) {
     val log = LoggerFactory.getLogger(<%= table.camelName %>FilterController::class.java)
 
@@ -36,12 +39,16 @@ class <%= table.camelName %>FilterController(
     @RequestMapping(value = ["/{repository}/filter<%= table.pluralCamelName %>"], method = arrayOf(RequestMethod.GET))
     fun <%= table.pluralLowerCamelName %>Filter(filter : <%= table.camelName %>Filter,
          pageable: Pageable,
-         assembler: PagedResourcesAssembler<<%= table.camelName %>>) : ResponseEntity<PagedModel<EntityModel<<%= table.camelName %>>>> {
+         assembler: PagedResourcesAssembler<<%= table.camelName %>Projection>) : ResponseEntity<PagedModel<EntityModel<<%= table.camelName %>Projection>>> {
 
         val specifications = createSpecifications(filter)
-        val result = repository.findAll(specifications, pageable);
+		val result = repository.findAll(specifications, pageable)
+		
+		val projected = result.map {
+			factory.createProjection(<%= table.camelName %>Projection::class.java, it)
+		}
 
-        return ResponseEntity(assembler.toModel(result), HttpStatus.OK);
+        return ResponseEntity(assembler.toModel(projected), HttpStatus.OK);
     }
 
     fun createSpecifications(filter : <%= table.camelName %>Filter): Specification<<%= table.camelName %>>? = Specification.where(
