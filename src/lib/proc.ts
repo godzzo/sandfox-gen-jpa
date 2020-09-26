@@ -3,8 +3,8 @@ import { MkDir, Warn, Log, WriteJsonFile } from "./common";
 import pluralize = require('pluralize');
 
 
-export type RenderData = {templatePath: string, outputPath: string, model: any};
-export type CopyData = {srcPath: string, destPath: string};
+export type RenderData = {templatePath: string, outputPath: string, model: any, size: number};
+export type CopyData = {srcPath: string, destPath: string, size: number};
 export type Register = { outPath: string, created: string, renders: RenderData[], copies: CopyData[] };
 
 export async function ProcGenerate(options: string, project: string, tables: Array<any>, data: Array<any>) {
@@ -22,6 +22,8 @@ export async function ProcGenerate(options: string, project: string, tables: Arr
 	await ParseTables(register, options, project, tables, data);
 
 	await WriteJsonFile(`${register.outPath}/config/generateRegister.json`, register);
+
+	return register;
 }
 
 async function ParseTables(reg: Register, options: string, project: string, tables: Array<any>, data: Array<any>) {

@@ -31,6 +31,18 @@ export async function MkDir(srcPath: string) {
 	await mkdir(srcPath, {recursive: true});
 }
 
+export function FileSize(path: string) {
+	try {
+		const stats = fs.statSync(path);
+	
+		return stats.size;
+	} catch (e) {
+		console.log(e);
+
+		return -1;
+	}
+}
+
 export async function CopyFile(srcPath: string, destPath: string) {
 	const copyFile = util.promisify(fs.copyFile);
 
@@ -44,6 +56,10 @@ export async function ReadFile(filePath: string): Promise<string> {
 	return buffer.toString();
 }
 
+export function FileExists(filePath: string) {
+	return fs.existsSync(filePath);
+}
+
 export async function ReadJsonFile(filePath: string): Promise<any> {
 	const text = await ReadFile(filePath);
 
@@ -52,11 +68,21 @@ export async function ReadJsonFile(filePath: string): Promise<any> {
 	return data;
 }
 
-export async function WriteJsonFile(filePath: string, data: any) {
+export async function WriteFile(filePath: string, data: string) {
 	const writeFile = util.promisify(fs.writeFile);
 
 	try {
- 		await writeFile(filePath, JSON.stringify(data, null, 4), "utf8");
+ 		await writeFile(filePath, data, "utf8");
+	} catch(error) {
+		console.log(error);
+	}
+}
+
+export async function WriteJsonFile(filePath: string, data: any) {
+	try {
+		const json = JSON.stringify(data, null, 4);
+
+ 		await WriteFile(filePath, json);
 	} catch(error) {
 		console.log(error);
 	}

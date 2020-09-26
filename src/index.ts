@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 
-import { Log, LogObj, ReadFile, WriteJsonFile, MkDir } from "./lib/common";
+import { Log, LogObj, ReadFile, WriteJsonFile, MkDir, ReadJsonFile } from "./lib/common";
 import { ProcGenerate } from "./lib/proc";
 import { ParseCliArgs } from "./lib/cli.args";
 import { LoadMeta, LoadGSMeta } from "./lib/meta";
+import { ApplyCustom } from "./lib/custom";
+
 const chalk = require('chalk');
 
 
@@ -13,10 +15,10 @@ const chalk = require('chalk');
 	sakila:
 	node dist/index.js save -s 1Zt3ff5GsxVW9VVsRwdWoG66TawIQ0fWCxU4VCoq-ROA -d ./out/sakila -p sakila-kt-jpa -k org.mysql.sakila
 	node dist/index.js generate -s 1Zt3ff5GsxVW9VVsRwdWoG66TawIQ0fWCxU4VCoq-ROA -d ./out/sakila -p sakila-kt-jpa -k org.mysql.sakila
-	
-	tapie: 
-	node dist/index.js save -s 1PFibRlxGtjuCrFS1FiE7d5_SteiH5Zd_z_tet4VMybQ -d ./out/tapie -p tapie-mvc-kt -k org.godzzo.tapie
-	node dist/index.js generate -s 1PFibRlxGtjuCrFS1FiE7d5_SteiH5Zd_z_tet4VMybQ -d ./out/tapie -p tapie-mvc-kt -k org.godzzo.tapie
+
+	node dist/index.js save     -s 1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY -d ./out/simple -q ./in/simple -k -p simple -k org.godzzo.simple
+	node dist/index.js generate -s 1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY -d ./out/simple -q ./in/simple -k -p simple -k org.godzzo.simple
+	node dist/index.js custom   -s 1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY -d ./out/simple -q ./in/simple -k -p simple -k org.godzzo.simple
 */
 
 console.log('SandFox GEN JPA - Loaded...');
@@ -37,6 +39,8 @@ const options = ParseCliArgs();
 			await SaveGSMeta(options);
 		} else if (options.command == "generate") {
 			await InvokeGenerate(options);
+		} else if (options.command == "custom") {
+			await InvokeCustom(options);
 		} else {
 			Log(`Don't known this command: ${options.command} :(`);
 		}
@@ -75,6 +79,14 @@ async function InvokeGenerate(options: any) {
 	const {tables, data} = await LoadMeta(options);
 
 	await ProcGenerate(options, options.project, tables, data);
+}
+
+async function InvokeCustom(options: any) {
+	const register = await ReadJsonFile(`${options.directory}/config/generateRegister.json`);
+
+	console.log('register', register);
+
+	await ApplyCustom(register, options);
 }
 
 export const NgModelGen = (name: string) => 'Hello '+name;

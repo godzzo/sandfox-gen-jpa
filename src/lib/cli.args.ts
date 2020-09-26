@@ -7,6 +7,7 @@ export function ParseCliArgs() {
 	const optDef = [
 		{ name: 'command', defaultOption: true, type: String, defaultValue: 'info' },
 		{ name: 'directory', alias: 'd', type: String, defaultValue: './out/sample' },
+		{ name: 'customDir', alias: 'q', type: String, defaultValue: './in/sample' },
 		{ name: 'project', alias: 'p', type: String, defaultValue: 'sample' },
 		{ name: 'package', alias: 'k', type: String, defaultValue: 'demo' },
 		{ name: 'showLogo', type: String, defaultValue: 'yes' },
