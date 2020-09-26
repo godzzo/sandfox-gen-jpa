@@ -1,8 +1,9 @@
+import { Register } from './proc';
 import util = require("util");
 import fs = require("fs");
 import { renderFile } from "ejs";
 import pluralize = require('pluralize');
-import { Log } from "./common";
+import { CopyFile, Log } from "./common";
 
 
 export function SetNames(data: any): any {
@@ -36,7 +37,7 @@ export function SetNames(data: any): any {
 	return data;
 }
 
-export async function render(templatePath: string, model: any, outputPath: string) {
+export async function render(register: Register, templatePath: string, model: any, outputPath: string) {
 	const writeFile = util.promisify(fs.writeFile);
 
 	// Log(`GENERATE? ${templatePath}\n -- TO: ${outputPath}`);
@@ -44,10 +45,19 @@ export async function render(templatePath: string, model: any, outputPath: strin
 	try {
 		const html = await renderFile(templatePath, model);
 
- 		await writeFile(outputPath, html, "utf8");
+		await writeFile(outputPath, html, "utf8");
+
+		// TODO: model is circular should create a free one, to support serialize to json that
+		register.renders.push({templatePath, outputPath, model: null});
 	} catch(error) {
 		console.log(error);
 	}
+}
+
+export async function RegCpFile(register: Register, srcPath: string, destPath: string) {
+	CopyFile(srcPath, destPath);
+
+	register.copies.push({srcPath, destPath});
 }
 
 export function SetColumnAnnotation(column: any): string {

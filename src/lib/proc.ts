@@ -1,17 +1,30 @@
-import { SetNames, SetColumnAnnotation, render } from "./generate";
-import { CopyFile, MkDir, Warn, Log } from "./common";
+import { SetNames, SetColumnAnnotation, render, RegCpFile } from "./generate";
+import { MkDir, Warn, Log, WriteJsonFile } from "./common";
 import pluralize = require('pluralize');
 
 
+export type RenderData = {templatePath: string, outputPath: string, model: any};
+export type CopyData = {srcPath: string, destPath: string};
+export type Register = { outPath: string, created: string, renders: RenderData[], copies: CopyData[] };
+
 export async function ProcGenerate(options: string, project: string, tables: Array<any>, data: Array<any>) {
+	const register: Register = {
+		renders: new Array<RenderData>(),
+		copies: new Array<CopyData>(),
+		outPath: '',
+		created: new Date().toISOString(),
+	};
+
 	tables.forEach((table: any) => SetNames(table));
 
-	await GenerateProject(options, project, tables);
+	await GenerateProject(register, options, project, tables);
 
-	await ParseTables(options, project, tables, data);
+	await ParseTables(register, options, project, tables, data);
+
+	await WriteJsonFile(`${register.outPath}/config/generateRegister.json`, register);
 }
 
-async function ParseTables(options: string, project: string, tables: Array<any>, data: Array<any>) {
+async function ParseTables(reg: Register, options: string, project: string, tables: Array<any>, data: Array<any>) {
 	const relations: Array<any> = [];
 
 	tables.forEach((table: any) => {
@@ -42,7 +55,7 @@ async function ParseTables(options: string, project: string, tables: Array<any>,
 		const table = tables[idx];
 
 		if (table.primary) {
-			await Generate(options, project, {table, options, project});
+			await Generate(reg, options, project, {table, options, project});
 		} else {
 			Warn(`Could not generate without primary: ${table.name}`);
 		}
@@ -131,48 +144,50 @@ ${rel.relType}: ${rel.srcTbl.name} >> ${rel.trgTbl.name} // ${rel.srcCol.name}
 	})
 }
 
-async function GenerateProject(options: any, project: string, tables: any) {
+async function GenerateProject(reg: Register, options: any, project: string, tables: any) {
 	options.tmpl = `${options.foxPath}/templates/project`;
 	options.packagePath = options.package.replace(/\./g, '/');
 
 	const tmpl = options.tmpl;
 	const out = options.directory;
 
-	await CopyFile(`${tmpl}/gradlew`, `${out}/gradlew`);	
-	await CopyFile(`${tmpl}/gradlew.bat`, `${out}/gradlew.bat`);	
-	await CopyFile(`${tmpl}/README.md`, `${out}/README.md`);	
-	await CopyFile(`${tmpl}/.gitignore`, `${out}/.gitignore`);	
+	reg.outPath = out;
 
-	await render(`${tmpl}/build.gradle.kts.ejs`, options, `${out}/build.gradle.kts`);
-	await render(`${tmpl}/settings.gradle.kts.ejs`, options, `${out}/settings.gradle.kts`);
+	await RegCpFile(reg, `${tmpl}/gradlew`, `${out}/gradlew`);	
+	await RegCpFile(reg, `${tmpl}/gradlew.bat`, `${out}/gradlew.bat`);	
+	await RegCpFile(reg, `${tmpl}/README.md`, `${out}/README.md`);	
+	await RegCpFile(reg, `${tmpl}/.gitignore`, `${out}/.gitignore`);	
+
+	await render(reg, `${tmpl}/build.gradle.kts.ejs`, options, `${out}/build.gradle.kts`);
+	await render(reg, `${tmpl}/settings.gradle.kts.ejs`, options, `${out}/settings.gradle.kts`);
 
 	await MkDir(`${out}/gradle/wrapper`);
-	await CopyFile(`${tmpl}/gradle/wrapper/gradle-wrapper.jar`, `${out}/gradle/wrapper/gradle-wrapper.jar`);	
-	await CopyFile(`${tmpl}/gradle/wrapper/gradle-wrapper.properties`, `${out}/gradle/wrapper/gradle-wrapper.properties`);	
+	await RegCpFile(reg, `${tmpl}/gradle/wrapper/gradle-wrapper.jar`, `${out}/gradle/wrapper/gradle-wrapper.jar`);	
+	await RegCpFile(reg, `${tmpl}/gradle/wrapper/gradle-wrapper.properties`, `${out}/gradle/wrapper/gradle-wrapper.properties`);	
 
 	await MkDir(`${out}/src/main/resources`);
-	await render(`${tmpl}/src/main/resources/application.properties.ejs`
+	await render(reg, `${tmpl}/src/main/resources/application.properties.ejs`
 		, options, `${out}/src/main/resources/application.properties`);
 
 	await MkDir(`${out}/src/main/kotlin/${options.packagePath}`);
-	await render(`${tmpl}/src/main/kotlin/demo/Application.kt.ejs`
+	await render(reg, `${tmpl}/src/main/kotlin/demo/Application.kt.ejs`
 		, options, `${out}/src/main/kotlin/${options.packagePath}/Application.kt`);
-	await render(`${tmpl}/src/main/kotlin/demo/SpecConfiguration.kt.ejs`
+	await render(reg, `${tmpl}/src/main/kotlin/demo/SpecConfiguration.kt.ejs`
 		, options, `${out}/src/main/kotlin/${options.packagePath}/SpecConfiguration.kt`);
 
-	await render(`${tmpl}/src/main/kotlin/demo/RepositoryRestCustomization.kt.ejs`
+	await render(reg, `${tmpl}/src/main/kotlin/demo/RepositoryRestCustomization.kt.ejs`
 		, {options, tables}, `${out}/src/main/kotlin/${options.packagePath}/RepositoryRestCustomization.kt`);
 
 	await MkDir(`${out}/src/main/kotlin/${options.packagePath}/util`);
-	await render(`${tmpl}/src/main/kotlin/demo/util/FilterHelper.kt.ejs`
+	await render(reg, `${tmpl}/src/main/kotlin/demo/util/FilterHelper.kt.ejs`
 		, options, `${out}/src/main/kotlin/${options.packagePath}/util/FilterHelper.kt`);
 	
 	await MkDir(`${out}/src/test/kotlin/${options.packagePath}`);
-	await render(`${tmpl}/src/test/kotlin/demo/ApplicationTests.kt.ejs`
+	await render(reg, `${tmpl}/src/test/kotlin/demo/ApplicationTests.kt.ejs`
 		, options, `${out}/src/test/kotlin/${options.packagePath}/ApplicationTests.kt`);
 }
 
-async function Generate(options: any, project: string, meta: any) {
+async function Generate(reg: Register, options: any, project: string, meta: any) {
 	// console.log("GENERATE TABLE: ", JSON.stringify(meta, null, 4));
 
 	/*
@@ -185,6 +200,7 @@ async function Generate(options: any, project: string, meta: any) {
 	await MkDir(domainPath);
 
 	await render(
+		reg,
 		`${options.tmpl}/${prjPath}/domain/Entity.kt.ejs`, 
 		meta, 
 		`${domainPath}/${meta.table.camelName}.kt`
@@ -194,6 +210,7 @@ async function Generate(options: any, project: string, meta: any) {
 	await MkDir(controllerPath);
 
 	await render(
+		reg,
 		`${options.tmpl}/${prjPath}/controller/FilterController.kt.ejs`, 
 		meta, 
 		`${controllerPath}/${meta.table.camelName}FilterController.kt`
@@ -204,6 +221,7 @@ async function Generate(options: any, project: string, meta: any) {
 	
 	// if (meta.table.menu && meta.table.menu == 'yes') {
 		await render(
+			reg,
 			`${options.tmpl}/${prjPath}/repository/Repository.kt.ejs`, 
 			meta, 
 			`${repoPath}/${meta.table.camelName}Repository.kt`
@@ -214,6 +232,7 @@ async function Generate(options: any, project: string, meta: any) {
 	await MkDir(projPath);
 
 	await render(
+		reg,
 		`${options.tmpl}/${prjPath}/projection/Projection.kt.ejs`, 
 		meta, 
 		`${projPath}/${meta.table.camelName}Projection.kt`
