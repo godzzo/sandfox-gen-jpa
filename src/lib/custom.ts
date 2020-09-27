@@ -37,7 +37,7 @@ function InvokeCustomization(newContent: string, oldContent: string) {
 
     const blocks = InsertCustoms(customs, newContent);
 
-    const appliedContent = blocks.join('\n');
+    const appliedContent = blocks.join('');
 
     return appliedContent;
 }
@@ -77,7 +77,7 @@ function ParseCustoms(customs: any[], text: string) {
           console.log(`[[[${text}]]]`);
   
         } else {
-          blocks.push(`/*FOXB-${name}*/\n/*FOXE-${name}*/\n`);
+          blocks.push(`/*FOXB-${name}*/\n/*FOXE-${name}*/`);
         }
   
         blocks.push(remaining);
