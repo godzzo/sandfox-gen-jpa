@@ -6,8 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.stereotype.Repository
 import org.springframework.web.bind.annotation.CrossOrigin
+/*FOXB-IMPORT*/
+/*FOXE-IMPORT*/
 
 @Repository
 @CrossOrigin
-interface <%= table.camelName %>Repository : JpaRepository<<%= table.camelName %>, Long>, JpaSpecificationExecutor<<%= table.camelName %>>
-
+interface <%= table.camelName %>Repository : JpaRepository<<%= table.camelName %>, Long>, JpaSpecificationExecutor<<%= table.camelName %>> {
+/*FOXB-BLOCK*/
+/*FOXE-BLOCK*/
+}

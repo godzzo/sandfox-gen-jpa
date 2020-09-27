@@ -5,12 +5,16 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.rest.core.config.Projection
 import java.time.*
 import javax.persistence.*
+/*FOXB-IMPORT*/
+/*FOXE-IMPORT*/
 
 @Projection(name = "<%= table.camelName %>Projection", types = [<%= table.camelName %>::class])
 interface <%= table.camelName %>Projection {
 	@Value("#{target.id}")
 	fun getId(): Int
 
+/*FOXB-BLOCK*/
+/*FOXE-BLOCK*/
 <% 
 // A nem relációs vagyis egyszerű tulajdonságok generálása
 table.columns.forEach((column, idx) => { 
