@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import javax.persistence.criteria.Predicate
+/*FOXB-IMPORT*/
+/*FOXE-IMPORT*/
 
 
 @Controller
@@ -28,6 +30,8 @@ import javax.persistence.criteria.Predicate
 @CrossOrigin
 class <%= table.camelName %>FilterController(
 	@Autowired val repository: <%= table.camelName %>Repository,
+/*FOXB-INIT*/
+/*FOXE-INIT*/
 	@Autowired val factory: ProjectionFactory
 ) {
     val log = LoggerFactory.getLogger(<%= table.camelName %>FilterController::class.java)
@@ -35,6 +39,9 @@ class <%= table.camelName %>FilterController(
     init {
         log.info("<%= table.camelName %>FilterController INITIALIZED...");
     }
+
+/*FOXB-BODY*/
+/*FOXE-BODY*/
 
     @RequestMapping(value = ["/{repository}/filter<%= table.pluralCamelName %>"], method = arrayOf(RequestMethod.GET))
     fun <%= table.pluralLowerCamelName %>Filter(filter : <%= table.camelName %>Filter,
@@ -77,7 +84,10 @@ class <%= table.camelName %>FilterController(
 		%><% 
 		}); 
 		%>
-			
+
+/*FOXB-SPEC*/
+/*FOXE-SPEC*/
+		
 			if (predicates.size < 1) {
 				predicates.add(cb.isNotNull(root.get<String>("id")))
 			}
@@ -112,6 +122,11 @@ table.columns.forEach((column, idx) => {
 %>
 	val fullText_like: String?,
 
+/*FOXB-MODEL_INIT*/
+/*FOXE-MODEL_INIT*/
+
 	val isAnd : Boolean = false
 ) {
+/*FOXB-MODEL_BLOCK*/
+/*FOXE-MODEL_BLOCK*/
 }
