@@ -1,0 +1,58 @@
+package <%= options.package %>.repository
+
+import <%= options.package %>.domain.<%= table.camelName %>
+import <%= options.package %>.repository.<%= table.camelName %>Repository
+import <%= options.package %>.util.FilterHelper
+import <%= options.package %>.util.TestPageRequest
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
+import org.springframework.data.domain.Sort
+import org.springframework.data.jpa.domain.Specification
+import org.springframework.data.projection.ProjectionFactory
+import javax.persistence.criteria.Predicate
+
+
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+class Test<%= table.camelName %>Repository(
+/*FOXB-CARG*/
+/*FOXE-CARG*/
+    @Autowired val repository: <%= table.camelName %>Repository,
+    @Autowired val factory: ProjectionFactory
+) {
+/*FOXB-INIT*/
+/*FOXE-INIT*/
+    
+    @Test
+    fun testFindById() {
+        val entity = repository?.findById(1)
+
+        println(entity)
+    }
+
+    @Test
+    fun testQueryWithCriteriaBuilder() {
+        val specifications = createSpecifications()
+
+        val result = repository?.findAll(
+            specifications,
+            TestPageRequest(0, 10, Sort.by("id"))
+        )
+    }
+
+    fun createSpecifications(): Specification<<%= table.camelName %>>? = Specification.where(
+        Specification { root, query, cb ->
+            val predicates = mutableListOf<Predicate>()
+
+            FilterHelper.equal(root, query, cb, predicates, "id", 1)
+
+            // predicates.add(cb.isNotNull(root.get<String>("id")))
+
+            cb.or(*predicates.toTypedArray())
+        }
+    )
+
+/*FOXB-CODE*/
+/*FOXE-CODE*/
+}

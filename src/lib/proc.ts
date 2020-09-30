@@ -187,6 +187,10 @@ async function GenerateProject(reg: Register, options: any, project: string, tab
 	await MkDir(`${out}/src/test/kotlin/${options.packagePath}`);
 	await render(reg, `${tmpl}/src/test/kotlin/demo/ApplicationTests.kt.ejs`
 		, options, `${out}/src/test/kotlin/${options.packagePath}/ApplicationTests.kt`);
+
+	await MkDir(`${out}/src/test/kotlin/${options.packagePath}/util`);
+	await render(reg, `${tmpl}/src/test/kotlin/demo/util/TestPageRequest.kt.ejs`
+		, options, `${out}/src/test/kotlin/${options.packagePath}/util/TestPageRequest.kt`);
 }
 
 async function Generate(reg: Register, options: any, project: string, meta: any) {
@@ -197,6 +201,7 @@ async function Generate(reg: Register, options: any, project: string, meta: any)
 	*/
 
 	const prjPath = 'src/main/kotlin/demo';
+	const tprjPath = 'src/test/kotlin/demo';
 
 	const domainPath = `${options.directory}/src/main/kotlin/${options.packagePath}/domain`;
 	await MkDir(domainPath);
@@ -240,4 +245,23 @@ async function Generate(reg: Register, options: any, project: string, meta: any)
 		`${projPath}/${meta.table.camelName}Projection.kt`
 	);
 
+	const trepoPath = `${options.directory}/src/test/kotlin/${options.packagePath}/repository`;
+	await MkDir(trepoPath);
+
+	await render(
+		reg,
+		`${options.tmpl}/${tprjPath}/repository/TestRepository.kt.ejs`, 
+		meta, 
+		`${trepoPath}/Test${meta.table.camelName}Repository.kt`
+	);
+
+	const tctrlPath = `${options.directory}/src/test/kotlin/${options.packagePath}/controller`;
+	await MkDir(tctrlPath);
+
+	await render(
+		reg,
+		`${options.tmpl}/${tprjPath}/controller/TestFilterController.kt.ejs`, 
+		meta, 
+		`${tctrlPath}/TestFilter${meta.table.camelName}Controller.kt`
+	);
 }

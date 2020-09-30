@@ -1,0 +1,18 @@
+node dist/index.js save -s 1A-CnEIWo4YUtYWqw8QZGkfOJzzw0TBXEL1kll3C9nbE 
+sakila: 1Zt3ff5GsxVW9VVsRwdWoG66TawIQ0fWCxU4VCoq-ROA
+
+sakila:
+	node dist/index.js save -s 1Zt3ff5GsxVW9VVsRwdWoG66TawIQ0fWCxU4VCoq-ROA -d ./out/sakila -p sakila-kt-jpa -k org.mysql.sakila
+	node dist/index.js generate -s 1Zt3ff5GsxVW9VVsRwdWoG66TawIQ0fWCxU4VCoq-ROA -d ./out/sakila -p sakila-kt-jpa -k org.mysql.sakila
+
+Recurie 1EHmgJT2QQSISf9iLHA4YwZKfmyXNC3462vf0oUXyDpI
+	node dist/index.js save     -s 1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY -d ./out/simple -q ./in/simple -k -p simple -k org.godzzo.simple
+	node dist/index.js generate -s 1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY -d ./out/simple -q ./in/simple -k -p simple -k org.godzzo.simple
+	node dist/index.js custom   -s 1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY -d ./out/simple -q ./in/simple -k -p simple -k org.godzzo.simple
+
+Recurie 1EHmgJT2QQSISf9iLHA4YwZKfmyXNC3462vf0oUXyDpI
+	CREATE DATABASE recurie CHARACTER SET utf8 COLLATE utf8_hungarian_ci;
+
+	node dist/index.js save     -s 1EHmgJT2QQSISf9iLHA4YwZKfmyXNC3462vf0oUXyDpI -d ./out/recurie -q ./in/recurie -k -p recurie -k org.godzzo.recurie
+	node dist/index.js generate -s 1EHmgJT2QQSISf9iLHA4YwZKfmyXNC3462vf0oUXyDpI -d ./out/recurie -q ./in/recurie -k -p recurie -k org.godzzo.recurie
+	node dist/index.js custom   -s 1EHmgJT2QQSISf9iLHA4YwZKfmyXNC3462vf0oUXyDpI -d ./out/recurie -q ./in/recurie -k -p recurie -k org.godzzo.recurie

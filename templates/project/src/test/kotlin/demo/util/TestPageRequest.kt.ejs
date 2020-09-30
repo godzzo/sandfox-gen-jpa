@@ -1,0 +1,6 @@
+package <%= package %>.util
+
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
+
+class TestPageRequest(page: Int, size: Int, sort: Sort) : PageRequest(page, size, sort)
