@@ -74,6 +74,7 @@ function PrepareColumns(table: any, columns: any) {
 	columns.forEach((column: any) => {
 		column.annotations = SetColumnAnnotation(column);
 		column.ktType = column.kttype;
+		column.writeOnly = (column.writeonly ? (column.writeonly === 'yes') : false);
 		
 		if (column.type.startsWith('primary')) {
 			table.primary = column;

@@ -21,7 +21,8 @@ table.columns.forEach((column, idx) => {
 %><% 
     if (!column.type.startsWith('relation') 
         && !column.type.startsWith('primary')
-        ) { 
+		&& !column.writeOnly
+	) { 
 %>
     // <%= column.caption %>
     fun get<%= column.camelName %>(): <%= column.ktType %><%= column.needed != 'yes'? '?': ''  %>
