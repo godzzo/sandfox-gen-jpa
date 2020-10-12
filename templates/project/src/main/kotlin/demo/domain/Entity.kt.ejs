@@ -38,7 +38,7 @@ table.columns.forEach((column, idx) => {
 	@JoinColumn(name = "<%= column.name + (column.name.endsWith('_id')? '': '_id') %>")
 	val <%= column.lowerCamelName.endsWith('Id')? 
 		column.lowerCamelName.substring(0, column.lowerCamelName.length-2): 
-		column.lowerCamelName %>: <%= column.relation.camelName %>,
+		column.lowerCamelName %>: <%= column.relation.camelName %><%= column.needed != 'yes'? '?': ''  %>,
 <%
 	} 
 %><% 

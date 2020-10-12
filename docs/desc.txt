@@ -2,7 +2,7 @@ node dist/index.js save -s 1A-CnEIWo4YUtYWqw8QZGkfOJzzw0TBXEL1kll3C9nbE
 sakila: 1Zt3ff5GsxVW9VVsRwdWoG66TawIQ0fWCxU4VCoq-ROA
 
 sakila:
-	node dist/index.js save -s 1Zt3ff5GsxVW9VVsRwdWoG66TawIQ0fWCxU4VCoq-ROA -d ./out/sakila -p sakila-kt-jpa -k org.mysql.sakila
+	node dist/index.js save     -s 1Zt3ff5GsxVW9VVsRwdWoG66TawIQ0fWCxU4VCoq-ROA -d ./out/sakila -p sakila-kt-jpa -k org.mysql.sakila
 	node dist/index.js generate -s 1Zt3ff5GsxVW9VVsRwdWoG66TawIQ0fWCxU4VCoq-ROA -d ./out/sakila -p sakila-kt-jpa -k org.mysql.sakila
 
 Recurie 1EHmgJT2QQSISf9iLHA4YwZKfmyXNC3462vf0oUXyDpI
