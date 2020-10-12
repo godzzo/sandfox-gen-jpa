@@ -76,9 +76,15 @@ class <%= table.camelName %>FilterController(
 		<%
 			} 
 		%><% 
-			if (column.ktType === 'Int') { 
+			if (column.ktType === 'Int' && !column.type.startsWith('relation')) { 
 		%>
 			FilterHelper.equal(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_equal);
+		<%
+			} 
+		%><% 
+			if (column.type.startsWith('relation.one')) { 
+		%>
+			FilterHelper.equal(root, query, cb, predicates, "<%= column.relation.lowerCamelName%>", filter.<%= column.lowerCamelName%>_equal);
 		<%
 			} 
 		%><% 
