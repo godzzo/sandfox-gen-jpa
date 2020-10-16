@@ -1,7 +1,9 @@
 
 import gsjson = require('google-spreadsheet-to-json');
 import fs = require('fs');
-import util = require("util");
+import path = require('path');
+import util = require('util');
+import md5 = require('md5');
 const chalk = require('chalk');
 
 
@@ -26,9 +28,23 @@ export function Warn(msg: string) {
 	console.log(chalk.red.bgWhite(msg));
 }
 
+export function GetDir(filePath: string) {
+	return path.dirname(filePath);
+}
+
 export async function MkDir(srcPath: string) {
 	const mkdir = util.promisify(fs.mkdir);
 	await mkdir(srcPath, {recursive: true});
+}
+
+export function Checksum(data: string) {
+	return md5(data);
+}
+
+export async function FileChecksum(filePath: string) {
+	const data = await ReadFile(filePath);
+
+	return md5(data);
 }
 
 export function FileSize(path: string) {

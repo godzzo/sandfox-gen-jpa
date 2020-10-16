@@ -1,4 +1,5 @@
-import { ReadFile, FileExists, WriteFile, CopyFile } from './common';
+import { ReadFile, FileExists, WriteFile, CopyFile, MkDir, 
+  GetDir, FileChecksum, Checksum } from './common';
 import { Register } from './proc';
 
 
@@ -15,17 +16,39 @@ export async function ApplyCustom(reg: Register, options: any) {
         console.log(el.outputPath, {basePath, oldFile});
 
         if (FileExists(oldFile)) {
+            el.custom = {found : true, errors: [], checkSumAfter: null, checkSumBefore: null};
+
             const oldContent = await ReadFile(oldFile);
 
             console.log('FOUND OLD FILE!');
 
+            el.custom.checkSumBefore = Checksum(oldContent);
+
             const appliedContent = InvokeCustomization(newContent, oldContent)
+
+            el.custom.checkSumAfter = Checksum(appliedContent);
 
             await WriteFile(oldFile, appliedContent);
         } else {
+            el.custom = {found : false, errors: [], checkSumAfter: null, checkSumBefore: null};
+
             console.log('UNABLE TO LOCATE OLD FILE!');
 
-            await CopyFile(el.outputPath, oldFile);
+            if (FileExists(el.outputPath)) {
+              const dirPath = GetDir(oldFile);
+
+              console.log(`MKDIR - ${dirPath}`);
+              
+              await MkDir(dirPath);
+
+              await CopyFile(el.outputPath, oldFile);
+
+              el.custom.checkSumAfter = await FileChecksum(oldFile);
+            } else {
+              el.custom?.errors.push('GENERATED FILE NOT FOUND!');
+
+              console.log('GENERATED FILE NOT FOUND!');
+            }
         }
     }
 }

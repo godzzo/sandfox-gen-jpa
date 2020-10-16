@@ -49,7 +49,7 @@ export async function render(register: Register, templatePath: string, model: an
 		await writeFile(outputPath, html, "utf8");
 
 		// TODO: model is circular should create a free one, to support serialize to json that
-		register.renders.push({templatePath, outputPath, model: null, size: FileSize(outputPath)});
+		register.renders.push({templatePath, outputPath, model: null, size: FileSize(outputPath), custom: null});
 	} catch(error) {
 		console.log(error);
 	}

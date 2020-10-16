@@ -71,9 +71,13 @@ async function InvokeGenerate(options: any) {
 async function InvokeCustom(options: any) {
 	const register = await ReadJsonFile(`${options.directory}/config/generateRegister.json`);
 
-	console.log('register', register);
+	console.log('register', JSON.stringify(register, null, 4));
 
 	await ApplyCustom(register, options);
+
+	await WriteJsonFile(`${options.customDir}/config/customRegister.json`, register);
+
+	console.log('register', JSON.stringify(register, null, 4));
 }
 
 export const NgModelGen = (name: string) => 'Hello '+name;

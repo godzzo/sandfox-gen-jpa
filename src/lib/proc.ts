@@ -3,7 +3,21 @@ import { MkDir, Warn, Log, WriteJsonFile } from "./common";
 import pluralize = require('pluralize');
 
 
-export type RenderData = {templatePath: string, outputPath: string, model: any, size: number};
+export type CustomData = {
+	found: boolean,
+	errors: string[],
+	checkSumBefore: string | null,
+	checkSumAfter: string | null,
+};
+
+export type RenderData = {
+	templatePath: string, 
+	outputPath: string, 
+	model: any, 
+	size: number,
+	custom: CustomData | null,
+};
+
 export type CopyData = {srcPath: string, destPath: string, size: number};
 export type Register = { outPath: string, created: string, renders: RenderData[], copies: CopyData[] };
 
