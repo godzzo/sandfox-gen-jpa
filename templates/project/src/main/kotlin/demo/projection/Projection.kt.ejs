@@ -9,7 +9,7 @@ import javax.persistence.*
 /*FOXE-IMPORT*/
 
 @Projection(name = "<%= table.camelName %>Projection", types = [<%= table.camelName %>::class])
-interface <%= table.camelName %>Projection {
+interface <%= table.camelName %><%= extraNameTag %>Projection {
 	@Value("#{target.<%= table.primary.lowerCamelName %>}")
 	fun get<%= table.primary.camelName %>(): Int
 
@@ -33,17 +33,19 @@ table.columns.forEach((column, idx) => {
  
 <% 
 // Az egy (1:N) oldalu relációk getter -ként berakása
-table.columns.forEach((column, idx) => { 
+if (generateGenerateOne) {
+	table.columns.forEach((column, idx) => { 
 %><% 
-	if (column.type.startsWith('relation.one')) { 
+		if (column.type.startsWith('relation.one')) { 
 %>
 	fun get<%= column.lowerCamelName.endsWith('Id')? 
 		column.camelName.substring(0, column.lowerCamelName.length-2): 
-		column.camelName %>(): <%= column.relation.camelName %>
+		column.camelName %>(): <%= column.relation.camelName %>BaseProjection
 <%
-	} 
+		} 
 %><% 
-}); 
+	}); 
+}
 %>
 
 }

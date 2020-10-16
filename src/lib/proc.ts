@@ -278,11 +278,21 @@ async function Generate(reg: Register, options: any, project: string, meta: any)
 	const projPath = `${options.directory}/src/main/kotlin/${options.packagePath}/projection`;
 	await MkDir(projPath);
 
+	meta.extraNameTag = '';
+	meta.generateGenerateOne = true;
 	await render(
 		reg,
 		`${options.tmpl}/${prjPath}/projection/Projection.kt.ejs`, 
 		meta, 
 		`${projPath}/${meta.table.camelName}Projection.kt`
+	);
+	meta.extraNameTag = 'Base';
+	meta.generateGenerateOne = false;
+	await render(
+		reg,
+		`${options.tmpl}/${prjPath}/projection/Projection.kt.ejs`, 
+		meta, 
+		`${projPath}/${meta.table.camelName}BaseProjection.kt`
 	);
 
 	const trepoPath = `${options.directory}/src/test/kotlin/${options.packagePath}/repository`;
