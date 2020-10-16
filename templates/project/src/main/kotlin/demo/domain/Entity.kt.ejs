@@ -51,7 +51,7 @@ table.columns.forEach((column, idx) => {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "<%= table.primary.name %>")
-	val id: Long = 0
+	val <%= table.primary.lowerCamelName %>: Long = 0
 <%} else {%><% 
 table.primaries.forEach((column, idx) => { 
 %>
