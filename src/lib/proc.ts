@@ -233,6 +233,16 @@ async function Generate(reg: Register, options: any, project: string, meta: any)
 		`${domainPath}/${meta.table.camelName}.kt`
 	);
 
+	const entitylistenerPath = `${options.directory}/src/main/kotlin/${options.packagePath}/entitylistener`;
+	await MkDir(entitylistenerPath);
+
+	await render(
+		reg,
+		`${options.tmpl}/${prjPath}/entitylistener/EntityListener.kt.ejs`, 
+		meta, 
+		`${entitylistenerPath}/${meta.table.camelName}EntityListener.kt`
+	);
+
 	const eventhandlerPath = `${options.directory}/src/main/kotlin/${options.packagePath}/eventhandler`;
 	await MkDir(eventhandlerPath);
 

@@ -1,0 +1,47 @@
+package <%= options.package %>.entitylistener
+
+import <%= options.package %>.domain.<%= table.camelName %>
+import javax.persistence.*
+/*FOXB-IMPORT*/
+/*FOXE-IMPORT*/
+
+class <%= table.camelName %>EntityListener(
+/*FOXB-CARG*/
+/*FOXE-CARG*/
+) {
+    fun preSave(type: String, entity: <%= table.camelName %>) {
+/*FOXB-PRE*/
+/*FOXE-PRE*/
+    }
+
+    fun postSave(type: String, entity: <%= table.camelName %>) {
+/*FOXB-POST*/
+/*FOXE-POST*/
+    }
+
+    @PrePersist
+    fun prePersist(entity: <%= table.camelName %>) {
+        preSave("insert", entity);
+    }
+    @PreUpdate
+    fun preUpdate(entity: <%= table.camelName %>) {
+        preSave("update", entity);
+    }
+    @PreRemove
+    fun preRemove(entity: <%= table.camelName %>) {
+        preSave("delete", entity);
+    }
+
+    @PostPersist
+    fun postPersist(entity: <%= table.camelName %>) {
+        postSave("insert", entity);
+    }
+    @PostUpdate
+    fun postUpdate(entity: <%= table.camelName %>) {
+        postSave("update", entity);
+    }
+    @PostRemove
+    fun postRemove(entity: <%= table.camelName %>) {
+        postSave("delete", entity);
+    }
+}

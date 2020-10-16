@@ -1,6 +1,6 @@
-package <%= options.package %>.domain
+package <%= options.package %>.eventhandler
 
-import <%= options.package %>.domain.*
+import <%= options.package %>.domain.<%= table.camelName %>
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.rest.core.annotation.*
 import org.springframework.stereotype.Component
