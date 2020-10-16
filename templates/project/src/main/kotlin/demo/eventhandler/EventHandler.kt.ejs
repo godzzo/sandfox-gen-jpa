@@ -1,0 +1,54 @@
+package <%= options.package %>.domain
+
+import <%= options.package %>.domain.*
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.rest.core.annotation.*
+import org.springframework.stereotype.Component
+/*FOXB-IMPORT*/
+/*FOXE-IMPORT*/
+
+@Component
+@RepositoryEventHandler(<%= table.camelName %>::class)
+class <%= table.camelName %>EventHandler(
+/*FOXB-CARG*/
+/*FOXE-CARG*/
+) {
+
+    fun before(type: String, entity: <%= table.camelName %>) {
+/*FOXB-BEFORE*/
+/*FOXE-BEFORE*/
+    }
+
+    fun after(type: String, entity: <%= table.camelName %>) {
+/*FOXB-AFTER*/
+/*FOXE-AFTER*/
+    }
+
+    @HandleBeforeCreate
+    fun beforeCreate(entity: <%= table.camelName %>) {
+        before("insert", entity)
+
+    }
+    @HandleBeforeDelete
+    fun beforeDelete(entity: <%= table.camelName %>) {
+        before("delete", entity)
+    }
+    @HandleBeforeSave
+    fun beforeSave(entity: <%= table.camelName %>) {
+        before("update", entity)
+    }
+
+    @HandleAfterCreate
+    fun afterCreate(entity: <%= table.camelName %>) {
+        after("insert", entity)
+
+    }
+    @HandleAfterDelete
+    fun afterDelete(entity: <%= table.camelName %>) {
+        after("delete", entity)
+    }
+    @HandleAfterSave
+    fun afterSave(entity: <%= table.camelName %>) {
+        after("update", entity)
+    }
+}

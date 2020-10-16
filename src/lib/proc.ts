@@ -233,6 +233,16 @@ async function Generate(reg: Register, options: any, project: string, meta: any)
 		`${domainPath}/${meta.table.camelName}.kt`
 	);
 
+	const eventhandlerPath = `${options.directory}/src/main/kotlin/${options.packagePath}/eventhandler`;
+	await MkDir(eventhandlerPath);
+
+	await render(
+		reg,
+		`${options.tmpl}/${prjPath}/eventhandler/EventHandler.kt.ejs`, 
+		meta, 
+		`${eventhandlerPath}/${meta.table.camelName}EventHandler.kt`
+	);
+
 	const controllerPath = `${options.directory}/src/main/kotlin/${options.packagePath}/controller`;
 	await MkDir(controllerPath);
 
