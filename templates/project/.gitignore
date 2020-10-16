@@ -34,3 +34,7 @@ out/
 \.attach_*
 tmp/
 bin/
+
+### SandFox ###
+
+*.custom

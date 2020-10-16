@@ -1,56 +1,130 @@
 import { ReadFile, FileExists, WriteFile, CopyFile, MkDir, 
-  GetDir, FileChecksum, Checksum } from './common';
-import { Register } from './proc';
+  MakeDirFromFile, FileChecksum, Checksum, ReadJsonFile } from './common';
+import { Register, RenderData, CopyData } from './proc';
 
+
+interface CustomConfig {
+  ignore: {
+    copyAsCustom: boolean;
+    masks: string[];
+  };
+}
 
 export async function ApplyCustom(reg: Register, options: any) {
     console.log('reg', {reg, options});
 
+    const customConfigPath = `${options.customDir}/config/custom.json`;
+    let customConfig = null;
+
+    if (FileExists(customConfigPath)) {
+      customConfig = await ReadJsonFile(customConfigPath) as CustomConfig;
+    } else {
+      customConfig = await ReadJsonFile(`${options.directory}/config/custom.json`) as CustomConfig;
+    }
+
     for (const el of reg.renders) {
-        
-        const basePath = el.outputPath.replace(options.directory, '');
-        const oldFile = `${options.customDir}${basePath}`;
+        const { basePath, oldFile } = ParsePath(el.outputPath, options);
 
         const newContent = await ReadFile(el.outputPath);
 
         console.log(el.outputPath, {basePath, oldFile});
 
-        if (FileExists(oldFile)) {
-            el.custom = {found : true, errors: [], checkSumAfter: null, checkSumBefore: null};
-
-            const oldContent = await ReadFile(oldFile);
-
-            console.log('FOUND OLD FILE!');
-
-            el.custom.checkSumBefore = Checksum(oldContent);
-
-            const appliedContent = InvokeCustomization(newContent, oldContent)
-
-            el.custom.checkSumAfter = Checksum(appliedContent);
-
-            await WriteFile(oldFile, appliedContent);
-        } else {
-            el.custom = {found : false, errors: [], checkSumAfter: null, checkSumBefore: null};
-
-            console.log('UNABLE TO LOCATE OLD FILE!');
-
-            if (FileExists(el.outputPath)) {
-              const dirPath = GetDir(oldFile);
-
-              console.log(`MKDIR - ${dirPath}`);
-              
-              await MkDir(dirPath);
-
-              await CopyFile(el.outputPath, oldFile);
-
-              el.custom.checkSumAfter = await FileChecksum(oldFile);
-            } else {
-              el.custom?.errors.push('GENERATED FILE NOT FOUND!');
-
-              console.log('GENERATED FILE NOT FOUND!');
-            }
-        }
+        await CustomFile(oldFile, el, newContent, customConfig);
     }
+
+    for (const el of reg.copies) {
+      const { basePath, oldFile } = ParsePath(el.destPath, options);
+
+      await CopyNotFoundFile(oldFile, el, customConfig);
+    }
+}
+
+function DontIgnore(filePath: string, customConfig:  CustomConfig) {
+  const found = customConfig.ignore.masks.find(el => new RegExp(el).test(filePath) );
+
+  return (found === undefined);
+}
+
+async function CopyNotFoundFile(oldFile: string, el: CopyData, customConfig: CustomConfig) {
+  if (!FileExists(oldFile)) {
+      el.custom = { found: false, errors: [], checkSumBefore: null, checkSumAfter: null, copyAsCustom: false };
+
+      await MakeDirFromFile(oldFile);
+
+      if (DontIgnore(oldFile, customConfig)) {
+        await CopyFile(el.destPath, oldFile); 
+
+      } else if (customConfig.ignore.copyAsCustom) {
+        el.custom.copyAsCustom = true;
+
+        await CopyFile(el.destPath, `${oldFile}.custom`); 
+      }
+  } else {
+    el.custom = { found: true, errors: [], checkSumBefore: null, checkSumAfter: null, copyAsCustom: false };
+  }
+}
+
+async function CustomFile(oldFile: string, el: RenderData, newContent: string, customConfig: CustomConfig) {
+  if (FileExists(oldFile)) {
+    await CustomExistsFile(el, oldFile, newContent, customConfig);
+  } else {
+    await CustomNotFoundFile(el, oldFile, customConfig);
+  }
+}
+
+function ParsePath(outputPath: string, options: any) {
+  const basePath = outputPath.replace(options.directory, '');
+  const oldFile = `${options.customDir}${basePath}`;
+
+  return { basePath, oldFile };
+}
+
+async function CustomNotFoundFile(el: RenderData, oldFile: string, customConfig: CustomConfig) {
+  el.custom = { found: false, errors: [], checkSumAfter: null, checkSumBefore: null, copyAsCustom: false };
+
+  console.log('UNABLE TO LOCATE OLD FILE!');
+
+  if (FileExists(el.outputPath)) {
+    await MakeDirFromFile(oldFile);
+
+    if (DontIgnore(oldFile, customConfig)) {
+      await CopyFile(el.outputPath, oldFile);
+
+    } else if (customConfig.ignore.copyAsCustom) {
+      el.custom.copyAsCustom = true;
+
+      await CopyFile(el.outputPath, `${oldFile}.custom`);
+    }
+
+    el.custom.checkSumAfter = await FileChecksum(oldFile);
+  } else {
+    el.custom?.errors.push('GENERATED FILE NOT FOUND!');
+
+    console.log('GENERATED FILE NOT FOUND!');
+  }
+}
+
+async function CustomExistsFile(el: RenderData, oldFile: string, newContent: string, customConfig: CustomConfig) {
+  el.custom = { found: true, errors: [], checkSumAfter: null, checkSumBefore: null, copyAsCustom: false };
+
+  const oldContent = await ReadFile(oldFile);
+
+  console.log('FOUND OLD FILE!');
+
+  el.custom.checkSumBefore = Checksum(oldContent);
+
+  const appliedContent = InvokeCustomization(newContent, oldContent);
+
+  el.custom.checkSumAfter = Checksum(appliedContent);
+
+  if (DontIgnore(oldFile, customConfig)) {
+    await WriteFile(oldFile, appliedContent);
+
+  } else if (customConfig.ignore.copyAsCustom) {
+    el.custom.copyAsCustom = true;
+
+    await WriteFile(`${oldFile}.custom`, appliedContent);
+  }
 }
 
 function InvokeCustomization(newContent: string, oldContent: string) {

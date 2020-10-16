@@ -32,6 +32,12 @@ export function GetDir(filePath: string) {
 	return path.dirname(filePath);
 }
 
+export async function MakeDirFromFile(oldFile: string) {
+	const dirPath = GetDir(oldFile);
+  
+	await MkDir(dirPath);
+}
+
 export async function MkDir(srcPath: string) {
 	const mkdir = util.promisify(fs.mkdir);
 	await mkdir(srcPath, {recursive: true});

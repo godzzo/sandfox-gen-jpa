@@ -8,6 +8,7 @@ export type CustomData = {
 	errors: string[],
 	checkSumBefore: string | null,
 	checkSumAfter: string | null,
+	copyAsCustom: boolean,
 };
 
 export type RenderData = {
@@ -18,7 +19,8 @@ export type RenderData = {
 	custom: CustomData | null,
 };
 
-export type CopyData = {srcPath: string, destPath: string, size: number};
+export type CopyData = { srcPath: string, destPath: string, size: number, custom: CustomData | null, };
+
 export type Register = { outPath: string, created: string, renders: RenderData[], copies: CopyData[] };
 
 export async function ProcGenerate(options: string, project: string, tables: Array<any>, data: Array<any>) {
@@ -177,6 +179,9 @@ async function GenerateProject(reg: Register, options: any, project: string, tab
 
 	await render(reg, `${tmpl}/build.gradle.kts.ejs`, options, `${out}/build.gradle.kts`);
 	await render(reg, `${tmpl}/settings.gradle.kts.ejs`, options, `${out}/settings.gradle.kts`);
+
+	await MkDir(`${out}/config`);
+	await RegCpFile(reg, `${tmpl}/config/custom.json`, `${out}/config/custom.json`);
 
 	await MkDir(`${out}/gradle/wrapper`);
 	await RegCpFile(reg, `${tmpl}/gradle/wrapper/gradle-wrapper.jar`, `${out}/gradle/wrapper/gradle-wrapper.jar`);	

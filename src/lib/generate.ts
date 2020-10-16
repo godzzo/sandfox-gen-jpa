@@ -58,7 +58,7 @@ export async function render(register: Register, templatePath: string, model: an
 export async function RegCpFile(register: Register, srcPath: string, destPath: string) {
 	await CopyFile(srcPath, destPath);
 
-	register.copies.push({srcPath, destPath, size: FileSize(destPath)});
+	register.copies.push({srcPath, destPath, size: FileSize(destPath), custom: null});
 }
 
 export function SetColumnAnnotation(column: any): string {
