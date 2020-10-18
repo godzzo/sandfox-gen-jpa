@@ -42,6 +42,18 @@ export async function ProcGenerate(options: string, project: string, tables: Arr
 	return register;
 }
 
+function AddGroup(table: any, columns: Array<any>, data: Array<any>) {
+	if (table.groups) {
+		const groups = table.groups.split(',');
+
+		groups.forEach((group: any) => {
+			const groupColumns = data[0].filter((row: any) => row.table == group);
+
+			columns.push(...groupColumns);
+		});
+	}
+}
+
 async function ParseTables(reg: Register, options: string, project: string, tables: Array<any>, data: Array<any>) {
 	const relations: Array<any> = [];
 
@@ -54,6 +66,8 @@ async function ParseTables(reg: Register, options: string, project: string, tabl
 		} else {
 			columns = data[table.pos - 1];
 		}
+
+		AddGroup(table, columns, data);
 
 		// SetNames, Primary, Annotations
 		PrepareColumns(table, columns);
