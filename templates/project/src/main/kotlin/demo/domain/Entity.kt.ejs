@@ -69,7 +69,13 @@ table.primaries.forEach((column, idx) => {
 <%}%>
 /*FOXB-CARGE*/
 /*FOXE-CARGE*/
-): Serializable {
+): <%
+if (table.groupConfigs.length > 0) {
+	table.groupConfigs.forEach((group, idx) => {
+%><%= idx === 0? group.camelName: ', ' + group.camelName%><% 
+	});%>, <%
+}
+%>Serializable {
 /*FOXB-BLOCKB*/
 /*FOXE-BLOCKB*/
 <% 

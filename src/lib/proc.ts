@@ -31,30 +31,67 @@ export async function ProcGenerate(options: string, project: string, tables: Arr
 		created: new Date().toISOString(),
 	};
 
+	const groups: any = {};
+
 	tables.forEach((table: any) => SetNames(table));
 
 	await GenerateProject(register, options, project, tables);
 
-	await ParseTables(register, options, project, tables, data);
+	await ParseTables(register, options, project, tables, data, groups);
+
+	await GenerateTables(register, options, tables, project);
 
 	await WriteJsonFile(`${register.outPath}/config/generateRegister.json`, register);
 
 	return register;
 }
 
-function AddGroup(table: any, columns: Array<any>, data: Array<any>) {
+/**
+ * Locate Groups of given Table (add Group Columns)
+ */
+function AddGroupsForTable(table: any, columns: Array<any>, data: Array<any>, groups: any) {
 	if (table.groups) {
-		const groups = table.groups.split(',');
+		table.groupNames = table.groups.split(',');
 
-		groups.forEach((group: any) => {
-			const groupColumns = data[0].filter((row: any) => row.table == group);
+		table.groupConfigs = table.groupNames.map((groupName: string) => {
+			return LocateAndRegisterGroup(groupName, groups, data);
+		});
 
-			columns.push(...groupColumns);
+		console.log(`Table - ${table.name} - groups: ${table.groups}`);
+
+		table.groupConfigs.forEach((groupConfig: any) => {
+			columns.push(...groupConfig.columns);
 		});
 	}
 }
 
-async function ParseTables(reg: Register, options: string, project: string, tables: Array<any>, data: Array<any>) {
+/**
+ * Prepare a GroupConfig and register by name, 
+ * If it registered already will return with the existed, 
+ * if not the newly created ones.
+ */
+function LocateAndRegisterGroup(name: string, groups: any, data: any[]) {
+	if (!groups[name]) {
+		const groupColumns = data[0].filter((row: any) => row.table == name);
+
+		const config: any = {name};
+
+		SetNames(config);
+
+		const columns = groupColumns.map((el: any) => {
+			el.group = name;
+
+			return el;
+		});
+
+		config.columns = columns;
+		groups[name] = config;
+	}
+
+	return groups[name];
+}
+
+async function ParseTables(reg: Register, options: string, project: string, tables: Array<any>, data: Array<any>, groups: any) {
 	const relations: Array<any> = [];
 
 	tables.forEach((table: any) => {
@@ -67,7 +104,7 @@ async function ParseTables(reg: Register, options: string, project: string, tabl
 			columns = data[table.pos - 1];
 		}
 
-		AddGroup(table, columns, data);
+		AddGroupsForTable(table, columns, data, groups);
 
 		// SetNames, Primary, Annotations
 		PrepareColumns(table, columns);
@@ -82,12 +119,14 @@ async function ParseTables(reg: Register, options: string, project: string, tabl
 	LookRelationTables(relations, tables)
 
 	CheckBidirectionalRelation(relations, tables);
+}
 
-	for (const idx in  tables)	{
+async function GenerateTables(reg: Register, options: string, tables: any[], project: string) {
+	for (const idx in tables) {
 		const table = tables[idx];
 
 		if (table.primary) {
-			await Generate(reg, options, project, {table, options, project});
+			await Generate(reg, options, project, { table, options, project });
 		} else {
 			Warn(`Could not generate without primary: ${table.name}`);
 		}
