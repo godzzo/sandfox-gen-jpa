@@ -42,7 +42,7 @@ table.columns.forEach((column, idx) => {
 	@JoinColumn(name = "<%= column.name + (column.name.endsWith('_id')? '': '_id') %>",
 		foreignKey = ForeignKey(name = "fk_<%= table.name%>_<%= (column.name.endsWith('_id')? column.name.substring(0, column.name.length-3): column.name) %>")
 	)
-	<%= (column.group ? 'override ' : '') %>val <%= column.lowerCamelName.endsWith('Id')? 
+	<%= (column.group ? 'override ' : '') %>var <%= column.lowerCamelName.endsWith('Id')? 
 		column.lowerCamelName.substring(0, column.lowerCamelName.length-2): 
 		column.lowerCamelName %>: <%= column.relation.camelName %><%= column.needed != 'yes'? '?': ''  %>,
 <%

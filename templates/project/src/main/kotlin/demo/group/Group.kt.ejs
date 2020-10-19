@@ -24,7 +24,7 @@ group.columns.forEach((column, idx) => {
 	if (column.type.startsWith('relation.one')) { 
 %>
 	// <%= column.caption %>
-	val <%= column.lowerCamelName.endsWith('Id')? 
+	var <%= column.lowerCamelName.endsWith('Id')? 
 		column.lowerCamelName.substring(0, column.lowerCamelName.length-2): 
 		column.lowerCamelName %>: <%= column.relation.camelName %><%= column.needed != 'yes'? '?': ''  %>
 <%
