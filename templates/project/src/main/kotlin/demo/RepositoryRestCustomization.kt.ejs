@@ -17,7 +17,8 @@ class RepositoryRestCustomization(
 for (const groupName in groups) {
     const group = groups[groupName];
 
-    echo(`,\n    @Autowired val ${group.lowerCamelName}: ${group.camelName}\n`);
+    echo(`,\n    @Autowired val ${group.lowerCamelName}Create: ${group.camelName}Create,\n`);
+    echo(`    @Autowired val ${group.lowerCamelName}Save: ${group.camelName}Save\n`);
 }
 %>) : RepositoryRestConfigurer {
     private val log = LoggerFactory.getLogger(RepositoryRestCustomization::class.java)
@@ -55,8 +56,8 @@ tables.forEach((table, idx) => {
 for (const groupName in groups) {
     const group = groups[groupName];
 %>
-        validatingListener.addValidator("beforeCreate", <%= group.lowerCamelName %>)
-        validatingListener.addValidator("beforeSave", <%= group.lowerCamelName %>)
+        validatingListener.addValidator("beforeCreate", <%= group.lowerCamelName %>Create)
+        validatingListener.addValidator("beforeSave", <%= group.lowerCamelName %>Save)
 <%
 }
 %>

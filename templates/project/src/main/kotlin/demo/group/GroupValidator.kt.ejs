@@ -1,0 +1,56 @@
+package <%= options.package %>.group
+
+import org.springframework.stereotype.Component
+import org.springframework.validation.Errors
+import org.springframework.validation.Validator
+import java.time.ZonedDateTime
+
+@Component
+class <%= group.camelName %>Create(
+/*FOXB-CARG-CREATE*/
+/*FOXE-CARG-CREATE*/
+): Validator {
+    init {
+        println("<%= group.camelName %>Create - INIT")
+    }
+
+    override fun supports(clazz: Class<*>): Boolean {
+        val support =  <%= group.camelName %>::class.java.isAssignableFrom(clazz)
+
+        println("<%= group.camelName %>Create - Supports - ${support} - ${clazz}")
+
+        return support
+    }
+
+    override fun validate(target: Any, errors: Errors) {
+        val entity = target as <%= group.camelName %>
+
+/*FOXB-CREATE*/
+/*FOXE-CREATE*/
+    }
+}
+
+@Component
+class <%= group.camelName %>Save(
+/*FOXB-CARG-SAVE*/
+/*FOXE-CARG-SAVE*/
+): Validator {
+    init {
+        println("<%= group.camelName %>Save - INIT")
+    }
+
+    override fun supports(clazz: Class<*>): Boolean {
+        val support =  <%= group.camelName %>::class.java.isAssignableFrom(clazz)
+
+        println("<%= group.camelName %>Save - Supports - ${support} - ${clazz}")
+
+        return support
+    }
+
+    override fun validate(target: Any, errors: Errors) {
+        val entity = target as <%= group.camelName %>
+
+/*FOXB-SAVE*/
+/*FOXE-SAVE*/
+    }
+}

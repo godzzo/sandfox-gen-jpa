@@ -66,6 +66,12 @@ async function GenerateGroups(reg: Register, options: any, tables: any[], projec
 			`${groupPath}/${meta.group.camelName}.kt`
 		);
 	
+		await render(
+			reg,
+			`${options.tmpl}/${prjPath}/group/GroupValidator.kt.ejs`, 
+			meta, 
+			`${groupPath}/${meta.group.camelName}Validator.kt`
+		);
 	}
 }
 
