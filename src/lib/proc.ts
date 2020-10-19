@@ -35,15 +35,38 @@ export async function ProcGenerate(options: string, project: string, tables: Arr
 
 	tables.forEach((table: any) => SetNames(table));
 
-	await GenerateProject(register, options, project, tables);
-
 	await ParseTables(register, options, project, tables, data, groups);
 
+	await GenerateProject(register, options, project, tables, groups);
+
 	await GenerateTables(register, options, tables, project);
+
+	await GenerateGroups(register, options, tables, project, groups);
 
 	await WriteJsonFile(`${register.outPath}/config/generateRegister.json`, register);
 
 	return register;
+}
+
+async function GenerateGroups(reg: Register, options: any, tables: any[], project: string, groups: any) {
+	const prjPath = 'src/main/kotlin/demo';
+
+	const groupPath = `${options.directory}/src/main/kotlin/${options.packagePath}/group`;
+	await MkDir(groupPath);
+
+	for (const groupName in groups) {
+		const group = groups[groupName];
+
+		const meta = {group, options, project};
+
+		await render(
+			reg,
+			`${options.tmpl}/${prjPath}/group/Group.kt.ejs`, 
+			meta, 
+			`${groupPath}/${meta.group.camelName}.kt`
+		);
+	
+	}
 }
 
 /**
@@ -121,7 +144,7 @@ async function ParseTables(reg: Register, options: string, project: string, tabl
 	CheckBidirectionalRelation(relations, tables);
 }
 
-async function GenerateTables(reg: Register, options: string, tables: any[], project: string) {
+async function GenerateTables(reg: Register, options: any, tables: any[], project: string) {
 	for (const idx in tables) {
 		const table = tables[idx];
 
@@ -216,7 +239,7 @@ ${rel.relType}: ${rel.srcTbl.name} >> ${rel.trgTbl.name} // ${rel.srcCol.name}
 	})
 }
 
-async function GenerateProject(reg: Register, options: any, project: string, tables: any) {
+async function GenerateProject(reg: Register, options: any, project: string, tables: any, groups: any) {
 	options.tmpl = `${options.foxPath}/templates/project`;
 	options.packagePath = options.package.replace(/\./g, '/');
 
@@ -251,7 +274,7 @@ async function GenerateProject(reg: Register, options: any, project: string, tab
 		, options, `${out}/src/main/kotlin/${options.packagePath}/SpecConfiguration.kt`);
 
 	await render(reg, `${tmpl}/src/main/kotlin/demo/RepositoryRestCustomization.kt.ejs`
-		, {options, tables}, `${out}/src/main/kotlin/${options.packagePath}/RepositoryRestCustomization.kt`);
+		, {options, tables, groups}, `${out}/src/main/kotlin/${options.packagePath}/RepositoryRestCustomization.kt`);
 
 	await MkDir(`${out}/src/main/kotlin/${options.packagePath}/util`);
 	await render(reg, `${tmpl}/src/main/kotlin/demo/util/FilterHelper.kt.ejs`

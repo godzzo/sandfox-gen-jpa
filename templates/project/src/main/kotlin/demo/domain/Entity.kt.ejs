@@ -4,6 +4,7 @@ import java.io.Serializable
 import java.time.*
 import javax.persistence.*
 import javax.validation.constraints.*
+import <%= options.package %>.group.*
 import <%= options.package %>.entitylistener.<%= table.camelName %>EntityListener
 /*FOXB-IMPORT*/
 /*FOXE-IMPORT*/
@@ -26,7 +27,7 @@ table.columns.forEach((column, idx) => {
 %>
 	// <%= column.caption %>
 	<%- column.annotations %>
-	var <%= column.lowerCamelName %>: <%= column.ktType %><%= column.needed != 'yes'? '?': ''  %>,
+	<%= (column.group ? 'override ' : '') %>var <%= column.lowerCamelName %>: <%= column.ktType %><%= column.needed != 'yes'? '?': ''  %>,
 <%	} 
 %><% 
 }); 
@@ -40,16 +41,14 @@ table.columns.forEach((column, idx) => {
 	@JoinColumn(name = "<%= column.name + (column.name.endsWith('_id')? '': '_id') %>",
 		foreignKey = ForeignKey(name = "fk_<%= table.name%>_<%= (column.name.endsWith('_id')? column.name.substring(0, column.name.length-3): column.name) %>")
 	)
-	val <%= column.lowerCamelName.endsWith('Id')? 
+	<%= (column.group ? 'override ' : '') %>val <%= column.lowerCamelName.endsWith('Id')? 
 		column.lowerCamelName.substring(0, column.lowerCamelName.length-2): 
 		column.lowerCamelName %>: <%= column.relation.camelName %><%= column.needed != 'yes'? '?': ''  %>,
 <%
 	} 
 %><% 
 }); 
-%>
-
-<%if (table.primaries.length < 2) { %>
+%><%if (table.primaries.length < 2) { %>
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "<%= table.primary.name %>")

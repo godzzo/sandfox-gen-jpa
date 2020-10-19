@@ -14,13 +14,13 @@
   "license": "ISC",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@types/ejs": "^2.6.3",
+    "@types/ejs": "^3.0.4",
     "@types/md5": "^2.2.0",
     "@types/node": "^12.12.6",
     "@types/pluralize": "0.0.29",
     "chalk": "^2.4.2",
     "command-line-args": "^5.1.1",
-    "ejs": "^2.6.1",
+    "ejs": "^3.1.5",
     "google-spreadsheet-to-json": "^1.0.0",
     "md5": "^2.3.0",
     "pluralize": "^8.0.0"

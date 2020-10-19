@@ -1,0 +1,34 @@
+package <%= options.package %>.group
+
+import org.godzzo.simple.domain.*
+import java.time.ZonedDateTime
+import javax.persistence.*
+import org.springframework.validation.Validator
+
+interface <%= group.camelName %> {
+<% 
+group.columns.forEach((column, idx) => { 
+%><% 
+	if (!column.type.startsWith('relation') 
+		&& !column.type.startsWith('primary')
+		) { 
+%>
+	// <%= column.caption %>
+	var <%= column.lowerCamelName %>: <%= column.ktType %><%= column.needed != 'yes'? '?': ''  %>
+<%	} 
+%><% 
+}); 
+%><% 
+group.columns.forEach((column, idx) => { 
+%><% 
+	if (column.type.startsWith('relation.one')) { 
+%>
+	val <%= column.lowerCamelName.endsWith('Id')? 
+		column.lowerCamelName.substring(0, column.lowerCamelName.length-2): 
+		column.lowerCamelName %>: <%= column.relation.camelName %><%= column.needed != 'yes'? '?': ''  %>
+<%
+	} 
+%><% 
+}); 
+%>
+}

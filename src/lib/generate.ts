@@ -44,7 +44,7 @@ export async function render(register: Register, templatePath: string, model: an
 	// Log(`GENERATE? ${templatePath}\n -- TO: ${outputPath}`);
 
 	try {
-		const html = await renderFile(templatePath, model);
+		const html = await renderFile(templatePath, model, {outputFunctionName: 'echo'});
 
 		await writeFile(outputPath, html, "utf8");
 

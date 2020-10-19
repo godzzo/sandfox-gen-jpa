@@ -2,6 +2,7 @@ package <%= options.package %>
 
 import <%= options.package %>.domain.*
 import <%= options.package %>.projection.*
+import <%= options.package %>.group.*
 import org.slf4j.LoggerFactory
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer
@@ -11,7 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.Validator
 
 @Component
-class RepositoryRestCustomization : RepositoryRestConfigurer {
+class RepositoryRestCustomization(
+    @Autowired val validator: Validator<%
+for (const groupName in groups) {
+    const group = groups[groupName];
+
+    echo(`,\n    @Autowired val ${group.lowerCamelName}: ${group.camelName}\n`);
+}
+%>) : RepositoryRestConfigurer {
     private val log = LoggerFactory.getLogger(RepositoryRestCustomization::class.java)
 
     init {
@@ -38,13 +46,19 @@ tables.forEach((table, idx) => {
         )
     }
 
-    @Autowired
-    private val validator: Validator? = null
-
     override fun configureValidatingRepositoryEventListener(
             validatingListener: ValidatingRepositoryEventListener
     ) {
         validatingListener.addValidator("beforeCreate", validator)
         validatingListener.addValidator("beforeSave", validator)
+<%
+for (const groupName in groups) {
+    const group = groups[groupName];
+%>
+        validatingListener.addValidator("beforeCreate", <%= group.lowerCamelName %>)
+        validatingListener.addValidator("beforeSave", <%= group.lowerCamelName %>)
+<%
+}
+%>
     }
 }
