@@ -91,6 +91,8 @@ function AddGroupsForTable(table: any, columns: Array<any>, data: Array<any>, gr
 		table.groupConfigs.forEach((groupConfig: any) => {
 			columns.push(...groupConfig.columns);
 		});
+	} else {
+		table.groupConfigs = [];
 	}
 }
 

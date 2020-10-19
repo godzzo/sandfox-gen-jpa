@@ -23,7 +23,7 @@ table.columns.forEach((column, idx) => {
 %><% 
 	if (!column.type.startsWith('relation') 
 		&& !column.type.startsWith('primary')
-		) { 
+		) { // NORMAL Columns
 %>
 	// <%= column.caption %>
 	<%- column.annotations %>
@@ -37,6 +37,7 @@ table.columns.forEach((column, idx) => {
 %><% 
 	if (column.type.startsWith('relation.one')) { 
 %>
+	// <%= column.caption %>
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "<%= column.name + (column.name.endsWith('_id')? '': '_id') %>",
 		foreignKey = ForeignKey(name = "fk_<%= table.name%>_<%= (column.name.endsWith('_id')? column.name.substring(0, column.name.length-3): column.name) %>")
@@ -56,6 +57,7 @@ table.columns.forEach((column, idx) => {
 <%} else {%><% 
 table.primaries.forEach((column, idx) => { 
 %>
+	// <%= column.caption %>
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "<%= column.name + (column.name.endsWith('_id')? '': '_id') %>")
