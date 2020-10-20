@@ -1,11 +1,26 @@
 package <%= package %>.util
 
 import javax.persistence.criteria.CriteriaBuilder
+import javax.persistence.criteria.CriteriaBuilder.In
 import javax.persistence.criteria.CriteriaQuery
 import javax.persistence.criteria.Predicate
 import javax.persistence.criteria.Root
 
 object FilterHelper {
+    fun inList(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+               predicates: MutableList<Predicate>, name: String?, value: String?, isNot: Boolean = false) {
+        val inClause: In<String> = cb.`in`(root.get(name))
+
+        if (value != null) {
+            val values = value.split(',')
+
+            for (item in values) {
+                inClause.value(item)
+            }
+
+            predicates.add(if (isNot) inClause.not() else inClause)
+        }
+    }
 
     fun greaterThan(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
              predicates: MutableList<Predicate>, name: String?, value: Int?) {
