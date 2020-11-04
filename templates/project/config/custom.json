@@ -3,7 +3,8 @@
         "copyAsCustom": true,
         "masks": [
             ".*application.properties$",
-            ".*build.gradle.kts$"
+            ".*build.gradle.kts$",
+            "^AppController.kt$"
         ]
     }
 }

@@ -1,0 +1,38 @@
+package <%= package %>.controller
+
+import org.slf4j.LoggerFactory
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.util.*
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpSession
+
+@RestController
+class AppController() {
+    val log = LoggerFactory.getLogger(AppController::class.java)
+
+    init {
+        log.info("AppController INITIALIZED...")
+    }
+
+    @RequestMapping(value = ["/app/upload"], method = arrayOf(RequestMethod.POST))
+    fun upload(@RequestParam file: MultipartFile, @RequestParam name: String?): MutableMap<String, Any?> {
+        log.info("${file.name} - ${file.contentType} - ${file.size} - ${file.originalFilename} - ${name}")
+
+        val guid = UUID.randomUUID().toString() + '.' + File(file.originalFilename).extension
+
+        Files.copy(file.inputStream, Paths.get("./upload/files/${guid}"))
+
+        val map = mutableMapOf<String, Any?>()
+
+        map.put("success", true)
+        map.put("guid", guid)
+        map.put("fileName", file.originalFilename)
+        map.put("name", name)
+
+        return map
+    }
+}

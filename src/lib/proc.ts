@@ -284,6 +284,11 @@ async function GenerateProject(reg: Register, options: any, project: string, tab
 	await render(reg, `${tmpl}/src/main/kotlin/demo/RepositoryRestCustomization.kt.ejs`
 		, {options, tables, groups}, `${out}/src/main/kotlin/${options.packagePath}/RepositoryRestCustomization.kt`);
 
+	const controllerPath = `${out}/src/main/kotlin/${options.packagePath}/controller`;
+	await MkDir(controllerPath);
+	await render(reg, `${tmpl}/src/main/kotlin/demo/controller/AppController.kt.ejs`
+		, options, `${controllerPath}/AppController.kt`);
+
 	await MkDir(`${out}/src/main/kotlin/${options.packagePath}/util`);
 	await render(reg, `${tmpl}/src/main/kotlin/demo/util/FilterHelper.kt.ejs`
 		, options, `${out}/src/main/kotlin/${options.packagePath}/util/FilterHelper.kt`);
