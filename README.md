@@ -83,6 +83,80 @@ Every table has the afollowing classes:
 ## Table and Column configuration with GoogleSpreadsheet
 *You can skip this step if You create somewhere else the config JSON.*
 
-- Using Google Spreadsheet [like this](https://docs.google.com/spreadsheets/d/1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY/edit#gid=0)
+- Using Google Spreadsheet [like this **ONE**👀](https://docs.google.com/spreadsheets/d/1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY/edit#gid=0)
 - 2 types of sheet (first - tables, second - columns)
 - important is the ID of GSheet - like this one 1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY
+
+## Customization - Setup Ignore RegExp masks
+SandFox creating a minimal config for ignores, like:
+```
+{
+    "ignore": {
+        "copyAsCustom": true,
+        "masks": [
+            ".*application.properties$",
+            ".*build.gradle.kts$",
+            "^AppController.kt$"
+        ]
+    }
+}
+```
+
+This means, only once will generate the application.properties, build.gradle.kts and the AppController.kt.
+
+You can setup more ignore masks and the **"copyAsCustom": true** setting means to copy the ignored files with .custom extension, so You can examine what changed, for example AppController.kt.custom (*the .custom in .gitignore already*).
+
+## Template folder
+SandFox can use multiple template folders, now using only [this one👀](https://github.com/godzzo/sandfox-gen-jpa/tree/master/templates/project).
+
+Some templates ([using EJS](https://ejs.co/)):
+- [src/main/kotlin/demo/domain/**Entity.kt.ejs**](https://github.com/godzzo/sandfox-gen-jpa/blob/master/templates/project/src/main/kotlin/demo/domain/Entity.kt.ejs)
+- [src/main/kotlin/demo/controller/**FilterController.kt.ejs**](https://github.com/godzzo/sandfox-gen-jpa/blob/master/templates/project/src/main/kotlin/demo/controller/FilterController.kt.ejs)
+
+*A bit messy without syntax coloring, I like to find a nice ONE, or changing extension* 🧐
+
+## Customization - Custom blocks FOXB...FOXE
+The template engine handle the **FOXB...FOXE** comment tags, so it can easily extendable in any template which the SandFox using, like this:
+
+Setup column values of the SystemGroup (all Entities have SystemGroup this example):
+```
+@Component
+class SystemGroupCreate(
+/*FOXB-CARG-CREATE*/
+    @Autowired val session: HttpSession,
+    @Autowired val users: LpUserRepository
+/*FOXE-CARG-CREATE*/
+): Validator {
+    init {
+        println("SystemGroupCreate - INIT")
+    }
+
+    override fun supports(clazz: Class<*>): Boolean {
+        val support =  SystemGroup::class.java.isAssignableFrom(clazz)
+
+        println("SystemGroupCreate - Supports - ${support} - ${clazz}")
+
+        return support
+    }
+
+    override fun validate(target: Any, errors: Errors) {
+        val entity = target as SystemGroup
+
+/*FOXB-CREATE*/
+        println("SystemGroupCreate - Supports - Session: ${session}")
+        val userId: String = session.getAttribute("user_id") as String
+
+        println("SystemGroupCreate - Supports - UserId: ${userId}")
+
+        val user = users.findById(userId.toLong())
+
+        entity.user = user.get()
+        entity.lastModifier = user.get()
+
+        entity.created = ZonedDateTime.now()
+        entity.lastModified = ZonedDateTime.now()
+        entity.logicRemove = 0
+/*FOXE-CREATE*/
+    }
+}
+```
