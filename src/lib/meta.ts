@@ -1,7 +1,5 @@
-
-import { Log, ReadJsonFile } from "../lib/common";
-import { LoadSpreadsheetData } from "../lib/common";
-
+import { Log, ReadJsonFile } from '../lib/common';
+import { LoadSpreadsheetData } from '../lib/common';
 
 export async function LoadGSMeta(options: any) {
 	if (options.sheetId == 'NONE') {
@@ -12,10 +10,7 @@ export async function LoadGSMeta(options: any) {
 
 	Log(`credential: ${credPath}, sheetId: ${options.sheetId}`);
 
-	const data = await LoadSpreadsheetData(
-		options.sheetId,
-		credPath
-	);
+	const data = await LoadSpreadsheetData(options.sheetId, credPath);
 
 	return data;
 }
@@ -33,5 +28,5 @@ export async function LoadMeta(options: any) {
 
 	const tables = data.shift();
 
-	return {tables, data};
+	return { tables, data };
 }

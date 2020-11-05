@@ -1,4 +1,3 @@
-
 import gsjson = require('google-spreadsheet-to-json');
 import fs = require('fs');
 import path = require('path');
@@ -6,8 +5,10 @@ import util = require('util');
 import md5 = require('md5');
 const chalk = require('chalk');
 
-
-export async function LoadSpreadsheetData(spreadsheetId: string, credentials: string) {
+export async function LoadSpreadsheetData(
+	spreadsheetId: string,
+	credentials: string
+) {
 	return gsjson({
 		spreadsheetId: spreadsheetId,
 		credentials: credentials,
@@ -34,13 +35,13 @@ export function GetDir(filePath: string) {
 
 export async function MakeDirFromFile(oldFile: string) {
 	const dirPath = GetDir(oldFile);
-  
+
 	await MkDir(dirPath);
 }
 
 export async function MkDir(srcPath: string) {
 	const mkdir = util.promisify(fs.mkdir);
-	await mkdir(srcPath, {recursive: true});
+	await mkdir(srcPath, { recursive: true });
 }
 
 export function Checksum(data: string) {
@@ -56,7 +57,7 @@ export async function FileChecksum(filePath: string) {
 export function FileSize(path: string) {
 	try {
 		const stats = fs.statSync(path);
-	
+
 		return stats.size;
 	} catch (e) {
 		console.log(e);
@@ -74,7 +75,7 @@ export async function CopyFile(srcPath: string, destPath: string) {
 export async function ReadFile(filePath: string): Promise<string> {
 	const readFile = util.promisify(fs.readFile);
 
-	const buffer = await readFile(filePath, {encoding: 'utf8'});
+	const buffer = await readFile(filePath, { encoding: 'utf8' });
 	return buffer.toString();
 }
 
@@ -94,8 +95,8 @@ export async function WriteFile(filePath: string, data: string) {
 	const writeFile = util.promisify(fs.writeFile);
 
 	try {
- 		await writeFile(filePath, data, "utf8");
-	} catch(error) {
+		await writeFile(filePath, data, 'utf8');
+	} catch (error) {
 		console.log(error);
 	}
 }
@@ -104,8 +105,8 @@ export async function WriteJsonFile(filePath: string, data: any) {
 	try {
 		const json = JSON.stringify(data, null, 4);
 
- 		await WriteFile(filePath, json);
-	} catch(error) {
+		await WriteFile(filePath, json);
+	} catch (error) {
 		console.log(error);
 	}
 }

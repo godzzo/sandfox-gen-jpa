@@ -1,33 +1,39 @@
 #!/usr/bin/env node
 
-import { Log, LogObj, ReadFile, WriteJsonFile, MkDir, ReadJsonFile } from "./lib/common";
-import { ProcGenerate } from "./lib/proc";
-import { ParseCliArgs } from "./lib/cli.args";
-import { LoadMeta, LoadGSMeta } from "./lib/meta";
-import { ApplyCustom } from "./lib/custom";
+import {
+	Log,
+	LogObj,
+	ReadFile,
+	WriteJsonFile,
+	MkDir,
+	ReadJsonFile,
+} from './lib/common';
+import { ProcGenerate } from './lib/proc';
+import { ParseCliArgs } from './lib/cli.args';
+import { LoadMeta, LoadGSMeta } from './lib/meta';
+import { ApplyCustom } from './lib/custom';
 
 const chalk = require('chalk');
 
 console.log('SandFox GEN JPA - Loaded...');
 
-
 (async () => {
 	const options = await ParseCliArgs();
 
-	if (options.showArgs == 'yes'){
+	if (options.showArgs == 'yes') {
 		LogObj(options, 'ParseCliArgs');
 	}
 
 	await PrintLogo(options);
 
 	try {
-		if (options.command == "info") {
+		if (options.command == 'info') {
 			await InfoGSMeta(options);
-		} else if (options.command == "save") {
+		} else if (options.command == 'save') {
 			await SaveGSMeta(options);
-		} else if (options.command == "generate") {
+		} else if (options.command == 'generate') {
 			await InvokeGenerate(options);
-		} else if (options.command == "custom") {
+		} else if (options.command == 'custom') {
 			await InvokeCustom(options);
 		} else {
 			Log(`Don't known this command: ${options.command} :(`);
@@ -64,21 +70,26 @@ async function SaveGSMeta(options: any) {
 }
 
 async function InvokeGenerate(options: any) {
-	const {tables, data} = await LoadMeta(options);
+	const { tables, data } = await LoadMeta(options);
 
 	await ProcGenerate(options, options.project, tables, data);
 }
 
 async function InvokeCustom(options: any) {
-	const register = await ReadJsonFile(`${options.directory}/config/generateRegister.json`);
+	const register = await ReadJsonFile(
+		`${options.directory}/config/generateRegister.json`
+	);
 
 	console.log('register', JSON.stringify(register, null, 4));
 
 	await ApplyCustom(register, options);
 
-	await WriteJsonFile(`${options.customDir}/config/customRegister.json`, register);
+	await WriteJsonFile(
+		`${options.customDir}/config/customRegister.json`,
+		register
+	);
 
 	console.log('register', JSON.stringify(register, null, 4));
 }
 
-export const NgModelGen = (name: string) => 'Hello '+name;
+export const NgModelGen = (name: string) => 'Hello ' + name;
