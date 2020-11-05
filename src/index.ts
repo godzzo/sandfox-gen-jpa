@@ -10,9 +10,10 @@ const chalk = require('chalk');
 
 console.log('SandFox GEN JPA - Loaded...');
 
-const options = ParseCliArgs();
 
 (async () => {
+	const options = await ParseCliArgs();
+
 	if (options.showArgs == 'yes'){
 		LogObj(options, 'ParseCliArgs');
 	}

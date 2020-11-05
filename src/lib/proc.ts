@@ -43,6 +43,8 @@ export async function ProcGenerate(options: string, project: string, tables: Arr
 
 	await GenerateGroups(register, options, tables, project, groups);
 
+	await GenerateAuthentication(register, options, project, tables, groups);
+
 	await WriteJsonFile(`${register.outPath}/config/generateRegister.json`, register);
 
 	return register;
@@ -245,6 +247,26 @@ ${rel.relType}: ${rel.srcTbl.name} >> ${rel.trgTbl.name} // ${rel.srcCol.name}
 			}
 		}
 	})
+}
+
+async function GenerateAuthentication(reg: Register, options: any, project: string, tables: any, groups: any) {
+	const tmpl = options.tmpl;
+	const out = options.directory;
+
+	if (options.hints.includes('auth')) {
+		await render(reg, `${tmpl}/src/main/kotlin/demo/SecurityConfiguration.kt.ejs`
+			, {options}, `${out}/src/main/kotlin/${options.packagePath}/SecurityConfiguration.kt`);
+
+		const serviceDir = `${out}/src/main/kotlin/${options.packagePath}/service`;
+		await MkDir(serviceDir);
+		await render(reg, `${tmpl}/src/main/kotlin/demo/service/UserDetailsServiceImpl.kt.ejs`
+			, {options}, `${serviceDir}/UserDetailsServiceImpl.kt`);
+
+		const mapDir = `${out}/src/main/kotlin/${options.packagePath}/map`;
+		await MkDir(mapDir);
+		await render(reg, `${tmpl}/src/main/kotlin/demo/map/AuthUserDetails.kt.ejs`
+			, {options}, `${mapDir}/AuthUserDetails.kt`);
+	}
 }
 
 async function GenerateProject(reg: Register, options: any, project: string, tables: any, groups: any) {

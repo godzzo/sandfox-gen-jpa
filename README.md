@@ -44,7 +44,7 @@ node dist/index.js generate -s 1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY -d .
 ```
 ./gradlew bootRun
 ```
-After working / editing the project and make some configuration changes (like more column config...), you can override your project (need to save and generate and after that run the custom action)
+After working / editing the project and make some configuration changes (like more column config...), you can override your project (need to **save** and **generate** and after that run the **custom** action)
 
 The **custom** step only override your existing project (**respecting** Your /*FOXB-???*/ ...Your Code.. /*FOXE-???*/) blocks.
 
