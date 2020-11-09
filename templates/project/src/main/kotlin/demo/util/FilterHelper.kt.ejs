@@ -1,5 +1,6 @@
 package <%= package %>.util
 
+import java.time.ZonedDateTime
 import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.CriteriaBuilder.In
 import javax.persistence.criteria.CriteriaQuery
@@ -7,6 +8,21 @@ import javax.persistence.criteria.Predicate
 import javax.persistence.criteria.Root
 
 object FilterHelper {
+    fun between(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+            predicates: MutableList<Predicate>, name: String?,
+            fromValue: ZonedDateTime?, toValue: ZonedDateTime?) {
+        if (fromValue != null && toValue != null) {
+            val startingFrom =  cb.greaterThanOrEqualTo(root.get(name), fromValue)
+            val endingAt = cb.lessThanOrEqualTo(root.get(name), toValue)
+
+            predicates.add(cb.and(startingFrom, endingAt))
+        } else if (fromValue != null) {
+            predicates.add(cb.greaterThanOrEqualTo(root.get(name), fromValue))
+        } else if (toValue != null) {
+            predicates.add(cb.lessThanOrEqualTo(root.get(name), toValue))
+        }
+    }
+
     fun inList(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
                predicates: MutableList<Predicate>, name: String?, value: String?, isNot: Boolean = false) {
         val inClause: In<String> = cb.`in`(root.get(name))
