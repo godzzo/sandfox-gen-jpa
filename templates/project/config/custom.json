@@ -4,7 +4,7 @@
         "masks": [
             ".*application.properties$",
             ".*build.gradle.kts$",
-            "^AppController.kt$"
+            "/AppController.kt$"
         ]
     }
 }

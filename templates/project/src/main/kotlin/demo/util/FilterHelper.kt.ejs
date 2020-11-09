@@ -6,9 +6,14 @@ import javax.persistence.criteria.CriteriaBuilder.In
 import javax.persistence.criteria.CriteriaQuery
 import javax.persistence.criteria.Predicate
 import javax.persistence.criteria.Root
+/*FOXB-IMPORT*/
+/*FOXE-IMPORT*/
 
 object FilterHelper {
-    fun between(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+/*FOXB-BLOCK*/
+/*FOXE-BLOCK*/
+
+        fun between(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
             predicates: MutableList<Predicate>, name: String?,
             fromValue: ZonedDateTime?, toValue: ZonedDateTime?) {
         if (fromValue != null && toValue != null) {
