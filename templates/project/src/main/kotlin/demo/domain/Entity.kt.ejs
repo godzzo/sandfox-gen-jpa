@@ -85,7 +85,7 @@ table.columns.forEach((column, idx) => {
 	if (column.type.startsWith('relation.many')) { 
 %>
 	@OneToMany(mappedBy = "<%= table.lowerCamelName %>", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-	val <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf()
+	var <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf()
 <% 
 	} 
 %><% 

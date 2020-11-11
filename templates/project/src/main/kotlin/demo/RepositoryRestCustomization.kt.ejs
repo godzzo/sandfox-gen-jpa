@@ -38,6 +38,8 @@ tables.forEach((table, idx) => {
 %>
             ?.addProjection(<%= table.camelName %>Projection::class.java)<%
 });%>
+/*FOXB-PROJ*/
+/*FOXE-PROJ*/
 
         config?.exposeIdsFor(<% 
 tables.forEach((table, idx) => { 
