@@ -3,15 +3,19 @@ package <%= options.package %>
 import <%= options.package %>.service.UserDetailsServiceImpl
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import kotlin.streams.toList
 
 
 @Configuration
@@ -39,16 +43,63 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
 
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
-        http
+        val authorizeRequests = http
             .csrf().disable()
             .authorizeRequests()
-            .anyRequest().authenticated()
+
+        val access = configAccess(authorizeRequests)
+
+        access!!
+            .anyRequest()
+                .authenticated()
             .and()
-            .httpBasic()
+                .httpBasic()
+    }
+
+    fun configAccess(configurer: ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry)
+            : ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry? {
+        var cfg = configurer
+<%
+tables.forEach((table, idx) => { 
+%>
+        cfg = configApiAccess("<%= table.pluralLowerCamelName %>", cfg)
+<% 
+});
+%>
+        return cfg;
+    }
+
+    fun configApiAccess(name: String, configurer: ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry)
+            : ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry {
+        val priv = "${name.toUpperCase()}_PRIVILEGE"
+
+        return configurer
+            .antMatchers(HttpMethod.GET, "/api/filter${name.capitalize()}")
+                .access("hasAuthority('FILTER_${priv}')")
+            .antMatchers(HttpMethod.POST, "/api/${name}/**")
+                .access("hasAuthority('CREATE_${priv}')")
+            .antMatchers(HttpMethod.GET, "/api/${name}/**")
+                .access("hasAuthority('READ_${priv}')")
+            .antMatchers(HttpMethod.PATCH, "/api/${name}/**")
+                .access("hasAuthority('UPDATE_${priv}')")
+            .antMatchers(HttpMethod.PUT, "/api/${name}/**")
+                .access("hasAuthority('CREATE_${priv}') and hasAuthority('UPDATE_${priv}')")
+            .antMatchers(HttpMethod.DELETE, "/api/${name}/**")
+                .access("hasAuthority('DELETE_${priv}')")
+    }
+
+    fun hasRoles(roles: String): String {
+        return roles.split(",").stream().map {"hasRole('$it')"}
+            .toList().joinToString(" or ")
     }
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {
         return BCryptPasswordEncoder()
+    }
+
+    @Throws(java.lang.Exception::class)
+    override fun configure(web: WebSecurity) {
+        web.debug(false)
     }
 }

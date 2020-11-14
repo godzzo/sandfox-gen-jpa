@@ -9,7 +9,55 @@ import org.springframework.security.core.userdetails.UserDetails
 class AuthUserDetails(val userDetails: User) : UserDetails {
 
     override fun getAuthorities(): Collection<GrantedAuthority?> {
-        return listOf(SimpleGrantedAuthority(userDetails.roleType))
+        val role = userDetails.roleType.toUpperCase()
+        val roleDef = "ROLE_${userDetails.roleType}"
+
+        val authorities = mutableListOf<GrantedAuthority>(SimpleGrantedAuthority(roleDef))
+
+        println("ADD ${role}")
+<%
+tables.forEach((table, idx) => { 
+%>
+        addPrivilegesForRole(authorities, "<%= table.pluralLowerCamelName %>", listOf(role), """<%= table.authority %>""".trimIndent())
+<%
+});
+%>
+        println("Authorities: ${authorities}")
+
+        return authorities
+    }
+
+    fun addPrivilegesForRole(authorities: MutableList<GrantedAuthority>, entity: String, roles: List<String>, settings: String) {
+        settings.split("\n").stream().forEach {
+            val tags = it.split(":")
+
+            val roleName = tags[0].toUpperCase()
+            val rights = tags[1].toUpperCase()
+
+            if (roles.contains(roleName)) {
+                addPrivileges(authorities, entity, rights)
+            }
+        }
+    }
+
+    fun addPrivileges(authorities: MutableList<GrantedAuthority>, name: String, rights: String) {
+        val priv = "${name.toUpperCase()}_PRIVILEGE"
+
+        if (rights.contains("C")) {
+            authorities.add(SimpleGrantedAuthority("CREATE_${priv}"))
+        }
+        if (rights.contains("R")) {
+            authorities.add(SimpleGrantedAuthority("READ_${priv}"))
+        }
+        if (rights.contains("U")) {
+            authorities.add(SimpleGrantedAuthority("UPDATE_${priv}"))
+        }
+        if (rights.contains("D")) {
+            authorities.add(SimpleGrantedAuthority("DELETE_${priv}"))
+        }
+        if (rights.contains("F")) {
+            authorities.add(SimpleGrantedAuthority("FILTER_${priv}"))
+        }
     }
 
     val id: Int

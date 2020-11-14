@@ -309,12 +309,13 @@ async function GenerateAuthentication(
 ) {
 	const tmpl = options.tmpl;
 	const out = options.directory;
+	const meta = { options, tables, project, groups, reg };
 
 	if (options.hints.includes('auth')) {
 		await render(
 			reg,
 			`${tmpl}/src/main/kotlin/demo/SecurityConfiguration.kt.ejs`,
-			{ options },
+			meta,
 			`${out}/src/main/kotlin/${options.packagePath}/SecurityConfiguration.kt`
 		);
 
@@ -323,7 +324,7 @@ async function GenerateAuthentication(
 		await render(
 			reg,
 			`${tmpl}/src/main/kotlin/demo/service/UserDetailsServiceImpl.kt.ejs`,
-			{ options },
+			meta,
 			`${serviceDir}/UserDetailsServiceImpl.kt`
 		);
 
@@ -332,7 +333,7 @@ async function GenerateAuthentication(
 		await render(
 			reg,
 			`${tmpl}/src/main/kotlin/demo/map/AuthUserDetails.kt.ejs`,
-			{ options },
+			meta,
 			`${mapDir}/AuthUserDetails.kt`
 		);
 	}
