@@ -47,7 +47,11 @@ export async function ProcGenerate(
 
 	const groups: any = {};
 
-	tables.forEach((table: any) => SetNames(table));
+	tables.forEach((table: any) => {
+		SetNames(table);
+
+		table.audit = table.audit && table.audit == 'yes';
+	});
 
 	await ParseTables(register, options, project, tables, data, groups);
 

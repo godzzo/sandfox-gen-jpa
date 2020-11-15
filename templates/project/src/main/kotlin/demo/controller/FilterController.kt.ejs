@@ -42,7 +42,23 @@ class <%= table.camelName %>FilterController(
 
 /*FOXB-BODY*/
 /*FOXE-BODY*/
+<% 
+if ( options.hints.includes('envers') && table.audit ) { %>
+	@RequestMapping(value = ["/{repository}/revision<%= table.pluralCamelName %>"], method = arrayOf(RequestMethod.GET))
+	fun versions(id : Long, pageable: Pageable, assembler: PagedResourcesAssembler<<%= table.camelName %>Projection>) 
+			: ResponseEntity<PagedModel<EntityModel<<%= table.camelName %>Projection>>> {
 
+		val result = repository.findRevisions(id, pageable)
+
+		val projected = result.map {
+			factory.createProjection(<%= table.camelName %>Projection::class.java, it)
+		}
+
+		return ResponseEntity(assembler.toModel(projected), HttpStatus.OK);
+	}
+<% 
+}
+%>
     @RequestMapping(value = ["/{repository}/filter<%= table.pluralCamelName %>"], method = arrayOf(RequestMethod.GET))
     fun <%= table.pluralLowerCamelName %>Filter(filter : <%= table.camelName %>Filter,
          pageable: Pageable,

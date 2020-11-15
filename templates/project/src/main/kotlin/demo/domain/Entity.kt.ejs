@@ -3,18 +3,22 @@ package <%= options.package %>.domain
 import java.io.Serializable
 import java.time.*
 import javax.persistence.*
-import javax.validation.constraints.*
+import javax.validation.constraints.*<% 
+if ( options.hints.includes('envers') && table.audit ) { %>
+import org.hibernate.envers.Audited<% } %>
 import <%= options.package %>.group.*
 import <%= options.package %>.entitylistener.<%= table.camelName %>EntityListener
 /*FOXB-IMPORT*/
 /*FOXE-IMPORT*/
 
-@Entity
+@Entity<% 
+if ( options.hints.includes('envers') && table.audit ) {%>
+@Audited<%}%>
 @EntityListeners(<%= table.camelName %>EntityListener::class)
-@Table(name = "<%= table.name %>")
-<%if (table.primaries.length > 1) {
-	%>@IdClass(<%= table.camelName %>Id::class)<%
-}%>
+@Table(name = "<%= table.name %>")<%
+if (table.primaries.length > 1) { %>
+@IdClass(<%= table.camelName %>Id::class)<% 
+} %>
 data class <%= table.camelName %>(
 /*FOXB-CARGB*/
 /*FOXE-CARGB*/
