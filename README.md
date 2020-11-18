@@ -160,3 +160,72 @@ class SystemGroupCreate(
     }
 }
 ```
+
+## Hints
+
+SandFox use hints to add optional features.
+
+### Generating auditing with Hibernate Envers - "envers"
+
+Adding Hibernate and Spring Data Envers (Entity Versioning / Record Audit / Revisions).
+
+- build.gradle.kts
+- Application.kt
+- Modify: **{Entity}**.kt
+- Modify: **{Entity}** Repository.kt
+- Modify: **{Entity}** FilterController.kt
+
+### Authentication and Authorization - "auth"
+
+Using Basic Authentication and creating privileges (**C**reate-**R**ead-**U**pdate-**D**elete +**F**ilter) for generated JpaRepositories.
+
+In AuthUserDetails handling to assign privileges to the User by the roles of the User. For example: 
+```
+ADMIN:CRUDF
+EDITOR:RUF
+GUEST:F
+```
+
+Generating :
+- Create: SecurityConfiguration.kt
+- Create: UserDetailsServiceImpl.kt
+- Create: AuthUserDetails.kt
+
+## Json Config
+
+Sample config:
+```
+{
+	"sheetId": "1vI...mKY",
+	"directory": "./out/{project-name}",
+	"customDir": "../WORK/{project-name}",
+	"project": "{project-name}",
+	"package": "org.godzzo.sakila",
+	"credential": "credentials/gd-drive-access.json",
+	"hint": "auth,envers",
+	"showLogo": "yes",
+	"showArgs": "yes"
+}
+```
+
+Project generating and customizing sample bash script:
+```
+#!/bin/bash
+
+SANDFOX="{sandfox-directory-location}";
+CFG="{project-directory}/config/sandfox-config.json";
+
+cd $SANDFOX;
+
+# tsc;
+
+node dist/index.js --config $CFG save;
+
+sleep 1;
+node dist/index.js --config $CFG generate;
+
+sleep 1;
+node dist/index.js --config $CFG custom;
+
+cd -;
+```
