@@ -26,7 +26,7 @@ group.columns.forEach((column, idx) => {
 	// <%= column.caption %>
 	var <%= column.lowerCamelName.endsWith('Id')? 
 		column.lowerCamelName.substring(0, column.lowerCamelName.length-2): 
-		column.lowerCamelName %>: <%= column.relation.camelName %><%= column.needed != 'yes'? '?': ''  %>
+		column.lowerCamelName %>: <%= column.relation.camelName %>?
 <%
 	} 
 %><% 
