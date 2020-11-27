@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import javax.persistence.criteria.Predicate
+import javax.servlet.http.HttpSession
 /*FOXB-IMPORT*/
 /*FOXE-IMPORT*/
 
@@ -59,12 +60,14 @@ if ( options.hints.includes('envers') && table.audit ) { %>
 <% 
 }
 %>
-    @RequestMapping(value = ["/{repository}/filter<%= table.pluralCamelName %>"], method = arrayOf(RequestMethod.GET))
-    fun <%= table.pluralLowerCamelName %>Filter(filter : <%= table.camelName %>Filter,
-         pageable: Pageable,
-         assembler: PagedResourcesAssembler<<%= table.camelName %>Projection>) : ResponseEntity<PagedModel<EntityModel<<%= table.camelName %>Projection>>> {
+	@RequestMapping(value = ["/{repository}/filter<%= table.pluralCamelName %>"], method = arrayOf(RequestMethod.GET))
+	fun <%= table.pluralLowerCamelName %>Filter(filter : <%= table.camelName %>Filter,
+		pageable: Pageable,
+		assembler: PagedResourcesAssembler<<%= table.camelName %>Projection>,
+		session: HttpSession
+	) : ResponseEntity<PagedModel<EntityModel<<%= table.camelName %>Projection>>> {
 
-        val specifications = createSpecifications(filter)
+		val specifications = createSpecifications(filter, session)
 		val result = repository.findAll(specifications, pageable)
 		
 		val projected = result.map {
@@ -74,7 +77,7 @@ if ( options.hints.includes('envers') && table.audit ) { %>
         return ResponseEntity(assembler.toModel(projected), HttpStatus.OK);
     }
 
-    fun createSpecifications(filter : <%= table.camelName %>Filter): Specification<<%= table.camelName %>>? = Specification.where(
+    fun createSpecifications(filter : <%= table.camelName %>Filter, session: HttpSession): Specification<<%= table.camelName %>>? = Specification.where(
         Specification { root, query, cb ->
             val predicates = mutableListOf<Predicate>()
 
