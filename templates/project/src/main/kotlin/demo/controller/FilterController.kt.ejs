@@ -61,7 +61,7 @@ if ( options.hints.includes('envers') && table.audit ) { %>
 }
 %>
 	@RequestMapping(value = ["/{repository}/filter<%= table.pluralCamelName %>"], method = arrayOf(RequestMethod.GET))
-	fun <%= table.pluralLowerCamelName %>Filter(filter : <%= table.camelName %>Filter,
+	fun <%= table.pluralLowerCamelName %>Filter(filter: <%= table.camelName %>Filter,
 		pageable: Pageable,
 		assembler: PagedResourcesAssembler<<%= table.camelName %>Projection>,
 		session: HttpSession
@@ -77,7 +77,7 @@ if ( options.hints.includes('envers') && table.audit ) { %>
         return ResponseEntity(assembler.toModel(projected), HttpStatus.OK);
     }
 
-    fun createSpecifications(filter : <%= table.camelName %>Filter, session: HttpSession): Specification<<%= table.camelName %>>? = Specification.where(
+    fun createSpecifications(filter: <%= table.camelName %>Filter, session: HttpSession): Specification<<%= table.camelName %>>? = Specification.where(
         Specification { root, query, cb ->
             val predicates = mutableListOf<Predicate>()
 

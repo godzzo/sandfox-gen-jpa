@@ -433,6 +433,15 @@ async function GenerateProject(
 		`${controllerPath}/AppController.kt`
 	);
 
+	const filterPath = `${out}/src/main/kotlin/${options.packagePath}/filter`;
+	await MkDir(filterPath);
+	await render(
+		reg,
+		`${tmpl}/src/main/kotlin/demo/filter/ApiFilter.kt.ejs`,
+		{ options, tables, groups },
+		`${filterPath}/ApiFilter.kt`
+	);
+
 	await MkDir(`${out}/src/main/kotlin/${options.packagePath}/util`);
 	await render(
 		reg,
