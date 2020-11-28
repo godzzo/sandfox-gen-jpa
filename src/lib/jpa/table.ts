@@ -1,6 +1,6 @@
 import { render } from '../generate';
 import { MkDir, Warn } from '../common';
-import { Register } from "../proc/common";
+import { Register } from '../proc/common';
 
 export async function GenerateTables(
 	reg: Register,
@@ -12,7 +12,11 @@ export async function GenerateTables(
 		const table = tables[idx];
 
 		if (table.primary) {
-			await GenerateTable(reg, options, project, { table, options, project });
+			await GenerateTable(reg, options, project, {
+				table,
+				options,
+				project,
+			});
 		} else {
 			Warn(`Could not generate without primary: ${table.name}`);
 		}

@@ -1,5 +1,5 @@
-import { SetNames } from "../generate";
-import pluralize from "pluralize";
+import { SetNames } from '../generate';
+import pluralize from 'pluralize';
 
 export function LookRelationTables(relations: Array<any>, tables: any) {
 	// Lookup for tables whom targeted by relation

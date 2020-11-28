@@ -9,7 +9,7 @@ import {
 	Checksum,
 	ReadJsonFile,
 } from './common';
-import { Register, RenderData, CopyData } from "./proc/common";
+import { Register, RenderData, CopyData } from './proc/common';
 
 interface CustomConfig {
 	ignore: {

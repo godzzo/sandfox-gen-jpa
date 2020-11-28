@@ -1,10 +1,17 @@
 import { SetColumnAnnotation, SetNames } from '../generate';
-import { Register } from "../proc/common";
+import { Register } from '../proc/common';
 import { Warn } from '../common';
 import { AddGroupsForTable } from './group';
 import { CheckBidirectionalRelation, LookRelationTables } from './relation';
 
-export async function PrepareData(tables: any[], register: Register, options: string, project: string, data: any[], groups: any) {
+export async function PrepareData(
+	tables: any[],
+	register: Register,
+	options: string,
+	project: string,
+	data: any[],
+	groups: any
+) {
 	tables.forEach((table: any) => {
 		SetNames(table);
 

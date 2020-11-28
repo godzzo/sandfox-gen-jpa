@@ -30,6 +30,12 @@ export async function ProcGenerate(
 	return register;
 }
 
-async function GenerateProject(register: Register, options: string, project: string, tables: any[], groups: any) {
+async function GenerateProject(
+	register: Register,
+	options: string,
+	project: string,
+	tables: any[],
+	groups: any
+) {
 	await JpaGenerateProject(register, options, project, tables, groups);
 }

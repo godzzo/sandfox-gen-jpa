@@ -1,4 +1,3 @@
-
 export type CustomData = {
 	found: boolean;
 	errors: string[];
