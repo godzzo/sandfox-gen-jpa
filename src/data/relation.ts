@@ -1,4 +1,4 @@
-import { SetNames } from '../generate';
+import { SetNames } from '../lib/generate';
 import pluralize from 'pluralize';
 
 export function LookRelationTables(relations: Array<any>, tables: any) {

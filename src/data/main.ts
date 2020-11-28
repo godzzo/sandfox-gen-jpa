@@ -1,6 +1,6 @@
-import { SetColumnAnnotation, SetNames } from '../generate';
+import { SetColumnAnnotation, SetNames } from '../lib/generate';
 import { Register } from '../proc/common';
-import { Warn } from '../common';
+import { Warn } from '../lib/common';
 import { AddGroupsForTable } from './group';
 import { CheckBidirectionalRelation, LookRelationTables } from './relation';
 

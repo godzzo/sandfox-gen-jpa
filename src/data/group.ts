@@ -1,4 +1,4 @@
-import { SetNames } from '../generate';
+import { SetNames } from '../lib/generate';
 
 /**
  * Locate Groups of given Table (add Group Columns)

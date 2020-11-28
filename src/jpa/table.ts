@@ -1,5 +1,5 @@
-import { render } from '../generate';
-import { MkDir, Warn } from '../common';
+import { render } from '../lib/generate';
+import { MkDir, Warn } from '../lib/common';
 import { Register } from '../proc/common';
 
 export async function GenerateTables(

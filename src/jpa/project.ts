@@ -1,5 +1,5 @@
-import { render, RegCpFile } from '../generate';
-import { MkDir } from '../common';
+import { render, RegCpFile } from '../lib/generate';
+import { MkDir } from '../lib/common';
 import { Register } from '../proc/common';
 
 export async function GenerateProject(

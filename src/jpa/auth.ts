@@ -1,5 +1,5 @@
-import { render } from '../generate';
-import { MkDir } from '../common';
+import { render } from '../lib/generate';
+import { MkDir } from '../lib/common';
 import { Register } from '../proc/common';
 
 export async function GenerateAuthentication(

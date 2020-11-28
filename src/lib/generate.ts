@@ -4,7 +4,7 @@ import pluralize = require('pluralize');
 
 import { renderFile } from 'ejs';
 import { CopyFile, FileSize, Log } from './common';
-import { Register } from './proc/common';
+import { Register } from '../proc/common';
 
 export function SetNames(data: any): any {
 	const arrWords = data.name.split(/_/g);

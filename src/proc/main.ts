@@ -1,4 +1,4 @@
-import { WriteJsonFile } from '../common';
+import { WriteJsonFile } from '../lib/common';
 import { PrepareData } from '../data/main';
 import { JpaGenerateProject } from '../jpa/main';
 import { Register, RenderData, CopyData } from './common';

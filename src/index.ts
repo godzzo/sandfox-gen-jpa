@@ -8,7 +8,7 @@ import {
 	MkDir,
 	ReadJsonFile,
 } from './lib/common';
-import { ProcGenerate } from './lib/proc/main';
+import { ProcGenerate } from './proc/main';
 import { ParseCliArgs } from './lib/cli.args';
 import { LoadMeta, LoadGSMeta } from './lib/meta';
 import { ApplyCustom } from './lib/custom';
