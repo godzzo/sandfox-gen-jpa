@@ -1,7 +1,7 @@
 package <%= options.package %>.repository
 
 import <%= options.package %>.domain.<%= table.camelName %>
-import <%= options.package %>.projection.<%= table.camelName %>Projection
+import <%= options.package %>.projection.<%= table.camelName %>BaseProjection
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 /*FOXE-IMPORT*/
 
 @Repository
-@RepositoryRestResource(excerptProjection = <%= table.camelName %>Projection::class)
+@RepositoryRestResource(excerptProjection = <%= table.camelName %>BaseProjection::class)
 @CrossOrigin(methods = [RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE])
 interface <%= table.camelName %>Repository : JpaRepository<<%= table.camelName %>, Long>, JpaSpecificationExecutor<<%= table.camelName %>><%
 if ( options.hints.includes('envers') && table.audit ) { %>, RevisionRepository<<%= table.camelName %>, Long, Int><% } %> {

@@ -14,7 +14,7 @@ group.columns.forEach((column, idx) => {
 		) { 
 %>
 	// <%= column.caption %>
-	var <%= column.lowerCamelName %>: <%= column.ktType %><%= column.needed != 'yes'? '?': ''  %>
+	var <%= column.lowerCamelName %>: <%= column.ktType %>?
 <%	} 
 %><% 
 }); 

@@ -19,9 +19,21 @@ if ( options.hints.includes('envers') && table.audit ) {%>
 if (table.primaries.length > 1) { %>
 @IdClass(<%= table.camelName %>Id::class)<% 
 } %>
-data class <%= table.camelName %>(
+class <%= table.camelName %>(
 /*FOXB-CARGB*/
 /*FOXE-CARGB*/
+
+/*FOXB-CARGE*/
+/*FOXE-CARGE*/
+): <%
+if (table.groupConfigs.length > 0) {
+	table.groupConfigs.forEach((group, idx) => {
+%><%= idx === 0? group.camelName: ', ' + group.camelName%><% 
+	});%>, <%
+}
+%>Serializable {
+/*FOXB-BLOCKB*/
+/*FOXE-BLOCKB*/
 <% 
 table.columns.forEach((column, idx) => { 
 %><% 
@@ -31,7 +43,7 @@ table.columns.forEach((column, idx) => {
 %>
 	// <%= column.caption %>
 	<%- column.annotations %>
-	<%= (column.group ? 'override ' : '') %>var <%= column.lowerCamelName %>: <%= column.ktType %><%= column.needed != 'yes'? '?': ''  %>,
+	<%= (column.group ? 'override ' : '') %>var <%= column.lowerCamelName %>: <%= column.ktType %>? = null
 <%	} 
 %><% 
 }); 
@@ -40,7 +52,7 @@ table.columns.forEach((column, idx) => {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "<%= table.primary.name %>")
-	val <%= table.primary.lowerCamelName %>: Long = 0
+	var <%= table.primary.lowerCamelName %>: Long = 0
 <%} else {%><% 
 table.primaries.forEach((column, idx) => { 
 %>
@@ -55,17 +67,7 @@ table.primaries.forEach((column, idx) => {
 });
 %>
 <%}%>
-/*FOXB-CARGE*/
-/*FOXE-CARGE*/
-): <%
-if (table.groupConfigs.length > 0) {
-	table.groupConfigs.forEach((group, idx) => {
-%><%= idx === 0? group.camelName: ', ' + group.camelName%><% 
-	});%>, <%
-}
-%>Serializable {
-/*FOXB-BLOCKB*/
-/*FOXE-BLOCKB*/
+
 <% 
 table.columns.forEach((column, idx) => { 
 %><% 
@@ -98,7 +100,6 @@ table.columns.forEach((column, idx) => {
 /*FOXB-BLOCKE*/
 /*FOXE-BLOCKE*/
 }
-
 <%
 if (table.primaries.length > 1) {
 %>
