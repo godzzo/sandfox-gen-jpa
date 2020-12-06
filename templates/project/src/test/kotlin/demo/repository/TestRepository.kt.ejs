@@ -41,17 +41,15 @@ class Test<%= table.camelName %>Repository(
         )
     }
 
-    fun createSpecifications(): Specification<<%= table.camelName %>>? = Specification.where(
-        Specification { root, query, cb ->
-            val predicates = mutableListOf<Predicate>()
+    fun createSpecifications(): Specification<<%= table.camelName %>>? = Specification.where { root, query, cb ->
+        val predicates = mutableListOf<Predicate>()
 
-            FilterHelper.equal(root, query, cb, predicates, "id", 1)
+        FilterHelper.equal(root, query, cb, predicates, "id", 1)
 
-            // predicates.add(cb.isNotNull(root.get<String>("id")))
+        // predicates.add(cb.isNotNull(root.get<String>("id")))
 
-            cb.or(*predicates.toTypedArray())
-        }
-    )
+        cb.or(*predicates.toTypedArray())
+    }
 
 /*FOXB-CODE*/
 /*FOXE-CODE*/
