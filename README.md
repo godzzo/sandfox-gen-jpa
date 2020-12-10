@@ -229,3 +229,14 @@ node dist/index.js --config $CFG custom;
 
 cd -;
 ```
+
+## Test with Jest
+
+- [Tutorial](https://medium.com/@RupaniChirag/writing-unit-tests-in-typescript-d4719b8a0a40)
+- [GitHub](https://github.com/ChiragRupani/TSUnitTestsSetup/tree/master/HelloJest)
+
+### Debugging
+
+- launch.json contains configuration
+- set breakpoint
+- run : open package.json file, hover on scripts "debug" will pop in
