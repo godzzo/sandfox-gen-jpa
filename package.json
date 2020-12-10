@@ -4,12 +4,13 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "p:fix": "prettier --config ./.prettierrc --write \"src/**/*.ts\""
+    "format": "prettier --config ./.prettierrc --write \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "test": "jest",
+    "coverage": "jest --coverage"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run p:fix"
+      "pre-commit": "npm run format"
     }
   },
   "bin": {
@@ -32,8 +33,11 @@
     "pluralize": "^8.0.0"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.18",
     "husky": "^4.3.0",
+    "jest": "^26.6.3",
     "prettier": "^2.1.2",
-    "typescript": "^4.0.5"
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.1.2"
   }
 }

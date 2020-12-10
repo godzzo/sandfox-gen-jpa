@@ -44,7 +44,7 @@ async function ParseTables(
 		AddGroupsForTable(table, columns, data, groups);
 
 		// SetNames, Primary, Annotations
-		PrepareColumns(table, columns);
+		columns = PrepareColumns(data, table, columns);
 
 		if (!table.primary) {
 			Warn(`Table not has primary ${table.name}!`);
@@ -58,23 +58,58 @@ async function ParseTables(
 	CheckBidirectionalRelation(relations, tables);
 }
 
-function PrepareColumns(table: any, columns: any) {
+function PrepareColumns(data: any[], table: any, columns: any): any[] {
 	console.log('PrepareColumns: ', JSON.stringify(columns, null, 4));
 
 	columns.forEach(SetNames);
 
 	table.primaries = [];
 
-	columns.forEach((column: any) => {
-		column.annotations = SetColumnAnnotation(column);
-		column.ktType = column.kttype;
-		column.writeOnly = column.writeonly
-			? column.writeonly === 'yes'
-			: false;
+	return columns.map((column: any) =>
+		PrepareColumn(data, table, columns, column)
+	);
+}
 
-		if (column.type.startsWith('primary')) {
-			table.primary = column;
-			table.primaries.push(column);
+function PrepareColumn(
+	data: any[],
+	table: any,
+	columns: any[],
+	column: any
+): any {
+	column = ParseDomain(data, column);
+
+	column.annotations = SetColumnAnnotation(column);
+	column.ktType = column.kttype;
+	column.writeOnly = column.writeonly ? column.writeonly === 'yes' : false;
+
+	if (column.type.startsWith('primary')) {
+		table.primary = column;
+		table.primaries.push(column);
+	}
+
+	return column;
+}
+
+/**
+ * Locate domain add column config
+ *
+ */
+export function ParseDomain(data: any, column: any): any {
+	if (column.domain) {
+		const domain: any[] = data[0].filter(
+			(row: any) => row.name == column.domain
+		);
+
+		if (domain.length > 0) {
+			const link: any = ParseDomain(data, domain[0]);
+
+			return { ...link, ...column };
+		} else {
+			console.error(`Domain not found: ${column.domain}`, column);
+
+			return column;
 		}
-	});
+	} else {
+		return column;
+	}
 }
