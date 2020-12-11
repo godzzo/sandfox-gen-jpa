@@ -82,9 +82,13 @@ function PrepareColumn(
 	column.ktType = column.kttype;
 	column.writeOnly = column.writeonly ? column.writeonly === 'yes' : false;
 
-	if (column.type.startsWith('primary')) {
-		table.primary = column;
-		table.primaries.push(column);
+	if (column.type) {
+		if (column.type.startsWith('primary')) {
+			table.primary = column;
+			table.primaries.push(column);
+		}
+	} else {
+		console.log('Column type not found', column);
 	}
 
 	return column;

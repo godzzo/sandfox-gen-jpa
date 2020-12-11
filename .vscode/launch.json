@@ -20,15 +20,18 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Insert Partners",
+			"name": "Generate Simple",
 			"program": "${workspaceFolder}\\src\\index.ts",
 			"preLaunchTask": "npm: build",
 			"sourceMaps": true,
 			"smartStep": true,
+			"trace": true,
 			"internalConsoleOptions": "openOnSessionStart",
 			"outFiles": ["${workspaceFolder}/dist/**/*.js"],
 			"args": [
-				"info"
+				"--config",
+				"config/simple.json",
+				"generate"
 			],
 			"skipFiles": [
 				"<node_internals>/**/*.js"

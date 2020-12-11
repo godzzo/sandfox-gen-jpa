@@ -1,4 +1,5 @@
 import { SetNames } from '../lib/generate';
+import { ParseDomain } from './main';
 
 /**
  * Locate Groups of given Table (add Group Columns)
@@ -42,7 +43,9 @@ function LocateAndRegisterGroup(name: string, groups: any, data: any[]) {
 		const columns = groupColumns.map((el: any) => {
 			el.group = name;
 
-			return el;
+			const column = ParseDomain(data, el);
+
+			return column;
 		});
 
 		config.columns = columns;
