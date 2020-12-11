@@ -1,0 +1,12 @@
+[
+	{
+		"path": "$ROOTPATH$\\tests\\data\\main.test.ts",
+		"bookmarks": [
+			{
+				"line": 18,
+				"column": 6,
+				"label": "test ParseDomain"
+			}
+		]
+	}
+]

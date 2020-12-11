@@ -1,0 +1,10 @@
+{
+	"sheetId": "1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY",
+	"directory": "./out/simple",
+	"project": "simple",
+	"package": "org.godzzo.simple",
+	"credential": "credentials/gd-drive-access.json",
+	"hint": "none",
+	"showLogo": "yes",
+	"showArgs": "yes"
+}
