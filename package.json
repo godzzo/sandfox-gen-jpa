@@ -4,6 +4,9 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "start": "node dist/index.js",
+    "prestart": "npm run build",
+    "build": "tsc",
     "format": "prettier --config ./.prettierrc --write \"src/**/*.ts\" \"tests/**/*.ts\"",
     "test": "jest",
     "coverage": "jest --coverage"

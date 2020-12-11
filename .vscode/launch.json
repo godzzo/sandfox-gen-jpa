@@ -12,9 +12,27 @@
 			"args": ["${relativeFile}"],
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "neverOpen",
+			"trace": true,
 			"windows": {
-			  "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+				"program": "${workspaceFolder}/node_modules/jest/bin/jest"
 			}
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Insert Partners",
+			"program": "${workspaceFolder}\\src\\index.ts",
+			"preLaunchTask": "npm: build",
+			"sourceMaps": true,
+			"smartStep": true,
+			"internalConsoleOptions": "openOnSessionStart",
+			"outFiles": ["${workspaceFolder}/dist/**/*.js"],
+			"args": [
+				"info"
+			],
+			"skipFiles": [
+				"<node_internals>/**/*.js"
+			]
 		}
 	]
 }
