@@ -3,7 +3,8 @@
 ## Running
 
 Installing:
-```
+
+```bash
 git clone https://github.com/godzzo/sandfox-gen-jpa.git
 cd sandfox-gen-jpa
 
@@ -15,7 +16,8 @@ tsc
 ```
 
 Configure Your GDrive access on ./credentials/gd-drive-access.json:
-```
+
+```json
 {
   "type": "service_account",
   "project_id": "gd-drive-access",
@@ -31,49 +33,57 @@ Configure Your GDrive access on ./credentials/gd-drive-access.json:
 ```
 
 Save the Google Spreadsheet to JSON (**save** action):
-```
+
+```bash
 node dist/index.js save     -s 1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY -d ./out/simple -q ../sandfox-in/simple -k -p simple -k org.godzzo.simple
 ```
 
 Generate to the FULL project to the ./out/simple folder (**generate** action):
-```
+
+```bash
 node dist/index.js generate -s 1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY -d ./out/simple -q ../sandfox-in/simple -k -p simple -k org.godzzo.simple
 ```
 
 ✋**Copy the project!** (./out/simple) to an another directory (for example: ../sandfox-in/simple), and you NOW can run it (do not forget to setup your database on src/main/resources/application.properties)
-```
+
+```bash
 ./gradlew bootRun
 ```
+
 After working / editing the project and make some configuration changes (like more column config...), you can override your project (need to **save** and **generate** and after that run the **custom** action)
 
 The **custom** step only override your existing project (**respecting** Your /*FOXB-???*/ ...Your Code.. /*FOXE-???*/) blocks.
 
-```
+```bash
 node dist/index.js custom   -s 1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY -d ./out/simple -q ../sandfox-in/simple -k -p simple -k org.godzzo.simple
 ```
 
 ## Output - Generated class files
+
 Application level:
+
 - Application (for running application)
-- RepositoryRestCustomization 
-  - add projections 
+- RepositoryRestCustomization
+  - add projections
   - exposeIds
   - add validators (BeanValidation, GroupValidators)
 - SpelAwareProxyProjectionFactory (using expression in Projections)
 - AppController (with minimal Upload handling)
 
 Group level (set of columns, for sharing between tables - like SystemGroup (id, creator, created...))
+
 - Group interface
 - GroupValidator (handling all tables who has this Group)
 
 Every table has the afollowing classes:
+
 - Entity
 - Projection (+BaseProjection - without relations)
 - JpaRepository
-- FilterController 
+- FilterController
   - MVC RepositoryRestController - URL f.e.: /api/users/filterUsers
   - with dynamic filtering using Criteria API)
-  - name convention to handle filters on properties of entity (_equal, _like...)
+  - name convention to handle filters on properties of entity ( _equal , _like... )
   - isAnd=true to joining filter expression with AND
 - EntityListener
 - RepositoryEventHandler
@@ -81,6 +91,7 @@ Every table has the afollowing classes:
 - TestRepository - with PageRequest and Specification
 
 ## Table and Column configuration with GoogleSpreadsheet
+
 *You can skip this step if You create somewhere else the config JSON.*
 
 - Using Google Spreadsheet [like this **ONE**👀](https://docs.google.com/spreadsheets/d/1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY/edit#gid=0)
@@ -88,8 +99,10 @@ Every table has the afollowing classes:
 - important is the ID of GSheet - like this one 1yUZ2cHkYdEC3twB6bNimEORO7ZJohJ3PgX4D74KC_lY
 
 ## Customization - Setup Ignore RegExp masks
+
 SandFox creating a minimal config for ignores, like:
-```
+
+```json
 {
     "ignore": {
         "copyAsCustom": true,
@@ -107,19 +120,23 @@ This means, only once will generate the application.properties, build.gradle.kts
 You can setup more ignore masks and the **"copyAsCustom": true** setting means to copy the ignored files with .custom extension, so You can examine what changed, for example AppController.kt.custom (*the .custom in .gitignore already*).
 
 ## Template folder
+
 SandFox can use multiple template folders, now using only [this one👀](https://github.com/godzzo/sandfox-gen-jpa/tree/master/templates/project).
 
 Some templates ([using EJS](https://ejs.co/)):
+
 - [src/main/kotlin/demo/domain/**Entity.kt.ejs**](https://github.com/godzzo/sandfox-gen-jpa/blob/master/templates/project/src/main/kotlin/demo/domain/Entity.kt.ejs)
 - [src/main/kotlin/demo/controller/**FilterController.kt.ejs**](https://github.com/godzzo/sandfox-gen-jpa/blob/master/templates/project/src/main/kotlin/demo/controller/FilterController.kt.ejs)
 
 *A bit messy without syntax coloring, I like to find a nice ONE, or changing extension* 🧐
 
 ## Customization - Custom blocks FOXB...FOXE
+
 The template engine handle the **FOXB...FOXE** comment tags, so it can easily extendable in any template which the SandFox using, like this:
 
 Setup column values of the SystemGroup (all Entities have SystemGroup this example):
-```
+
+```typescript
 @Component
 class SystemGroupCreate(
 /*FOXB-CARG-CREATE*/
@@ -179,14 +196,16 @@ Adding Hibernate and Spring Data Envers (Entity Versioning / Record Audit / Revi
 
 Using Basic Authentication and creating privileges (**C**reate-**R**ead-**U**pdate-**D**elete +**F**ilter) for generated JpaRepositories.
 
-In AuthUserDetails handling to assign privileges to the User by the roles of the User. For example: 
-```
+In AuthUserDetails handling to assign privileges to the User by the roles of the User. For example:
+
+```text
 ADMIN:CRUDF
 EDITOR:RUF
 GUEST:F
 ```
 
 Generating :
+
 - Create: SecurityConfiguration.kt
 - Create: UserDetailsServiceImpl.kt
 - Create: AuthUserDetails.kt
@@ -194,7 +213,8 @@ Generating :
 ## Json Config
 
 Sample config:
-```
+
+```json
 {
 	"sheetId": "1vI...mKY",
 	"directory": "./out/{project-name}",
@@ -209,7 +229,8 @@ Sample config:
 ```
 
 Project generating and customizing sample bash script:
-```
+
+```bash
 #!/bin/bash
 
 SANDFOX="{sandfox-directory-location}";
