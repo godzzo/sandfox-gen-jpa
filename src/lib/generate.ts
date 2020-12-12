@@ -1,6 +1,6 @@
-import util = require('util');
-import fs = require('fs');
-import pluralize = require('pluralize');
+import * as util from 'util';
+import * as fs from 'fs';
+import * as pluralize from 'pluralize';
 
 import { renderFile } from 'ejs';
 import { CopyFile, FileSize, Log } from './common';

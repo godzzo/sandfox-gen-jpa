@@ -2,21 +2,16 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "*": ["types/*"]
+      "*": ["../types/*"]
     },
-    "target": "es5",
-    "module": "commonjs",
+    "target": "es2017",
+    "module": "ES2015",
     "strict": true,
     "esModuleInterop": true,
+    "moduleResolution": "Node",
     "lib": ["es2017", "es7", "es6", "dom"],
     "declaration": true,
-    "outDir": "dist",
+    "outDir": "../dist",
     "sourceMap": true
-  },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "templates",
-    "out"
-  ]
+  }
 }

@@ -1,8 +1,8 @@
-import gsjson = require('google-spreadsheet-to-json');
-import fs = require('fs');
-import path = require('path');
-import util = require('util');
-import md5 = require('md5');
+import gsjson from 'google-spreadsheet-to-json';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as util from 'util';
+import md5 from 'md5';
 const chalk = require('chalk');
 
 export async function LoadSpreadsheetData(

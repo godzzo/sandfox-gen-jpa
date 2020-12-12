@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"*": ["../types/*"]
+		},
+		"target": "es6",
+		"module": "commonjs",
+		"strict": true,
+		"esModuleInterop": true,
+		"lib": ["es2017", "es7", "es6", "dom"],
+		"declaration": true,
+		"sourceMap": true
+	}
+}
