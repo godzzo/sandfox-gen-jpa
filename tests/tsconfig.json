@@ -4,12 +4,20 @@
 		"paths": {
 			"*": ["../types/*"]
 		},
-		"target": "es6",
+		"target": "es2017",
 		"module": "commonjs",
 		"strict": true,
 		"esModuleInterop": true,
 		"lib": ["es2017", "es7", "es6", "dom"],
 		"declaration": true,
-		"sourceMap": true
+		"sourceMap": true,
+		"typeRoots": [
+			"../types",
+			"../node_modules/@types"
+		],
+		"types": [
+			"reflect-metadata",
+			"jest"
+		],
 	}
 }

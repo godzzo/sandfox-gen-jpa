@@ -246,6 +246,14 @@ describe('test ParseDomain', function () {
 
 		console.log('Configured column', config);
 
-		// expect(config).toBe(7);
+		expect(config).toEqual({
+			table: 'user',
+			name: 'id',
+			type: 'primary',
+			kttype: 'Int',
+			caption: 'Azonosító',
+			domain: 'd.id',
+			needed: 'yes',
+		});
 	});
 });
