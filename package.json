@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "prestart": "npm run build",
-    "build": "tsc",
+    "build": "tsc -p src",
     "format": "prettier --config ./.prettierrc --write \"src/**/*.ts\" \"tests/**/*.ts\"",
     "test": "jest",
     "coverage": "jest --coverage"
