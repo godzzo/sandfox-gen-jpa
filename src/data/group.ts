@@ -6,8 +6,8 @@ import { ParseDomain } from './main';
  */
 export function AddGroupsForTable(
 	table: any,
-	columns: Array<any>,
-	data: Array<any>,
+	columns: any[],
+	data: any[],
 	groups: any
 ) {
 	if (table.groups) {
@@ -34,7 +34,7 @@ export function AddGroupsForTable(
  */
 function LocateAndRegisterGroup(name: string, groups: any, data: any[]) {
 	if (!groups[name]) {
-		const groupColumns = data[0].filter((row: any) => row.table == name);
+		const groupColumns = data[0].filter((row: any) => row.table === name);
 
 		const config: any = { name };
 

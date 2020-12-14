@@ -1,7 +1,7 @@
 import { SetNames } from '../lib/generate';
 import pluralize from 'pluralize';
 
-export function LookRelationTables(relations: Array<any>, tables: any) {
+export function LookRelationTables(relations: any[], tables: any) {
 	// Lookup for tables whom targeted by relation
 	tables.forEach((table: any) => {
 		table.columns.forEach((column: any) => {
@@ -12,9 +12,7 @@ export function LookRelationTables(relations: Array<any>, tables: any) {
 				const relName = column.type.split('.')[2];
 				const relType = column.type.split('.')[1];
 
-				const relTable = tables.find(
-					(table: any) => table.name == relName
-				);
+				const relTable = tables.find((el: any) => el.name === relName);
 
 				column.relation = relTable;
 
@@ -23,7 +21,7 @@ export function LookRelationTables(relations: Array<any>, tables: any) {
 					srcCol: column,
 					trgTbl: relTable,
 					trgCol: relTable.columns.find(
-						(col: any) => col.type == 'primary'
+						(col: any) => col.type === 'primary'
 					),
 					relType,
 				});
@@ -32,21 +30,21 @@ export function LookRelationTables(relations: Array<any>, tables: any) {
 	});
 }
 
-export function CheckBidirectionalRelation(relations: Array<any>, tables: any) {
+export function CheckBidirectionalRelation(relations: any[], tables: any) {
 	relations.forEach((rel: any) => {
 		/*Log(`
 ${rel.relType}: ${rel.srcTbl.name} >> ${rel.trgTbl.name} // ${rel.srcCol.name}
 		`);*/
 
 		if (
-			rel.relType == 'one' &&
-			`${rel.trgTbl.name}_id` == rel.srcCol.name
+			rel.relType === 'one' &&
+			`${rel.trgTbl.name}_id` === rel.srcCol.name
 		) {
 			const found = relations.find(
 				(rf: any) =>
-					rf.srcTbl.name == rel.trgTbl.name &&
-					rf.trgTbl.name == rel.srcTbl.name &&
-					rf.relType == 'many'
+					rf.srcTbl.name === rel.trgTbl.name &&
+					rf.trgTbl.name === rel.srcTbl.name &&
+					rf.relType === 'many'
 			);
 
 			if (!found) {

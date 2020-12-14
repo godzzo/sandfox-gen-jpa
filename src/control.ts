@@ -10,23 +10,23 @@ import { ProcGenerate } from './proc/main';
 import { LoadMeta, LoadGSMeta } from './lib/meta';
 import { ApplyCustom } from './lib/custom';
 
-const chalk = require('chalk');
+import chalk from 'chalk';
 
 export async function Main(options: any) {
-	if (options.showArgs == 'yes') {
+	if (options.showArgs === 'yes') {
 		LogObj(options, 'ParseCliArgs');
 	}
 
 	await PrintLogo(options);
 
 	try {
-		if (options.command == 'info') {
+		if (options.command === 'info') {
 			await InfoGSMeta(options);
-		} else if (options.command == 'save') {
+		} else if (options.command === 'save') {
 			await SaveGSMeta(options);
-		} else if (options.command == 'generate') {
+		} else if (options.command === 'generate') {
 			await InvokeGenerate(options);
-		} else if (options.command == 'custom') {
+		} else if (options.command === 'custom') {
 			await InvokeCustom(options);
 		} else {
 			Log(`Don't known this command: ${options.command} :(`);
@@ -39,7 +39,7 @@ export async function Main(options: any) {
 }
 
 async function PrintLogo(options: any) {
-	if (options.showLogo == 'yes') {
+	if (options.showLogo === 'yes') {
 		const logo = await ReadFile(`${options.foxPath}/config/logo.txt`);
 
 		Log(chalk.yellow.bgRed.bold(logo));

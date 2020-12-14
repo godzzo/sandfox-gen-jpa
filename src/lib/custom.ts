@@ -217,13 +217,13 @@ function InsertCustoms(customs: any[], text: string) {
 			const custom = customs.find((el) => el.name === name);
 
 			if (custom && custom.data.trim().length !== 0) {
-				const text = custom.data
+				const block = custom.data
 					.replace(/^[\n|\r]*/g, '')
 					.replace(/[\n|\r]*$/g, '');
 
-				blocks.push(`/*FOXB-${name}*/\n${text}\n/*FOXE-${name}*/`);
+				blocks.push(`/*FOXB-${name}*/\n${block}\n/*FOXE-${name}*/`);
 
-				console.log(`[[[${text}]]]`);
+				console.log(`[[[${block}]]]`);
 			} else {
 				blocks.push(`/*FOXB-${name}*/\n/*FOXE-${name}*/`);
 			}

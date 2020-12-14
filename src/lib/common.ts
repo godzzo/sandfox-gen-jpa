@@ -1,17 +1,17 @@
 import gsjson from 'google-spreadsheet-to-json';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as util from 'util';
+import fs from 'fs';
+import path from 'path';
+import util from 'util';
 import md5 from 'md5';
-const chalk = require('chalk');
+import chalk from 'chalk';
 
 export async function LoadSpreadsheetData(
 	spreadsheetId: string,
 	credentials: string
 ) {
 	return gsjson({
-		spreadsheetId: spreadsheetId,
-		credentials: credentials,
+		spreadsheetId,
+		credentials,
 		// worksheet: [0, 1, 2]
 		allWorksheets: true,
 	});
@@ -54,9 +54,9 @@ export async function FileChecksum(filePath: string) {
 	return md5(data);
 }
 
-export function FileSize(path: string) {
+export function FileSize(filePath: string) {
 	try {
-		const stats = fs.statSync(path);
+		const stats = fs.statSync(filePath);
 
 		return stats.size;
 	} catch (e) {

@@ -6,8 +6,8 @@ import { Register, RenderData, CopyData } from './common';
 export async function ProcGenerate(
 	options: string,
 	project: string,
-	tables: Array<any>,
-	data: Array<any>
+	tables: any[],
+	data: any[]
 ) {
 	const register: Register = {
 		renders: new Array<RenderData>(),
