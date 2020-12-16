@@ -86,11 +86,11 @@ export function SetColumnAnnotation(column: any): string {
 	let more = '';
 
 	more +=
-		column.length && column.length != 'null'
+		column.length && column.length !== 'null'
 			? `, length=${column.length}`
 			: '';
 	more +=
-		column.needed && column.needed == 'yes'
+		column.needed && column.needed === 'yes'
 			? `, nullable=false`
 			: ', nullable=true';
 	more += column.precision ? `, precision=${column.precision}` : '';

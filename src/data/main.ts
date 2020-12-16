@@ -15,7 +15,7 @@ export async function PrepareData(
 	tables.forEach((table: any) => {
 		SetNames(table);
 
-		table.audit = table.audit && table.audit == 'yes';
+		table.audit = table.audit && table.audit === 'yes';
 	});
 
 	await ParseTables(register, options, project, tables, data, groups);
@@ -25,18 +25,18 @@ async function ParseTables(
 	reg: Register,
 	options: string,
 	project: string,
-	tables: Array<any>,
-	data: Array<any>,
+	tables: any[],
+	data: any[],
 	groups: any
 ) {
-	const relations: Array<any> = [];
+	const relations: any[] = [];
 
 	tables.forEach((table: any) => {
 		let columns = null;
 
 		// Handling ALL sheet - all table config in one sheet
-		if (table.pos == 0) {
-			columns = data[0].filter((row: any) => row.table == table.name);
+		if (table.pos === 0) {
+			columns = data[0].filter((row: any) => row.table === table.name);
 		} else {
 			columns = data[table.pos - 1];
 		}
@@ -101,7 +101,7 @@ function PrepareColumn(
 export function ParseDomain(data: any, column: any): any {
 	if (column.domain) {
 		const domain: any[] = data[0].filter(
-			(row: any) => row.name == column.domain
+			(row: any) => row.name === column.domain
 		);
 
 		if (domain.length > 0) {

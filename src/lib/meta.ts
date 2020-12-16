@@ -2,7 +2,7 @@ import { Log, ReadJsonFile } from '../lib/common';
 import { LoadSpreadsheetData } from '../lib/common';
 
 export async function LoadGSMeta(options: any) {
-	if (options.sheetId == 'NONE') {
+	if (options.sheetId === 'NONE') {
 		throw new Error('Missing sheetId parameter!');
 	}
 
@@ -18,7 +18,7 @@ export async function LoadGSMeta(options: any) {
 export async function LoadMeta(options: any) {
 	let data = null;
 
-	if (options.sheetId != 'NONE') {
+	if (options.sheetId !== 'NONE') {
 		data = await LoadGSMeta(options);
 	} else {
 		const jsonPath = `${options.directory}/config/${options.project}.json`;

@@ -14,7 +14,7 @@ export async function GenerateGroups(
 	const groupPath = `${options.directory}/src/main/kotlin/${options.packagePath}/group`;
 	await MkDir(groupPath);
 
-	for (const groupName in groups) {
+	for (const groupName of Object.keys(groups)) {
 		const group = groups[groupName];
 
 		const meta = { group, options, project };

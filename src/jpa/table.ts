@@ -8,9 +8,7 @@ export async function GenerateTables(
 	tables: any[],
 	project: string
 ) {
-	for (const idx in tables) {
-		const table = tables[idx];
-
+	for (const table of tables) {
 		if (table.primary) {
 			await GenerateTable(reg, options, project, {
 				table,

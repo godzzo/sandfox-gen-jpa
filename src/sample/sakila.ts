@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { ReadJsonFile, Log, Warn } from '../lib/common';
-const CliArgs = require('command-line-args');
+import CliArgs from 'command-line-args';
 
 // https://github.com/75lb/command-line-args/blob/master/doc/option-definition.md
 const optDef = [
@@ -17,12 +17,13 @@ const options = CliArgs(optDef);
 
 //  node dist/sample/sakila.js cols > config/sakila/config.csv
 
+// tslint:disable:no-floating-promises
 (async () => {
-	if (options.command == 'cols') {
+	if (options.command === 'cols') {
 		await PrintColRows();
-	} else if (options.command == 'tables') {
+	} else if (options.command === 'tables') {
 		await PrintTables();
-	} else if (options.command == 'types') {
+	} else if (options.command === 'types') {
 		await PrintColTypes();
 	}
 })();
@@ -54,7 +55,7 @@ async function PrintColRows() {
 	tables.forEach((tbl: any) => {
 		// Log(`${tbl.table_name}`);
 
-		cols.filter((col: any) => col.table_name == tbl.table_name).forEach(
+		cols.filter((col: any) => col.table_name === tbl.table_name).forEach(
 			(col: any) => {
 				const row: any = {};
 				row.table = col.table_name;
@@ -65,7 +66,7 @@ async function PrintColRows() {
 				row.columnType = col.data_type;
 				row.length = col.character_maximum_length;
 				row.edit = 'text';
-				row.needed = col.is_nullable == 'YES' ? 'no' : 'yes';
+				row.needed = col.is_nullable === 'YES' ? 'no' : 'yes';
 				row.resultType = 'text';
 
 				if (col.referenced_table_name != null) {
@@ -74,7 +75,7 @@ async function PrintColRows() {
 					// const relation = cols.find((el: any) => el.referenced_table_name);
 				}
 
-				if (col.column_key == 'PRI') {
+				if (col.column_key === 'PRI') {
 					row.type =
 						col.referenced_table_name == null
 							? 'primary'

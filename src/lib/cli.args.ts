@@ -1,4 +1,4 @@
-const CliArgs = require('command-line-args');
+import CliArgs from 'command-line-args';
 import { ReadJsonFile, FileExists } from './common';
 
 export async function ParseCliArgs() {
