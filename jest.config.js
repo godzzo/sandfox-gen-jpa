@@ -8,11 +8,9 @@ module.exports = {
 	moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 	globals: {
 		'ts-jest': {
-			tsconfig: './tests/tsconfig.json'
-		}
+			tsconfig: './tests/tsconfig.json',
+		},
 	},
-	collectCoverageFrom: [
-		'src/utils/*.ts',
-		'src/*.ts'
-	]
+	collectCoverageFrom: ['src/utils/*.ts', 'src/*.ts'],
+	setupFilesAfterEnv: ['./jest.setup.js'],
 };

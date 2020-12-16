@@ -9,10 +9,7 @@
 			"request": "launch",
 			"name": "Jest Current",
 			"program": "${workspaceFolder}/node_modules/.bin/jest",
-			"args": [
-				"--runTestsByPath",
-				"${relativeFile}"
-			],
+			"args": ["--runTestsByPath", "${relativeFile}"],
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "neverOpen",
 			"smartStep": true,
@@ -49,14 +46,22 @@
 			"trace": true,
 			"internalConsoleOptions": "openOnSessionStart",
 			"outFiles": ["${workspaceFolder}/dist/**/*.js"],
-			"args": [
-				"--config",
-				"config/simple.json",
-				"generate"
-			],
-			"skipFiles": [
-				"<node_internals>/**/*.js"
-			]
+			"args": ["--config", "config/simple.json", "generate"],
+			"skipFiles": ["<node_internals>/**/*.js"]
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Save Simple",
+			"program": "${workspaceFolder}\\src\\index.ts",
+			"preLaunchTask": "npm: build",
+			"sourceMaps": true,
+			"smartStep": true,
+			"trace": true,
+			"internalConsoleOptions": "openOnSessionStart",
+			"outFiles": ["${workspaceFolder}/dist/**/*.js"],
+			"args": ["--config", "config/simple.json", "save"],
+			"skipFiles": ["<node_internals>/**/*.js"]
 		}
 	]
 }

@@ -9,7 +9,7 @@ function GetOptions(command: string = 'info'): any {
 		project: 'simple',
 		package: 'org.godzzo.simple',
 		credential: 'credentials/gd-drive-access.json',
-		hint: 'auth',
+		hints: ['auth'],
 		showLogo: 'yes',
 		showArgs: 'yes',
 		foxPath: '.',
@@ -20,6 +20,12 @@ function GetOptions(command: string = 'info'): any {
 describe('Control / Main', () => {
 	it('Save', async () => {
 		const options = GetOptions();
+
+		await Main(options);
+	});
+
+	it('Generate', async () => {
+		const options = GetOptions('generate');
 
 		await Main(options);
 	});
