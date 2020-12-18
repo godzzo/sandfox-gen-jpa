@@ -4,9 +4,11 @@ import <%= options.package %>.domain.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import org.slf4j.LoggerFactory
 
 
 class AuthUserDetails(val userDetails: User) : UserDetails {
+    private val log = LoggerFactory.getLogger(AuthUserDetails::class.java)
 
     override fun getAuthorities(): Collection<GrantedAuthority?> {
         val role = userDetails.roleType!!.toUpperCase()
@@ -14,7 +16,7 @@ class AuthUserDetails(val userDetails: User) : UserDetails {
 
         val authorities = mutableListOf<GrantedAuthority>(SimpleGrantedAuthority(roleDef))
 
-        println("ADD ${role}")
+        log.info("ADD ${role}")
 <%
 tables.forEach((table, idx) => { 
 %>
@@ -22,7 +24,7 @@ tables.forEach((table, idx) => {
 <%
 });
 %>
-        println("Authorities: ${authorities}")
+        log.info("Authorities: ${authorities}")
 
         return authorities
     }

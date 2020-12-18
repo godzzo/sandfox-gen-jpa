@@ -24,14 +24,11 @@ for (const groupName in groups) {
     private val log = LoggerFactory.getLogger(RepositoryRestCustomization::class.java)
 
     init {
-        println("RepositoryRestCustomization: INIT")
-        log.warn("configureRepositoryRestConfiguration: INIT")
-
+        log.info("configureRepositoryRestConfiguration: INIT")
     }
 
     override fun configureRepositoryRestConfiguration(config: RepositoryRestConfiguration?) {
-        println("RepositoryRestCustomization: CALLED")
-        log.warn("configureRepositoryRestConfiguration: CALLED")
+        log.info("configureRepositoryRestConfiguration: CALLED")
 
         config?.projectionConfiguration<% 
 tables.forEach((table, idx) => { 

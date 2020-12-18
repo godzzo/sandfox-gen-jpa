@@ -3,6 +3,7 @@ package <%= options.package %>.group
 import org.springframework.stereotype.Component
 import org.springframework.validation.Errors
 import org.springframework.validation.Validator
+import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 /*FOXB-CARG-IMPORT*/
 /*FOXE-CARG-IMPORT*/
@@ -12,14 +13,16 @@ class <%= group.camelName %>Create(
 /*FOXB-CARG-CREATE*/
 /*FOXE-CARG-CREATE*/
 ): Validator {
+    private val log = LoggerFactory.getLogger(<%= group.camelName %>Create::class.java)
+
     init {
-        println("<%= group.camelName %>Create - INIT")
+        log.info("<%= group.camelName %>Create - INIT")
     }
 
     override fun supports(clazz: Class<*>): Boolean {
         val support =  <%= group.camelName %>::class.java.isAssignableFrom(clazz)
 
-        println("<%= group.camelName %>Create - Supports - ${support} - ${clazz}")
+        log.info("<%= group.camelName %>Create - Supports - ${support} - ${clazz}")
 
         return support
     }
@@ -37,14 +40,16 @@ class <%= group.camelName %>Save(
 /*FOXB-CARG-SAVE*/
 /*FOXE-CARG-SAVE*/
 ): Validator {
+    private val log = LoggerFactory.getLogger(<%= group.camelName %>Save::class.java)
+
     init {
-        println("<%= group.camelName %>Save - INIT")
+        log.info("<%= group.camelName %>Save - INIT")
     }
 
     override fun supports(clazz: Class<*>): Boolean {
         val support =  <%= group.camelName %>::class.java.isAssignableFrom(clazz)
 
-        println("<%= group.camelName %>Save - Supports - ${support} - ${clazz}")
+        log.info("<%= group.camelName %>Save - Supports - ${support} - ${clazz}")
 
         return support
     }

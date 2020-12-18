@@ -20,7 +20,6 @@ if ( hints.includes('envers') ) {
 %>
 class Application : SpringBootServletInitializer() {
 	override fun configure(application: SpringApplicationBuilder): SpringApplicationBuilder {
-		println(">>>>> Application - configure - Called :)")
 		log.info(">>>>> Application - configure - Called :)")
 
 		return application.sources(Application::class.java)
@@ -30,7 +29,6 @@ class Application : SpringBootServletInitializer() {
 private val log = LoggerFactory.getLogger(Application::class.java)
 
 fun main(args: Array<String>) {
-	println(">>>>> Application - main - Called :)")
 	log.info(">>>>> Application - main - Called :)")
 
 	runApplication<Application>(*args)
