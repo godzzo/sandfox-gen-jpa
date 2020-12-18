@@ -1,6 +1,7 @@
 package <%= options.package %>.entitylistener
 
 import <%= options.package %>.domain.<%= table.camelName %>
+import org.slf4j.LoggerFactory
 import javax.persistence.*
 /*FOXB-IMPORT*/
 /*FOXE-IMPORT*/
@@ -9,6 +10,8 @@ class <%= table.camelName %>EntityListener(
 /*FOXB-CARG*/
 /*FOXE-CARG*/
 ) {
+    private val log = LoggerFactory.getLogger(<%= table.camelName %>EntityListener::class.java)
+
     fun preSave(type: String, entity: <%= table.camelName %>) {
 /*FOXB-PRE*/
 /*FOXE-PRE*/
