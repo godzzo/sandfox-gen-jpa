@@ -5,7 +5,7 @@ import java.time.*
 import javax.persistence.*
 import javax.validation.constraints.*<% 
 if ( options.hints.includes('envers') && table.audit ) { %>
-import org.hibernate.envers.Audited<% } %>
+import org.hibernate.envers.*<% } %>
 import <%= options.package %>.group.*
 import <%= options.package %>.entitylistener.<%= table.camelName %>EntityListener
 /*FOXB-IMPORT*/
@@ -77,7 +77,9 @@ table.columns.forEach((column, idx) => {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "<%= column.name + (column.name.endsWith('_id')? '': '_id') %>", nullable=<%= column.needed != 'yes'? 'true': 'false'  %>,
 		foreignKey = ForeignKey(name = "fk_<%= table.name%>_<%= (column.name.endsWith('_id')? column.name.substring(0, column.name.length-3): column.name) %>")
-	)
+	)<% 
+if ( options.hints.includes('envers') && table.audit && !column.relation.audit) { %>
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)<% } %>
 	<%= (column.group ? 'override ' : '') %>var <%= column.lowerCamelName.endsWith('Id')? 
 		column.lowerCamelName.substring(0, column.lowerCamelName.length-2): 
 		column.lowerCamelName %>: <%= column.relation.camelName %>? = null
