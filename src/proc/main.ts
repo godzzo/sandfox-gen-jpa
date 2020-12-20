@@ -22,6 +22,8 @@ export async function ProcGenerate(
 
 	await GenerateProject(register, options, project, tables, groups);
 
+	await WriteGeneratedConfig(register, tables, groups);
+
 	await WriteJsonFile(
 		`${register.outPath}/config/generateRegister.json`,
 		register
@@ -38,4 +40,24 @@ async function GenerateProject(
 	groups: any
 ) {
 	await JpaGenerateProject(register, options, project, tables, groups);
+}
+
+async function WriteGeneratedConfig(
+	register: any,
+	tables: any[],
+	groups: any[]
+) {
+	tables.forEach((table) => {
+		if (table.columns) {
+			table.columns.forEach((column: any) => {
+				if (column.relation) {
+					column.relation = column.relation.name;
+				}
+			});
+		}
+	});
+
+	await WriteJsonFile(`${register.outPath}/config/tables.json`, tables);
+
+	await WriteJsonFile(`${register.outPath}/config/groups.json`, groups);
 }
