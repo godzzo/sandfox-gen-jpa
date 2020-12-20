@@ -91,6 +91,14 @@ function PrepareColumn(
 		console.log('Column type not found', column);
 	}
 
+	if (column.type.startsWith('relation.one')) {
+		const lName = column.lowerCamelName;
+
+		column.relName = lName.endsWith('Id')
+			? lName.substring(0, lName.length - 2)
+			: lName;
+	}
+
 	return column;
 }
 

@@ -80,9 +80,9 @@ table.columns.forEach((column, idx) => {
 	)<% 
 if ( options.hints.includes('envers') && table.audit && !column.relation.audit) { %>
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)<% } %>
-	<%= (column.group ? 'override ' : '') %>var <%= column.lowerCamelName.endsWith('Id')? 
-		column.lowerCamelName.substring(0, column.lowerCamelName.length-2): 
-		column.lowerCamelName %>: <%= column.relation.camelName %>? = null
+	<%= 
+		(column.group ? 'override ' : '') 
+	%>var <%= column.relName %>: <%= column.relation.camelName %>? = null
 <%
 	} 
 %><% 
