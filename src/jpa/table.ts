@@ -93,6 +93,7 @@ async function GenerateTable(
 
 	meta.extraNameTag = '';
 	meta.generateGenerateOne = true;
+	meta.generateGenerateMany = false;
 	await render(
 		reg,
 		`${options.tmpl}/${prjPath}/projection/Projection.kt.ejs`,
@@ -101,12 +102,25 @@ async function GenerateTable(
 	);
 	meta.extraNameTag = 'Base';
 	meta.generateGenerateOne = false;
+	meta.generateGenerateMany = false;
 	await render(
 		reg,
 		`${options.tmpl}/${prjPath}/projection/Projection.kt.ejs`,
 		meta,
 		`${projPath}/${meta.table.camelName}BaseProjection.kt`
 	);
+
+	if (meta.table.audit) {
+		meta.extraNameTag = 'Revision';
+		meta.generateGenerateOne = true;
+		meta.generateGenerateMany = true;
+		await render(
+			reg,
+			`${options.tmpl}/${prjPath}/projection/Projection.kt.ejs`,
+			meta,
+			`${projPath}/${meta.table.camelName}RevisionProjection.kt`
+		);
+	}
 
 	const trepoPath = `${options.directory}/src/test/kotlin/${options.packagePath}/repository`;
 	await MkDir(trepoPath);

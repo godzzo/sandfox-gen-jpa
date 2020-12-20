@@ -15,37 +15,44 @@ interface <%= table.camelName %><%= extraNameTag %>Projection {
 
 /*FOXB-BLOCK*/
 /*FOXE-BLOCK*/
-<% 
+<%
 // A nem relációs vagyis egyszerű tulajdonságok generálása
-table.columns.forEach((column, idx) => { 
-%><% 
-    if (!column.type.startsWith('relation') 
-        && !column.type.startsWith('primary')
+table.columns.forEach((column, idx) => {
+	if (!column.type.startsWith('relation')
+		&& !column.type.startsWith('primary')
 		&& !column.writeOnly
-	) { 
+	) {
 %>
-    // <%= column.caption %>
-    fun get<%= column.camelName %>(): <%= column.ktType %><%= column.needed != 'yes'? '?': ''  %>
-<%	} 
-%><% 
-}); 
+	// <%= column.caption %>
+	fun get<%= column.camelName %>(): <%= column.ktType %><%= column.needed != 'yes'? '?': ''  %>
+<%
+	}
+});
 %>
- 
 <% 
 // Az egy (1:N) oldalu relációk getter -ként berakása
 if (generateGenerateOne) {
-	table.columns.forEach((column, idx) => { 
-%><% 
-		if (column.type.startsWith('relation.one')) { 
+	table.columns.forEach((column, idx) => {
+		if (column.type.startsWith('relation.one')) {
 %>
 	fun get<%= column.lowerCamelName.endsWith('Id')? 
 		column.camelName.substring(0, column.lowerCamelName.length-2): 
 		column.camelName %>(): <%= column.relation.camelName %>BaseProjection
 <%
-		} 
-%><% 
+		}
+	});
+}
+%>
+<%
+// Az egy (N:1) oldalu relációk getter -ként berakása
+if (generateGenerateMany) {
+	table.columns.forEach((column, idx) => {
+		if (column.type.startsWith('relation.many')) {
+%>
+	fun get<%= column.camelName %>(): List<<%= column.relation.camelName %>BaseProjection>
+<%
+		}
 	}); 
 }
 %>
-
 }

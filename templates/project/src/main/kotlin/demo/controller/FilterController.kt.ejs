@@ -2,7 +2,10 @@ package <%= options.package %>.controller
 
 import <%= options.package %>.domain.<%= table.camelName %>
 import <%= options.package %>.repository.<%= table.camelName %>Repository
-import <%= options.package %>.projection.<%= table.camelName %>Projection
+import <%= options.package %>.projection.<%= table.camelName %>Projection<% 
+if ( options.hints.includes('envers') && table.audit ) { %>
+import <%= options.package %>.projection.<%= table.camelName %>RevisionProjection<% 
+} %>
 import <%= options.package %>.util.FilterHelper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -35,24 +38,27 @@ class <%= table.camelName %>FilterController(
 /*FOXE-INIT*/
 	@Autowired val factory: ProjectionFactory
 ) {
-    val log = LoggerFactory.getLogger(<%= table.camelName %>FilterController::class.java)
+	val log = LoggerFactory.getLogger(<%= table.camelName %>FilterController::class.java)
 
-    init {
-        log.info("<%= table.camelName %>FilterController INITIALIZED...");
-    }
+	init {
+		log.info("<%= table.camelName %>FilterController INITIALIZED...");
+	}
 
 /*FOXB-BODY*/
 /*FOXE-BODY*/
 <% 
 if ( options.hints.includes('envers') && table.audit ) { %>
 	@RequestMapping(value = ["/{repository}/revision<%= table.pluralCamelName %>"], method = arrayOf(RequestMethod.GET))
-	fun versions(id : Long, pageable: Pageable, assembler: PagedResourcesAssembler<<%= table.camelName %>Projection>) 
-			: ResponseEntity<PagedModel<EntityModel<<%= table.camelName %>Projection>>> {
+	fun versions(id : Long, pageable: Pageable, assembler: PagedResourcesAssembler<<%= table.camelName %>Revision>) 
+			: ResponseEntity<PagedModel<EntityModel<<%= table.camelName %>Revision>>> {
 
 		val result = repository.findRevisions(id, pageable)
 
 		val projected = result.map {
-			factory.createProjection(<%= table.camelName %>Projection::class.java, it)
+			val revisionNumber = it.revisionNumber.get()
+			val projection = factory.createProjection(<%= table.camelName %>RevisionProjection::class.java, it.entity)
+
+			<%= table.camelName %>Revision(revisionNumber, projection)			
 		}
 
 		return ResponseEntity(assembler.toModel(projected), HttpStatus.OK);
@@ -74,14 +80,14 @@ if ( options.hints.includes('envers') && table.audit ) { %>
 			factory.createProjection(<%= table.camelName %>Projection::class.java, it)
 		}
 
-        return ResponseEntity(assembler.toModel(projected), HttpStatus.OK);
-    }
+		return ResponseEntity(assembler.toModel(projected), HttpStatus.OK);
+	}
 
-    fun createSpecifications(filter: <%= table.camelName %>Filter, session: HttpSession): Specification<<%= table.camelName %>>? = Specification.where(
-        Specification { root, query, cb ->
-            val predicates = mutableListOf<Predicate>()
+	fun createSpecifications(filter: <%= table.camelName %>Filter, session: HttpSession): Specification<<%= table.camelName %>>? = Specification.where(
+		Specification { root, query, cb ->
+			val predicates = mutableListOf<Predicate>()
 
-            // predicates.add(cb.like(root.get<String>("lastName"), "${search}%"))
+			// predicates.add(cb.like(root.get<String>("lastName"), "${search}%"))
 			// FilterHelper.like(root, query, cb, predicates, "firstName", search);
 			
 		<% 
@@ -125,7 +131,13 @@ if ( options.hints.includes('envers') && table.audit ) { %>
 		}
 	)
 }
-
+<% 
+if ( options.hints.includes('envers') && table.audit ) { 
+%>
+data class <%= table.camelName %>Revision(val revisionNumber: Int, val projection: <%= table.camelName %>RevisionProjection) {}
+<% 
+} 
+%>
 data class <%= table.camelName %>Filter(
 <% 
 table.columns.forEach((column, idx) => { 
