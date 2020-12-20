@@ -52,6 +52,7 @@ ${rel.relType}: ${rel.srcTbl.name} >> ${rel.trgTbl.name} // ${rel.srcCol.name}
 
 				const newCol: any = {
 					name: colName,
+					caption: rel.srcTbl.caption,
 					type: `relation.many.${rel.trgTbl.name}`,
 					relation: rel.srcTbl,
 				};
