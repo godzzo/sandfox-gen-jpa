@@ -35,6 +35,8 @@ export async function ParseCliArgs() {
 		},
 		{ name: 'hint', alias: 'h', type: String, defaultValue: '' },
 		{ name: 'sheetId', alias: 's', type: String, defaultValue: 'NONE' }, // 1A-CnEIWo4YUtYWqw8QZGkfOJzzw0TBXEL1kll3C9nbE
+		{ name: 'template', alias: 't', type: String, defaultValue: 'project' },
+		{ name: 'templateRoot', type: String, defaultValue: 'NONE' },
 	];
 
 	let options = CliArgs(optDef);

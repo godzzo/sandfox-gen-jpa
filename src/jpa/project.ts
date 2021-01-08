@@ -9,7 +9,6 @@ export async function GenerateProject(
 	tables: any,
 	groups: any
 ) {
-	options.tmpl = `${options.foxPath}/templates/project`;
 	options.packagePath = options.package.replace(/\./g, '/');
 
 	const tmpl = options.tmpl;

@@ -6,7 +6,7 @@ import { GenerateAuthentication } from './auth';
 
 export async function JpaGenerateProject(
 	register: Register,
-	options: string,
+	options: any,
 	project: string,
 	tables: any[],
 	groups: any
