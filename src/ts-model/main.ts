@@ -22,6 +22,7 @@ export async function GenerateTables(
 	project: string
 ) {
 	const out = options.directory;
+	reg.outPath = out;
 
 	await MkDir(`${out}/src/model`);
 

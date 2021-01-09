@@ -1,12 +1,21 @@
 export interface <%= table.camelName %> {
 <% 
 table.columns.forEach((column, idx) => { 
+	if (column.type.startsWith('primary')) { 
+%>
+	// <%= column.caption %>
+	<%= column.lowerCamelName %>: <%= column.tsType %>;
+<%
+	}
+}); 
+%>
+<% 
+table.columns.forEach((column, idx) => { 
 	if (!column.type.startsWith('relation') 
 		&& !column.type.startsWith('primary')
 	) { // NORMAL Columns
 %>
 	// <%= column.caption %>
-	<%- column.annotations %>
 	<%= column.lowerCamelName %>: <%= column.tsType %>;
 <%	
 	}

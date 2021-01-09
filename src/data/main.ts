@@ -80,6 +80,7 @@ function PrepareColumn(
 
 	column.annotations = SetColumnAnnotation(column);
 	column.ktType = column.kttype;
+	PrepareTsType(data, table, columns, column);
 	column.writeOnly = column.writeonly ? column.writeonly === 'yes' : false;
 
 	if (column.type) {
@@ -100,6 +101,23 @@ function PrepareColumn(
 	}
 
 	return column;
+}
+
+function PrepareTsType(
+	data: any[],
+	table: any,
+	columns: any[],
+	column: any
+): any {
+	if (column.tstype) {
+		column.tsType = column.tstype;
+	} else {
+		column.tsType = column.type;
+
+		if (column.type === 'primary') {
+			column.tsType = 'number';
+		}
+	}
 }
 
 /**
