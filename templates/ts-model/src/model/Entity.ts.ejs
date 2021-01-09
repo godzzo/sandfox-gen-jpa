@@ -1,3 +1,18 @@
+<% 
+const imports = {};
+
+table.columns.forEach((column, idx) => {
+	if (column.type.startsWith('relation') 
+		&& column.relation.camelName !== table.camelName
+		&& !imports[column.relation.camelName]
+	) {
+		imports[column.relation.camelName] = true;
+%>
+import { <%= column.relation.camelName %> } from './<%= column.relation.camelName %>';<% 
+	}
+});
+%>
+
 export interface <%= table.camelName %> {
 <% 
 table.columns.forEach((column, idx) => { 

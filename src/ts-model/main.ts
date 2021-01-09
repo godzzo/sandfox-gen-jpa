@@ -1,4 +1,4 @@
-import { render } from '../lib/generate';
+import { RegCpFile, render } from '../lib/generate';
 import { MkDir, Warn } from '../lib/common';
 import { Register } from '../proc/common';
 
@@ -9,10 +9,29 @@ export async function TsModelGenerateProject(
 	tables: any[],
 	groups: any
 ) {
-	// await GenerateProject(register, options, project, tables, groups);
-	// await GenerateTables(register, options, tables, project);
+	await GenerateProject(register, options, project, tables, groups);
 
 	await GenerateTables(register, options, tables, project);
+}
+
+export async function GenerateProject(
+	register: Register,
+	options: any,
+	project: string,
+	tables: any[],
+	groups: any
+) {
+	const out = options.directory;
+	const tmpl = options.tmpl;
+
+	register.outPath = out;
+
+	await MkDir(`${out}/config`);
+	await RegCpFile(
+		register,
+		`${tmpl}/config/custom.json`,
+		`${out}/config/custom.json`
+	);
 }
 
 export async function GenerateTables(
@@ -22,7 +41,6 @@ export async function GenerateTables(
 	project: string
 ) {
 	const out = options.directory;
-	reg.outPath = out;
 
 	await MkDir(`${out}/src/model`);
 
