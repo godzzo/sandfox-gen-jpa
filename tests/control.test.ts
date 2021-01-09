@@ -13,6 +13,8 @@ function GetOptions(command: string = 'info'): any {
 		showLogo: 'yes',
 		showArgs: 'yes',
 		foxPath: '.',
+		template: 'project',
+		templateRoot: 'NONE',
 	};
 }
 
