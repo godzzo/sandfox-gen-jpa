@@ -51,7 +51,7 @@ table.columns.forEach((column, idx) => {
 	if (column.type.startsWith('relation.many')) {
 %>
 	// TODO: Need to handle with function - getter? Default projection not serialize this!
-	<%= column.lowerCamelName %>: <%= column.relation.camelName %>[] = [];
+	<%= column.lowerCamelName %>: <%= column.relation.camelName %>[];
 <% 
 	}
 });

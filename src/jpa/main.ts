@@ -3,6 +3,7 @@ import { GenerateProject } from './project';
 import { GenerateTables } from './table';
 import { GenerateGroups } from './group';
 import { GenerateAuthentication } from './auth';
+import { WriteJsonFile } from '../lib/common';
 
 export async function JpaGenerateProject(
 	register: Register,
@@ -18,4 +19,15 @@ export async function JpaGenerateProject(
 	await GenerateGroups(register, options, tables, project, groups);
 
 	await GenerateAuthentication(register, options, project, tables, groups);
+}
+
+export async function JpaGeneratedConfig(
+	register: any,
+	options: any,
+	tables: any[],
+	groups: any[]
+) {
+	await WriteJsonFile(`${register.outPath}/config/tables.json`, tables);
+
+	await WriteJsonFile(`${register.outPath}/config/groups.json`, groups);
 }

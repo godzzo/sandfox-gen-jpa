@@ -1,8 +1,11 @@
 import { ReadJsonFile, WriteJsonFile } from '../lib/common';
 import { PrepareData } from '../data/main';
-import { JpaGenerateProject } from '../jpa/main';
+import { JpaGenerateProject, JpaGeneratedConfig } from '../jpa/main';
 import { Register, RenderData, CopyData } from './common';
-import { TsModelGenerateProject } from '../ts-model/main';
+import {
+	TsModelGeneratedConfig,
+	TsModelGenerateProject,
+} from '../ts-model/main';
 
 export async function ProcGenerate(
 	options: string,
@@ -19,11 +22,13 @@ export async function ProcGenerate(
 
 	const groups: any = {};
 
+	await LoadTemplateConfig(options);
+
 	await PrepareData(tables, register, options, project, data, groups);
 
 	await GenerateProject(register, options, project, tables, groups);
 
-	await WriteGeneratedConfig(register, tables, groups);
+	await WriteGeneratedConfig(register, options, tables, groups);
 
 	await WriteJsonFile(
 		`${register.outPath}/config/generateRegister.json`,
@@ -40,8 +45,6 @@ async function GenerateProject(
 	tables: any[],
 	groups: any
 ) {
-	await LoadTemplateConfig(options);
-
 	if (options.templateConfig.type === 'jpa') {
 		await JpaGenerateProject(register, options, project, tables, groups);
 	} else if (options.templateConfig.type === 'ts-model') {
@@ -72,6 +75,7 @@ async function LoadTemplateConfig(options: any) {
 
 async function WriteGeneratedConfig(
 	register: any,
+	options: any,
 	tables: any[],
 	groups: any[]
 ) {
@@ -85,7 +89,9 @@ async function WriteGeneratedConfig(
 		}
 	});
 
-	await WriteJsonFile(`${register.outPath}/config/tables.json`, tables);
-
-	await WriteJsonFile(`${register.outPath}/config/groups.json`, groups);
+	if (options.templateConfig.type === 'jpa') {
+		await JpaGeneratedConfig(register, options, tables, groups);
+	} else if (options.templateConfig.type === 'ts-model') {
+		await TsModelGeneratedConfig(register, options, tables, groups);
+	}
 }

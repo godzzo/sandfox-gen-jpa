@@ -1,5 +1,5 @@
 import { RegCpFile, render } from '../lib/generate';
-import { MkDir, Warn } from '../lib/common';
+import { MkDir, Warn, WriteJsonFile } from '../lib/common';
 import { Register } from '../proc/common';
 
 export async function TsModelGenerateProject(
@@ -12,6 +12,34 @@ export async function TsModelGenerateProject(
 	await GenerateProject(register, options, project, tables, groups);
 
 	await GenerateTables(register, options, tables, project);
+}
+
+export async function TsModelGeneratedConfig(
+	register: any,
+	options: any,
+	tables: any[],
+	groups: any[]
+) {
+	const out = options.directory;
+
+	const jsonTables = JSON.stringify(tables, null, 2);
+	const jsonGroups = JSON.stringify(groups, null, 2);
+
+	const meta = { tables, groups, jsonTables, jsonGroups };
+
+	await render(
+		register,
+		`${options.tmpl}/src/data/TablesConfig.ts.ejs`,
+		meta,
+		`${out}//src/data/TablesConfig.ts`
+	);
+
+	await render(
+		register,
+		`${options.tmpl}/src/data/GroupsConfig.ts.ejs`,
+		meta,
+		`${out}//src/data/GroupsConfig.ts`
+	);
 }
 
 export async function GenerateProject(
@@ -42,7 +70,7 @@ export async function GenerateTables(
 ) {
 	const out = options.directory;
 
-	await MkDir(`${out}/src/model`);
+	await MkDir(`${out}/src/data/model`);
 
 	for (const table of tables) {
 		if (table.primary) {
@@ -67,8 +95,8 @@ async function GenerateTable(
 
 	await render(
 		reg,
-		`${options.tmpl}/src/model/Entity.ts.ejs`,
+		`${options.tmpl}/src/data/model/Entity.ts.ejs`,
 		meta,
-		`${out}/src/model/${meta.table.camelName}.ts`
+		`${out}/src/data/model/${meta.table.camelName}.ts`
 	);
 }
