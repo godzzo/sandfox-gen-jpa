@@ -41,7 +41,7 @@ table.columns.forEach((column, idx) => {
 	if (column.type.startsWith('relation.one')) { 
 %>
 	// <%= column.caption %>
-	<%= column.relName %>: <%= column.relation.camelName %>;
+	<%= column.relName %>: <%= column.relation.camelName %> | string<%= column.needed !== 'yes'? ' | null': ''  %>;
 <%
 	}
 }); 
