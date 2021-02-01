@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 @Repository
 @RepositoryRestResource(excerptProjection = <%= table.camelName %>BaseProjection::class)
 @CrossOrigin(methods = [RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE])
-interface <%= table.camelName %>Repository : JpaRepository<<%= table.camelName %>, Long>, JpaSpecificationExecutor<<%= table.camelName %>><%
+interface <%= table.camelName %>Repository : JpaRepository<<%= table.camelName %>, <%= table.primary.ktType %>>, JpaSpecificationExecutor<<%= table.camelName %>><%
 if ( options.hints.includes('envers') && table.audit ) { %>, RevisionRepository<<%= table.camelName %>, Long, Int><% } %> {
 /*FOXB-BLOCK*/
 /*FOXE-BLOCK*/

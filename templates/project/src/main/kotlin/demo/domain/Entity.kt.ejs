@@ -56,7 +56,7 @@ table.columns.forEach((column, idx) => {
 	}
 %>
 	@Column(name = "<%= table.primary.name %>")
-	var <%= table.primary.lowerCamelName %>: Long = 0
+	var <%= table.primary.lowerCamelName %>: <%= table.primary.ktType %> = <%- table.primary.ktValue %>
 <%} else {%><% 
 table.primaries.forEach((column, idx) => { 
 %>
