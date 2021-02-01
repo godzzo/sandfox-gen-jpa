@@ -82,6 +82,7 @@ function PrepareColumn(
 	column.ktType = column.kttype;
 	PrepareTsType(data, table, columns, column);
 	column.writeOnly = column.writeonly ? column.writeonly === 'yes' : false;
+	column.resultMode = column.resultmode ? column.resultmode : 'NONE';
 
 	if (column.type) {
 		if (column.type.startsWith('primary')) {
