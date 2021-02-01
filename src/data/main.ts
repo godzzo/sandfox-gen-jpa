@@ -61,8 +61,6 @@ async function ParseTables(
 function PrepareColumns(data: any[], table: any, columns: any): any[] {
 	console.log('PrepareColumns: ', JSON.stringify(columns, null, 4));
 
-	columns.forEach(SetNames);
-
 	table.primaries = [];
 
 	return columns.map((column: any) =>
@@ -78,14 +76,24 @@ function PrepareColumn(
 ): any {
 	column = ParseDomain(data, column);
 
+	SetupColumn(column, table);
+
+	return column;
+}
+
+export function SetupColumn(column: any, table?: any) {
+	SetNames(column);
+
 	column.annotations = SetColumnAnnotation(column);
 	column.ktType = column.kttype;
-	PrepareTsType(data, table, columns, column);
+
+	PrepareTsType(column);
+
 	column.writeOnly = column.writeonly ? column.writeonly === 'yes' : false;
 	column.resultMode = column.resultmode ? column.resultmode : 'NONE';
 
 	if (column.type) {
-		if (column.type.startsWith('primary')) {
+		if (column.type.startsWith('primary') && table) {
 			table.primary = column;
 			table.primaries.push(column);
 		}
@@ -100,16 +108,9 @@ function PrepareColumn(
 			? lName.substring(0, lName.length - 2)
 			: lName;
 	}
-
-	return column;
 }
 
-function PrepareTsType(
-	data: any[],
-	table: any,
-	columns: any[],
-	column: any
-): any {
+function PrepareTsType(column: any): any {
 	if (column.tstype) {
 		column.tsType = column.tstype;
 	} else {
