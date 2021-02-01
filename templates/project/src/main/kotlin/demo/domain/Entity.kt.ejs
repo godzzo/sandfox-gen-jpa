@@ -49,8 +49,12 @@ table.columns.forEach((column, idx) => {
 }); 
 %>
 <%if (table.primaries.length < 2) { %>
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id<%
+	if (!table.primary.options.includes('no-auto')) {
+%>
+	@GeneratedValue(strategy = GenerationType.IDENTITY)<%
+	}
+%>
 	@Column(name = "<%= table.primary.name %>")
 	var <%= table.primary.lowerCamelName %>: Long = 0
 <%} else {%><% 

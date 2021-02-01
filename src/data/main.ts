@@ -91,6 +91,7 @@ export function SetupColumn(column: any, table?: any) {
 
 	column.writeOnly = column.writeonly ? column.writeonly === 'yes' : false;
 	column.resultMode = column.resultmode ? column.resultmode : 'NONE';
+	column.options = column.opts ? column.opts.split(',') : [];
 
 	if (column.type) {
 		if (column.type.startsWith('primary') && table) {
@@ -116,7 +117,7 @@ function PrepareTsType(column: any): any {
 	} else {
 		column.tsType = column.type;
 
-		if (column.type === 'primary') {
+		if (column.type.startsWith('primary')) {
 			column.tsType = 'number';
 		}
 	}

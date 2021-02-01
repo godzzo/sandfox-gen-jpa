@@ -16,12 +16,19 @@ export function LookRelationTables(relations: any[], tables: any) {
 
 				column.relation = relTable;
 
+				if (!relTable) {
+					console.error(
+						`Relation target not found: ${relName}`,
+						column
+					);
+				}
+
 				relations.push({
 					srcTbl: table,
 					srcCol: column,
 					trgTbl: relTable,
-					trgCol: relTable.columns.find(
-						(col: any) => col.type === 'primary'
+					trgCol: relTable.columns.find((col: any) =>
+						col.type.startsWith('primary')
 					),
 					relType,
 				});
