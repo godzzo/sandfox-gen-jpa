@@ -118,6 +118,10 @@ function PrepareTsType(column: any): any {
 	} else {
 		column.tsType = column.type;
 
+		if (!column.type) {
+			console.error('Column Type node found!', column);
+		}
+
 		if (column.type.startsWith('primary')) {
 			column.tsType = 'number';
 		}
