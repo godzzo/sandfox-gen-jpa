@@ -1,0 +1,11 @@
+{
+	"sheetId": "1Yl4-C2EeZDhxQB8HJiNlwrAqSZ5fdfbRdm9ggToparw",
+	"directory": "./out/steam",
+	"customDir": "../sandfox-in/steam",
+	"project": "steam",
+	"package": "org.godzzo.steam",
+	"credential": "credentials/gd-drive-access.json",
+	"hint": "",
+	"showLogo": "yes",
+	"showArgs": "yes"
+}

@@ -35,4 +35,16 @@ class AppController() {
 
         return map
     }
+
+    @RequestMapping(value = ["/app/download/{file_name}/{guid}"], method = [RequestMethod.GET])
+    @ResponseBody
+    fun downloadFile(@PathVariable("file_name") fileName: String?,
+        @PathVariable("guid") guid: String?,
+        resp: HttpServletResponse,
+        session: HttpSession
+    ): FileSystemResource? {
+        resp.addHeader("Content-Disposition", "attachment; filename=\"${fileName}\"")
+
+        return FileSystemResource(File("./upload/files/${guid}"))
+    }
 }
