@@ -12,13 +12,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.criteria.Predicate
-
+/*FOXB-IMPORT*/
+/*FOXE-IMPORT*/
 
 @Service("userDetailsServiceImpl")
 class UserDetailsServiceImpl : UserDetailsService {
+/*FOXB-INIT*/
+/*FOXE-INIT*/
     @Autowired
     private val userRepository: UserRepository? = null
-
+    
     @Transactional(readOnly = true)
     @Throws(UsernameNotFoundException::class)
     override fun loadUserByUsername(email: String): UserDetails {
@@ -30,6 +33,9 @@ class UserDetailsServiceImpl : UserDetailsService {
             ?: throw UsernameNotFoundException("User not found.")
 
         log.info("loadUserByUsername() : {}", email)
+
+/*FOXB-FOUND*/
+/*FOXE-FOUND*/
 
         return AuthUserDetails(user)
     }
