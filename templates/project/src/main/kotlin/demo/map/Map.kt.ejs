@@ -1,0 +1,161 @@
+package <%= options.package %>.map
+
+import java.time.*
+import <%= options.package %>.domain.*
+
+class <%= table.camelName %>Map {
+<% 
+table.columns.forEach((column, idx) => { 
+	if (!column.type.startsWith('relation') 
+		&& !column.type.startsWith('primary')
+	) { // NORMAL Columns
+%>
+	// <%= column.caption %>
+	var <%= column.lowerCamelName %>: <%= column.ktType %>? = null<%	
+	}
+}); 
+%>
+<% 
+if (table.primaries.length < 2) {%>
+	var <%= table.primary.lowerCamelName %>: <%= table.primary.ktType %>? = null<% 
+}
+%>
+<% 
+table.columns.forEach((column, idx) => { if (column.type.startsWith('relation.one')) {
+	if (column.relation.owner === table.name) {
+%>
+	var <%= column.relName %>: <%= column.relation.camelName %>? = null<%
+	} else {
+%>
+	var <%= column.relName %>: String? = null<%
+	}
+}});
+%>
+<% 
+table.columns.forEach((column, idx) => { if (column.type.startsWith('relation.many')) {
+	if (column.relation.owner === table.name) {
+%>
+	var <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>Map> = mutableListOf()<%
+	}
+}});
+%>
+}
+
+object <%= table.camelName %>Mapper {
+	fun toObject(entity: <%= table.camelName %>): <%= table.camelName %>Map {
+		val item = <%= table.camelName %>Map()
+<% 
+table.columns.forEach((column, idx) => { 
+	if (!column.type.startsWith('relation') 
+		&& !column.type.startsWith('primary')
+	) { // NORMAL Columns
+%>
+		item.<%= column.lowerCamelName %> = entity.<%= column.lowerCamelName %><%
+	}
+});
+%>
+
+		applyPrimaryForObject(item, entity)
+		applyROneForObject(item, entity)
+		applyRManyForObject(item, entity)
+
+		return item
+	}
+
+	fun applyPrimaryForObject(item : <%= table.camelName %>Map, entity: <%= table.camelName %>) {
+<% if (table.primaries.length < 2) {%>
+		item.<%= table.primary.lowerCamelName %> = entity.<%= table.primary.lowerCamelName %>
+<% } %>
+	}
+
+	fun applyROneForObject(item : <%= table.camelName %>Map, entity: <%= table.camelName %>) {
+<% 
+table.columns.forEach((column, idx) => { if (column.type.startsWith('relation.one')) {
+	if (column.relation.owner === table.name) {
+%>
+		if (entity.<%= column.relName %> != null) {
+			item.<%= column.relName %> = <%= column.relation.camelName %>Mapper.toObject(entity.<%= column.relName %>)
+		}
+<%	} else { %>
+		if (entity.<%= column.relName %> != null) {
+			item.<%= column.relName %> = "/<%= column.relation.pluralLowerCamelName %>/${entity.<%= column.relName %>!!.id}"
+		}
+<%
+	}
+}});
+%>
+	}
+
+	fun applyRManyForObject(item : <%= table.camelName %>Map, entity: <%= table.camelName %>) {
+<% 
+table.columns.forEach((column, idx) => { if (column.type.startsWith('relation.many')) {
+	if (column.relation.owner === table.name) {
+%>
+		entity.<%= column.lowerCamelName %>.forEach() {
+			item.<%= column.lowerCamelName %>.add(<%= column.relation.camelName %>Mapper.toObject(it))
+		}
+<%
+	}
+}});
+%>
+	}
+
+	fun toMap(entity: <%= table.camelName %>): MutableMap<String, Any?> {
+		val item = mutableMapOf<String, Any?>()
+<% 
+table.columns.forEach((column, idx) => { 
+	if (!column.type.startsWith('relation') 
+		&& !column.type.startsWith('primary')
+	) { // NORMAL Columns
+%>
+		item["<%= column.lowerCamelName %>"] = entity.<%= column.lowerCamelName %><%	
+	}
+});
+%>
+
+		applyPrimaryForMap(item, entity)
+		applyROneForMap(item, entity)
+		applyRManyForMap(item, entity)
+
+		return item
+	}
+
+	fun applyPrimaryForMap(item : MutableMap<String, Any?>, entity: <%= table.camelName %>) {
+<% if (table.primaries.length < 2) {%>
+		item["<%= table.primary.lowerCamelName %>"] = entity.<%= table.primary.lowerCamelName %>
+<% } %>
+	}
+
+	fun applyROneForMap(item : MutableMap<String, Any?>, entity: <%= table.camelName %>) {
+<% 
+table.columns.forEach((column, idx) => { if (column.type.startsWith('relation.one')) {
+	if (column.relation.owner === table.name) {
+%>
+		if (entity.<%= column.relName %> != null) {
+			item["<%= column.relName %>"] = <%= column.relation.camelName %>Mapper.toObject(entity.<%= column.relName %>)
+		}
+<%	} else { %>
+		if (entity.<%= column.relName %> != null) {
+			item["<%= column.relName %>"] = "/<%= column.relation.pluralLowerCamelName %>/${entity.<%= column.relName %>!!.id}"
+		}
+<%
+	}
+}});
+%>
+	}
+
+	fun applyRManyForMap(item : MutableMap<String, Any?>, entity: <%= table.camelName %>) {
+<% 
+table.columns.forEach((column, idx) => { if (column.type.startsWith('relation.many')) {
+	if (column.relation.owner === table.name) {
+%>
+		item["<%= column.lowerCamelName %>"] = entity.<%= column.lowerCamelName %>.map() {
+			<%= column.relation.camelName %>Mapper.toMap(it)
+		}
+<%
+	}
+}});
+%>
+	}
+
+}

@@ -10,7 +10,8 @@ async function Start() {
 	await Main(options);
 }
 
-// tslint:disable:no-floating-promises
-Start().then();
+Start().catch((err) => {
+	console.log(err);
+});
 
 export const NgModelGen = (name: string) => 'Hello ' + name;
