@@ -16,6 +16,7 @@ export async function PrepareData(
 		SetNames(table);
 
 		table.audit = table.audit && table.audit === 'yes';
+		table.nested = table.nested && table.nested === 'yes';
 		table.owner = table.owner ? table.owner : 'NONE';
 	});
 

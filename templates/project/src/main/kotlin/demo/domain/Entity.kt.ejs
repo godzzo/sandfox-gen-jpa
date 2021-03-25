@@ -75,7 +75,9 @@ table.primaries.forEach((column, idx) => {
 <% 
 table.columns.forEach((column, idx) => { 
 %><% 
-	if (column.type.startsWith('relation.one')) { 
+	if (column.type.startsWith('relation.one') 
+		&& !(column.relation.name === table.owner && table.nested)
+	) { 
 %>
 	// <%= column.caption %>
 	@ManyToOne(fetch = FetchType.LAZY)
