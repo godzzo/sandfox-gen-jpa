@@ -65,7 +65,7 @@ object FilterHelper {
     }
 
     fun fullLike(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
-             predicates: MutableList<Predicate>, name: String?, value: String?) {
+            predicates: MutableList<Predicate>, name: String?, value: String?) {
         if (value != null) {
             predicates.add(cb.like(root.get(name), "%${value}%"))
         }
@@ -85,4 +85,10 @@ object FilterHelper {
         }
     }
 
+    fun equal(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+            predicates: MutableList<Predicate>, name: String?, value: Long?) {
+        if (value != null) {
+            predicates.add(cb.equal(root.get<String>(name), value))
+        }
+    }
 }

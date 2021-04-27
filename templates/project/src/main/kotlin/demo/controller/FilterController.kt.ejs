@@ -101,7 +101,7 @@ if ( options.hints.includes('envers') && table.audit ) { %>
 		<%
 			} 
 		%><% 
-			if (column.ktType === 'Int' && !column.type.startsWith('relation')) { 
+			if ((column.ktType === 'Int' || column.ktType === 'Long') && !column.type.startsWith('relation')) { 
 		%>
 			FilterHelper.equal(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_equal);
 		<%
@@ -149,7 +149,7 @@ table.columns.forEach((column, idx) => {
 <%
 	} 
 %><% 
-	if (column.ktType === 'Int') { 
+	if (column.ktType === 'Int' || column.ktType === 'Long') { 
 %>
 	val <%= column.lowerCamelName %>_equal: <%= column.ktType %>?,
 <%
