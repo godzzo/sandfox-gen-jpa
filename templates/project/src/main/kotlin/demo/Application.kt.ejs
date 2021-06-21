@@ -9,7 +9,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories<% } %>
 import org.springframework.boot.runApplication
 import org.slf4j.LoggerFactory
+import org.springframework.boot.web.servlet.ServletComponentScan
 
+@ServletComponentScan
 @SpringBootApplication<% 
 if ( hints.includes('envers') ) {
 %>
