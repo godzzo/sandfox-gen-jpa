@@ -29,14 +29,18 @@ object FilterHelper {
     }
 
     fun inList(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
-               predicates: MutableList<Predicate>, name: String?, value: String?, isNot: Boolean = false) {
-        val inClause: In<String> = cb.`in`(root.get(name))
+                   predicates: MutableList<Predicate>, name: String?, value: String?, isNot: Boolean = false, type: String = "String") {
+        val inClause: In<Any> = cb.`in`(root.get(name))
 
         if (value != null) {
             val values = value.split(',')
 
             for (item in values) {
-                inClause.value(item)
+                if (type.equals("String")) {
+                    inClause.value(item)
+                } else {
+                    inClause.value(item.toInt())
+                }
             }
 
             predicates.add(if (isNot) inClause.not() else inClause)
