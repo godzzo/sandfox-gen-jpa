@@ -47,6 +47,29 @@ object FilterHelper {
         }
     }
 
+    fun <X, Y> subQueryInList(root: Root<*>,
+        query: CriteriaQuery<*>, cb: CriteriaBuilder,
+        entityType: Class<X>, subEntityType: Class<Y>, joinProp: String,
+        prs: MutableList<Predicate>, name: String?, value: String?,
+        isNot: Boolean = false, type: String = "String"
+    ) {
+        if (value != null) {
+            val sq = query.subquery(entityType)
+            val project = sq.from(subEntityType)
+            val sqEmp = project.join<X, Y>(joinProp)
+
+            val predicates = mutableListOf<Predicate>()
+
+            inList(project, query, cb, predicates, name, value, isNot, type)
+
+            sq.select(sqEmp.get("id")).where(cb.and(*predicates.toTypedArray()))
+
+            val inClause: In<X> = cb.`in`(root) as In<X>
+
+            prs.add(inClause.value(sq))
+        }
+    }
+
     fun greaterThan(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
              predicates: MutableList<Predicate>, name: String?, value: Int?) {
         if (value != null) {
