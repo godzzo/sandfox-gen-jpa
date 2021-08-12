@@ -1,0 +1,116 @@
+package <%= options.package %>.service
+
+import <%= options.package %>.domain.<%= table.camelName %>
+import <%= options.package %>.repository.<%= table.camelName %>Repository
+import <%= options.package %>.util.FilterHelper
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.domain.Specification
+import org.springframework.stereotype.Controller
+import org.springframework.transaction.annotation.Transactional
+import javax.persistence.criteria.Predicate
+import javax.servlet.http.HttpSession
+/*FOXB-IMPORT*/
+/*FOXE-IMPORT*/
+
+
+@Controller
+class <%= table.camelName %>FilterService(
+/*FOXB-INIT*/
+/*FOXE-INIT*/
+	@Autowired val repository: <%= table.camelName %>Repository
+) {
+	val log = LoggerFactory.getLogger(<%= table.camelName %>FilterService::class.java)
+
+	init {
+		log.info("<%= table.camelName %>FilterController INITIALIZED...")
+	}
+
+/*FOXB-BODY*/
+/*FOXE-BODY*/
+	@Transactional(readOnly = true)
+	fun invoke(filter: <%= table.camelName %>Filter, session: HttpSession, pageable: Pageable): Page<<%= table.camelName %>> {
+		val specifications = createSpecifications(filter, session)
+
+		return repository.findAll(specifications, pageable)
+	}
+
+	fun createSpecifications(filter: <%= table.camelName %>Filter, session: HttpSession): Specification<<%= table.camelName %>>? = Specification.where(
+		Specification { root, query, cb ->
+			val predicates = mutableListOf<Predicate>()
+
+			// predicates.add(cb.like(root.get<String>("lastName"), "${search}%"))
+			// FilterHelper.like(root, query, cb, predicates, "firstName", search)
+			
+		<% 
+		table.columns.forEach((column, idx) => { 
+		%><% 
+			if (column.ktType === 'String') { 
+		%>
+			FilterHelper.fullLike(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_like)
+			FilterHelper.fullLike(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.fullText_like)
+			FilterHelper.equal(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_equal)
+		<%
+			} 
+		%><% 
+			if ((column.ktType === 'Int' || column.ktType === 'Long') && !column.type.startsWith('relation')) { 
+		%>
+			FilterHelper.equal(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_equal)
+		<%
+			} 
+		%><% 
+			if (column.type.startsWith('relation.one')) { 
+		%>
+			FilterHelper.equal(root, query, cb, predicates, "<%= column.lowerCamelName.substring(0, column.lowerCamelName.length-2)%>", filter.<%= column.lowerCamelName%>_equal)
+		<%
+			} 
+		%><% 
+		}) 
+		%>
+
+/*FOXB-SPEC*/
+/*FOXE-SPEC*/
+		
+			if (predicates.size < 1) {
+				predicates.add(cb.isNotNull(root.get<String>("id")))
+			}
+
+			if (filter.isAnd) {
+				cb.and(*predicates.toTypedArray())
+			} else {
+				cb.or(*predicates.toTypedArray())
+			}
+		}
+	)
+}
+data class <%= table.camelName %>Filter(
+<% 
+table.columns.forEach((column, idx) => { 
+%><% 
+	if (column.ktType === 'String') { 
+%>
+	val <%= column.lowerCamelName %>_like: <%= column.ktType %>?,
+	val <%= column.lowerCamelName %>_equal: <%= column.ktType %>?,
+<%
+	} 
+%><% 
+	if (column.ktType === 'Int' || column.ktType === 'Long') { 
+%>
+	val <%= column.lowerCamelName %>_equal: <%= column.ktType %>?,
+<%
+	} 
+%><% 
+}) 
+%>
+	val fullText_like: String?,
+
+/*FOXB-MODEL_INIT*/
+/*FOXE-MODEL_INIT*/
+
+	val isAnd : Boolean = false
+) {
+/*FOXB-MODEL_BLOCK*/
+/*FOXE-MODEL_BLOCK*/
+}

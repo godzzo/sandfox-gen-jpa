@@ -76,6 +76,16 @@ async function GenerateTable(
 		`${controllerPath}/${meta.table.camelName}FilterController.kt`
 	);
 
+	const servicePath = `${options.directory}/src/main/kotlin/${options.packagePath}/service`;
+	await MkDir(servicePath);
+
+	await render(
+		reg,
+		`${options.tmpl}/${prjPath}/service/FilterService.kt.ejs`,
+		meta,
+		`${servicePath}/${meta.table.camelName}FilterService.kt`
+	);
+
 	const repoPath = `${options.directory}/src/main/kotlin/${options.packagePath}/repository`;
 	await MkDir(repoPath);
 
