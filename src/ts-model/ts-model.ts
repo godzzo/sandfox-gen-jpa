@@ -1,3 +1,4 @@
+import { TableInfo } from '../config';
 import { RegCpFile, render } from '../lib/generate';
 import { MkDir, Warn, WriteJsonFile } from '../lib/common';
 import { Options, Register } from '../proc/common';
@@ -6,7 +7,7 @@ export async function TsModelGenerateProject(
 	register: Register,
 	options: Options,
 	project: string,
-	tables: any[],
+	tables: TableInfo[],
 	groups: any
 ) {
 	await GenerateProject(register, options, project, tables, groups);
@@ -17,7 +18,7 @@ export async function TsModelGenerateProject(
 export async function TsModelGeneratedConfig(
 	register: Register,
 	options: Options,
-	tables: any[],
+	tables: TableInfo[],
 	groups: any[]
 ) {
 	const out = options.directory;
@@ -46,7 +47,7 @@ export async function GenerateProject(
 	register: Register,
 	options: Options,
 	project: string,
-	tables: any[],
+	tables: TableInfo[],
 	groups: any
 ) {
 	const out = options.directory;
@@ -65,7 +66,7 @@ export async function GenerateProject(
 export async function GenerateTables(
 	reg: Register,
 	options: Options,
-	tables: any[],
+	tables: TableInfo[],
 	project: string
 ) {
 	const out = options.directory;

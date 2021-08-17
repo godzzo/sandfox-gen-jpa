@@ -1,3 +1,4 @@
+import { TableInfo } from '../config';
 import { ReadJsonFile, WriteJsonFile } from '../lib/common';
 import { PrepareData } from '../data/data';
 import { JpaGenerateProject, JpaGeneratedConfig } from '../jpa/jpa';
@@ -10,7 +11,7 @@ import {
 export async function ProcGenerate(
 	options: Options,
 	project: string,
-	tables: any[],
+	tables: TableInfo[],
 	data: any[]
 ) {
 	const register: Register = {
@@ -42,7 +43,7 @@ async function GenerateProject(
 	register: Register,
 	options: Options,
 	project: string,
-	tables: any[],
+	tables: TableInfo[],
 	groups: any
 ) {
 	if (options.templateConfig.type === 'jpa') {

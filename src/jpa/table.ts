@@ -1,3 +1,4 @@
+import { TableInfo } from '../config';
 import { render } from '../lib/generate';
 import { MkDir, Warn } from '../lib/common';
 import { Options, Register } from '../proc/common';
@@ -5,7 +6,7 @@ import { Options, Register } from '../proc/common';
 export async function GenerateTables(
 	reg: Register,
 	options: Options,
-	tables: any[],
+	tables: TableInfo[],
 	project: string
 ) {
 	for (const table of tables) {

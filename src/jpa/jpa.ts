@@ -1,3 +1,4 @@
+import { TableInfo } from '../config';
 import { Options, Register } from '../proc/common';
 import { MkDir, WriteJsonFile } from '../lib/common';
 import { RegCpFile } from '../lib/generate';
@@ -11,7 +12,7 @@ export async function JpaGenerateProject(
 	register: Register,
 	options: Options,
 	project: string,
-	tables: any[],
+	tables: TableInfo[],
 	groups: any
 ) {
 	await GenerateProject(register, options, project, tables, groups);
@@ -28,7 +29,7 @@ export async function JpaGenerateProject(
 export async function JpaGeneratedConfig(
 	register: Register,
 	options: Options,
-	tables: any[],
+	tables: TableInfo[],
 	groups: any[]
 ) {
 	const configPath = `${register.outPath}/config`;

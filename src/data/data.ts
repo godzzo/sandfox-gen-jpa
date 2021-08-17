@@ -1,8 +1,13 @@
+import { TableInfo } from '../config';
 import { SetColumnAnnotation, SetNames } from '../lib/generate';
 import { Register, Options } from '../proc/common';
 import { Warn } from '../lib/common';
 import { AddGroupsForTable } from './group';
-import { CheckBidirectionalRelation, LookRelationTables } from './relation';
+import {
+	CheckBidirectionalRelation,
+	LookRelationTables,
+	RelationInfo,
+} from './relation';
 
 export async function PrepareData(
 	tables: any[],
@@ -12,7 +17,7 @@ export async function PrepareData(
 	data: any[],
 	groups: any
 ) {
-	tables.forEach((table: any) => {
+	tables.forEach((table) => {
 		SetNames(table);
 
 		table.audit = table.audit && table.audit === 'yes';
@@ -31,7 +36,7 @@ async function ParseTables(
 	data: any[],
 	groups: any
 ) {
-	const relations: any[] = [];
+	const relations: RelationInfo[] = [];
 
 	tables.forEach((table: any) => {
 		let columns = null;

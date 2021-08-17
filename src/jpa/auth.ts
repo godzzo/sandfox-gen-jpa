@@ -1,3 +1,4 @@
+import { TableInfo } from '../config';
 import { render } from '../lib/generate';
 import { MkDir } from '../lib/common';
 import { Options, Register } from '../proc/common';
@@ -6,7 +7,7 @@ export async function GenerateAuthentication(
 	reg: Register,
 	options: Options,
 	project: string,
-	tables: any,
+	tables: TableInfo[],
 	groups: any
 ) {
 	const tmpl = options.tmpl;
