@@ -1,14 +1,14 @@
 import { ReadJsonFile, WriteJsonFile } from '../lib/common';
-import { PrepareData } from '../data/main';
-import { JpaGenerateProject, JpaGeneratedConfig } from '../jpa/main';
-import { Register, RenderData, CopyData } from './common';
+import { PrepareData } from '../data/data';
+import { JpaGenerateProject, JpaGeneratedConfig } from '../jpa/jpa';
+import { Register, RenderData, CopyData, Options } from './common';
 import {
 	TsModelGeneratedConfig,
 	TsModelGenerateProject,
-} from '../ts-model/main';
+} from '../ts-model/ts-model';
 
 export async function ProcGenerate(
-	options: string,
+	options: Options,
 	project: string,
 	tables: any[],
 	data: any[]
@@ -40,7 +40,7 @@ export async function ProcGenerate(
 
 async function GenerateProject(
 	register: Register,
-	options: any,
+	options: Options,
 	project: string,
 	tables: any[],
 	groups: any
@@ -60,7 +60,7 @@ async function GenerateProject(
 	}
 }
 
-async function LoadTemplateConfig(options: any) {
+async function LoadTemplateConfig(options: Options) {
 	const templateRoot =
 		options.templateRoot === 'NONE'
 			? `${options.foxPath}/templates`
@@ -74,8 +74,8 @@ async function LoadTemplateConfig(options: any) {
 }
 
 async function WriteGeneratedConfig(
-	register: any,
-	options: any,
+	register: Register,
+	options: Options,
 	tables: any[],
 	groups: any[]
 ) {

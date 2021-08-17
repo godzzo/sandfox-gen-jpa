@@ -1,4 +1,4 @@
-import { Register } from '../proc/common';
+import { Options, Register } from '../proc/common';
 import { MkDir, WriteJsonFile } from '../lib/common';
 import { RegCpFile } from '../lib/generate';
 import { GenerateProject } from './project';
@@ -9,7 +9,7 @@ import { GenerateMap } from './map';
 
 export async function JpaGenerateProject(
 	register: Register,
-	options: any,
+	options: Options,
 	project: string,
 	tables: any[],
 	groups: any
@@ -26,8 +26,8 @@ export async function JpaGenerateProject(
 }
 
 export async function JpaGeneratedConfig(
-	register: any,
-	options: any,
+	register: Register,
+	options: Options,
 	tables: any[],
 	groups: any[]
 ) {

@@ -1,10 +1,10 @@
 import { render, RegCpFile } from '../lib/generate';
 import { MkDir } from '../lib/common';
-import { Register } from '../proc/common';
+import { Options, Register } from '../proc/common';
 
 export async function GenerateProject(
 	reg: Register,
-	options: any,
+	options: Options,
 	project: string,
 	tables: any,
 	groups: any

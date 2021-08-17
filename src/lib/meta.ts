@@ -1,7 +1,8 @@
+import { Options } from '../proc/common';
 import { Log, ReadJsonFile } from '../lib/common';
 import { LoadSpreadsheetData } from '../lib/common';
 
-export async function LoadGSMeta(options: any) {
+export async function LoadGSMeta(options: Options) {
 	if (options.sheetId === 'NONE') {
 		throw new Error('Missing sheetId parameter!');
 	}
@@ -15,7 +16,7 @@ export async function LoadGSMeta(options: any) {
 	return data;
 }
 
-export async function LoadMeta(options: any) {
+export async function LoadMeta(options: Options) {
 	let data = null;
 
 	if (options.sheetId !== 'NONE') {

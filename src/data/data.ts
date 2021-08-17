@@ -1,5 +1,5 @@
 import { SetColumnAnnotation, SetNames } from '../lib/generate';
-import { Register } from '../proc/common';
+import { Register, Options } from '../proc/common';
 import { Warn } from '../lib/common';
 import { AddGroupsForTable } from './group';
 import { CheckBidirectionalRelation, LookRelationTables } from './relation';
@@ -7,7 +7,7 @@ import { CheckBidirectionalRelation, LookRelationTables } from './relation';
 export async function PrepareData(
 	tables: any[],
 	register: Register,
-	options: string,
+	options: Options,
 	project: string,
 	data: any[],
 	groups: any
@@ -25,7 +25,7 @@ export async function PrepareData(
 
 async function ParseTables(
 	reg: Register,
-	options: string,
+	options: Options,
 	project: string,
 	tables: any[],
 	data: any[],

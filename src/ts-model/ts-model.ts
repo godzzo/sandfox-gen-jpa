@@ -1,10 +1,10 @@
 import { RegCpFile, render } from '../lib/generate';
 import { MkDir, Warn, WriteJsonFile } from '../lib/common';
-import { Register } from '../proc/common';
+import { Options, Register } from '../proc/common';
 
 export async function TsModelGenerateProject(
 	register: Register,
-	options: any,
+	options: Options,
 	project: string,
 	tables: any[],
 	groups: any
@@ -15,8 +15,8 @@ export async function TsModelGenerateProject(
 }
 
 export async function TsModelGeneratedConfig(
-	register: any,
-	options: any,
+	register: Register,
+	options: Options,
 	tables: any[],
 	groups: any[]
 ) {
@@ -44,7 +44,7 @@ export async function TsModelGeneratedConfig(
 
 export async function GenerateProject(
 	register: Register,
-	options: any,
+	options: Options,
 	project: string,
 	tables: any[],
 	groups: any
@@ -64,7 +64,7 @@ export async function GenerateProject(
 
 export async function GenerateTables(
 	reg: Register,
-	options: any,
+	options: Options,
 	tables: any[],
 	project: string
 ) {
@@ -87,7 +87,7 @@ export async function GenerateTables(
 
 async function GenerateTable(
 	reg: Register,
-	options: any,
+	options: Options,
 	project: string,
 	meta: any
 ) {

@@ -1,4 +1,5 @@
 import CliArgs from 'command-line-args';
+import { Options } from '../proc/common';
 import { ReadJsonFile, FileExists } from './common';
 
 export async function ParseCliArgs() {
@@ -39,7 +40,7 @@ export async function ParseCliArgs() {
 		{ name: 'templateRoot', type: String, defaultValue: 'NONE' },
 	];
 
-	let options = CliArgs(optDef);
+	let options = CliArgs(optDef) as Options;
 
 	if (FileExists(options.config)) {
 		const json = await ReadJsonFile(options.config);

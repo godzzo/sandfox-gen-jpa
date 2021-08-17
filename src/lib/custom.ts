@@ -9,7 +9,7 @@ import {
 	Checksum,
 	ReadJsonFile,
 } from './common';
-import { Register, RenderData, CopyData } from '../proc/common';
+import { Register, RenderData, CopyData, Options } from '../proc/common';
 
 interface CustomConfig {
 	ignore: {
@@ -18,7 +18,7 @@ interface CustomConfig {
 	};
 }
 
-export async function ApplyCustom(reg: Register, options: any) {
+export async function ApplyCustom(reg: Register, options: Options) {
 	console.log('reg', { reg, options });
 
 	const customConfigPath = `${options.customDir}/config/custom.json`;
@@ -104,7 +104,7 @@ async function CustomFile(
 	}
 }
 
-function ParsePath(outputPath: string, options: any) {
+function ParsePath(outputPath: string, options: Options) {
 	const basePath = outputPath.replace(options.directory, '');
 	const oldFile = `${options.customDir}${basePath}`;
 

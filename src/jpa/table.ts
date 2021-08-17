@@ -1,10 +1,10 @@
 import { render } from '../lib/generate';
 import { MkDir, Warn } from '../lib/common';
-import { Register } from '../proc/common';
+import { Options, Register } from '../proc/common';
 
 export async function GenerateTables(
 	reg: Register,
-	options: any,
+	options: Options,
 	tables: any[],
 	project: string
 ) {
@@ -23,7 +23,7 @@ export async function GenerateTables(
 
 async function GenerateTable(
 	reg: Register,
-	options: any,
+	options: Options,
 	project: string,
 	meta: any
 ) {

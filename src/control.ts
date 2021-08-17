@@ -1,3 +1,4 @@
+import { Options } from './proc/common';
 import {
 	Log,
 	LogObj,
@@ -6,13 +7,13 @@ import {
 	MkDir,
 	ReadJsonFile,
 } from './lib/common';
-import { ProcGenerate } from './proc/main';
+import { ProcGenerate } from './proc/proc';
 import { LoadMeta, LoadGSMeta } from './lib/meta';
 import { ApplyCustom } from './lib/custom';
 
 import chalk from 'chalk';
 
-export async function Main(options: any) {
+export async function Main(options: Options) {
 	if (options.showArgs === 'yes') {
 		LogObj(options, 'ParseCliArgs');
 	}
@@ -38,7 +39,7 @@ export async function Main(options: any) {
 	}
 }
 
-async function PrintLogo(options: any) {
+async function PrintLogo(options: Options) {
 	if (options.showLogo === 'yes') {
 		const logo = await ReadFile(`${options.foxPath}/config/logo.txt`);
 
@@ -46,12 +47,12 @@ async function PrintLogo(options: any) {
 	}
 }
 
-async function InfoGSMeta(options: any) {
+async function InfoGSMeta(options: Options) {
 	const data = await LoadGSMeta(options);
 	LogObj(data, 'InfoGSMeta');
 }
 
-async function SaveGSMeta(options: any) {
+async function SaveGSMeta(options: Options) {
 	const data = await LoadGSMeta(options);
 
 	await MkDir(`${options.directory}/config`);
@@ -62,13 +63,13 @@ async function SaveGSMeta(options: any) {
 	await WriteJsonFile(jsonPath, data);
 }
 
-async function InvokeGenerate(options: any) {
+async function InvokeGenerate(options: Options) {
 	const { tables, data } = await LoadMeta(options);
 
 	await ProcGenerate(options, options.project, tables, data);
 }
 
-async function InvokeCustom(options: any) {
+async function InvokeCustom(options: Options) {
 	const register = await ReadJsonFile(
 		`${options.directory}/config/generateRegister.json`
 	);

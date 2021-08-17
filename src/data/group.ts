@@ -1,5 +1,5 @@
 import { SetNames } from '../lib/generate';
-import { ParseDomain, SetupColumn } from './main';
+import { ParseDomain, SetupColumn } from './data';
 
 /**
  * Locate Groups of given Table (add Group Columns)
