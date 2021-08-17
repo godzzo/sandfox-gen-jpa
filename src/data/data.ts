@@ -92,7 +92,7 @@ export function SetupColumn(column: any, table?: any) {
 	SetNames(column);
 
 	column.annotations = SetColumnAnnotation(column);
-	column.ktType = column.kttype;
+	// column.ktType = column.kttype;
 	column.ktValue = column.ktType === 'String' ? '""' : '0';
 
 	PrepareTsType(column);
