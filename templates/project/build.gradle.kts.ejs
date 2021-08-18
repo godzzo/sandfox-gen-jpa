@@ -40,10 +40,17 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-rest")<% 
 if ( hints.includes('auth') ) { %>
 	implementation("org.springframework.boot:spring-boot-starter-security")<% } %>
-	implementation("org.springframework.security:spring-security-crypto")
+	implementation("org.springframework.security:spring-security-crypto")<% 
+if ( hints.includes('websocket') ) { %>
+	implementation("org.springframework.boot:spring-boot-starter-websocket")<% } %><% 
+if ( hints.includes('thymeleaf') ) { %>
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+	implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.5.3")<% } %>
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")<% 
 if ( hints.includes('envers') ) { %>
-	implementation("org.springframework.data:spring-data-envers")<% } %>
+	implementation("org.springframework.data:spring-data-envers")<% } %><% 
+if ( hints.includes('excel') ) { %>
+	implementation("org.apache.poi:poi-ooxml:4.1.2")<% } %>
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	compileOnly("org.projectlombok:lombok")

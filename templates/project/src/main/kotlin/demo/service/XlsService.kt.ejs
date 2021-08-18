@@ -1,0 +1,32 @@
+package <%= options.package %>.service
+
+import <%= options.package %>.domain.<%= table.camelName %>
+import <%= options.package %>.repository.<%= table.camelName %>Repository
+import <%= options.package %>.generator.<%= table.camelName %>XlsGenerator
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.domain.Specification
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import java.io.OutputStream
+/*FOXB-IMPORT*/
+/*FOXE-IMPORT*/
+
+@Service()
+class <%= table.camelName %>XlsService(
+/*FOXB-INIT*/
+/*FOXE-INIT*/
+		@Autowired val repository: <%= table.camelName %>Repository
+) {
+    val log = LoggerFactory.getLogger(<%= table.camelName %>XlsService::class.java)
+
+    @Transactional(readOnly = true)
+    fun generate(specifications: Specification<<%= table.camelName %>>, pageable: Pageable, out: OutputStream) {
+        val result = repository.findAll(specifications, pageable)
+
+        val generator = <%= table.camelName %>XlsGenerator(result.toList())
+
+        generator.export(out)
+    }
+}

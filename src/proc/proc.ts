@@ -1,4 +1,4 @@
-import { TableInfo } from '../config';
+import { TableInfo, TableConfig } from '../config';
 import { ReadJsonFile, WriteJsonFile } from '../lib/common';
 import { PrepareData } from '../data/data';
 import { JpaGenerateProject, JpaGeneratedConfig } from '../jpa/jpa';
@@ -11,7 +11,7 @@ import {
 export async function ProcGenerate(
 	options: Options,
 	project: string,
-	tables: TableInfo[],
+	tableConfigs: TableConfig[],
 	data: any[]
 ) {
 	const register: Register = {
@@ -25,7 +25,14 @@ export async function ProcGenerate(
 
 	await LoadTemplateConfig(options);
 
-	await PrepareData(tables, register, options, project, data, groups);
+	const tables = await PrepareData(
+		tableConfigs,
+		register,
+		options,
+		project,
+		data,
+		groups
+	);
 
 	await GenerateProject(register, options, project, tables, groups);
 
@@ -77,14 +84,14 @@ async function LoadTemplateConfig(options: Options) {
 async function WriteGeneratedConfig(
 	register: Register,
 	options: Options,
-	tables: any[],
+	tables: TableInfo[],
 	groups: any[]
 ) {
 	tables.forEach((table) => {
 		if (table.columns) {
-			table.columns.forEach((column: any) => {
+			table.columns.forEach((column) => {
 				if (column.relation) {
-					column.relation = column.relation.name;
+					column.relation = (column.relation as TableInfo).name;
 				}
 			});
 		}

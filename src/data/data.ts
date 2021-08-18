@@ -1,4 +1,5 @@
-import { TableInfo } from '../config';
+import { ColumnInfo } from './../config';
+import { ColumnConfig, TableConfig, TableInfo } from '../config';
 import { SetColumnAnnotation, SetNames } from '../lib/generate';
 import { Register, Options } from '../proc/common';
 import { Warn } from '../lib/common';
@@ -10,7 +11,7 @@ import {
 } from './relation';
 
 export async function PrepareData(
-	tables: any[],
+	tables: TableConfig[],
 	register: Register,
 	options: Options,
 	project: string,
@@ -26,6 +27,8 @@ export async function PrepareData(
 	});
 
 	await ParseTables(register, options, project, tables, data, groups);
+
+	return tables as TableInfo[];
 }
 
 async function ParseTables(
@@ -88,29 +91,35 @@ function PrepareColumn(
 	return column;
 }
 
-export function SetupColumn(column: any, table?: any) {
-	SetNames(column);
+export function SetupColumn(columnConfig: ColumnConfig, table?: any) {
+	SetNames(columnConfig);
 
-	column.annotations = SetColumnAnnotation(column);
+	const column = (columnConfig as unknown) as ColumnInfo;
+
+	column.annotations = SetColumnAnnotation(columnConfig);
 	// column.ktType = column.kttype;
-	column.ktValue = column.ktType === 'String' ? '""' : '0';
+	column.ktValue = columnConfig.ktType === 'String' ? '""' : '0';
 
-	PrepareTsType(column);
+	PrepareTsType(columnConfig);
 
-	column.writeOnly = column.writeonly ? column.writeonly === 'yes' : false;
-	column.resultMode = column.resultmode ? column.resultmode : 'NONE';
-	column.options = column.opts ? column.opts.split(',') : [];
+	column.writeOnly = columnConfig.writeOnly
+		? columnConfig.writeOnly === 'yes'
+		: false;
+	column.resultMode = columnConfig.resultMode
+		? columnConfig.resultMode
+		: 'NONE';
+	column.options = columnConfig.opts ? columnConfig.opts.split(',') : [];
 
-	if (column.type) {
-		if (column.type.startsWith('primary') && table) {
+	if (columnConfig.type) {
+		if (columnConfig.type.startsWith('primary') && table) {
 			table.primary = column;
 			table.primaries.push(column);
 		}
 	} else {
-		console.log('Column type not found', column);
+		console.log('Column type not found', columnConfig);
 	}
 
-	if (column.type.startsWith('relation.one')) {
+	if (columnConfig.type.startsWith('relation.one')) {
 		const lName = column.lowerCamelName;
 
 		column.relName = lName.endsWith('Id')
@@ -119,10 +128,8 @@ export function SetupColumn(column: any, table?: any) {
 	}
 }
 
-function PrepareTsType(column: any): any {
-	if (column.tstype) {
-		column.tsType = column.tstype;
-	} else {
+function PrepareTsType(column: ColumnConfig): any {
+	if (!column.tsType) {
 		column.tsType = column.type;
 
 		if (!column.type) {

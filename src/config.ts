@@ -1,3 +1,33 @@
+export interface TableConfig {
+	pos: number;
+	name: string;
+	caption: string;
+	menu: string;
+	groups: string;
+	authority: string;
+	audit?: string | boolean;
+	nested?: string | boolean;
+	owner?: string;
+}
+
+export type ColumnConfig = {
+	table: string;
+	name: string;
+	caption: string;
+	domain: string;
+	type: string;
+	ktType: string;
+	tsType: string;
+	columnType: string;
+	length: number;
+	needed: string;
+	edit: string;
+	resultType: string;
+	writeOnly?: string;
+	resultMode?: string;
+	opts?: string;
+};
+
 export type NameInfo = {
 	name: string;
 	camelName: string;
@@ -20,7 +50,7 @@ export type ColumnInfo = NameInfo & {
 	tsType: string;
 	writeOnly: boolean;
 	resultMode: string;
-	options: [];
+	options: string[];
 	relName: string;
 	relation: string | TableInfo;
 };
