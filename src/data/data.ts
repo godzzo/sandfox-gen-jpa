@@ -94,7 +94,7 @@ function PrepareColumn(
 export function SetupColumn(columnConfig: ColumnConfig, table?: any) {
 	SetNames(columnConfig);
 
-	const column = (columnConfig as unknown) as ColumnInfo;
+	const column = columnConfig as unknown as ColumnInfo;
 
 	column.annotations = SetColumnAnnotation(columnConfig);
 	// column.ktType = column.kttype;

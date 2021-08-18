@@ -92,6 +92,15 @@ export async function GenerateProject(
 		`${controllerPath}/AppController.kt`
 	);
 
+	if (options.hints.includes('thymeleaf')) {
+		await render(
+			reg,
+			`${tmpl}/src/main/kotlin/demo/controller/PageController.kt.ejs`,
+			options,
+			`${controllerPath}/PageController.kt`
+		);
+	}
+
 	const filterPath = `${out}/src/main/kotlin/${options.packagePath}/filter`;
 	await MkDir(filterPath);
 	await render(

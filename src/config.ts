@@ -8,6 +8,7 @@ export interface TableConfig {
 	audit?: string | boolean;
 	nested?: string | boolean;
 	owner?: string;
+	hint?: string; // mtom:keyword
 }
 
 export type ColumnConfig = {
@@ -25,7 +26,7 @@ export type ColumnConfig = {
 	resultType: string;
 	writeOnly?: string;
 	resultMode?: string;
-	opts?: string;
+	opts?: string; // no-auto
 };
 
 export type NameInfo = {
