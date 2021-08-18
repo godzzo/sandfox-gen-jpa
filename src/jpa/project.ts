@@ -76,6 +76,15 @@ export async function GenerateProject(
 		`${out}/src/main/kotlin/${options.packagePath}/SpecConfiguration.kt`
 	);
 
+	if (options.hints.includes('thymeleaf')) {
+		await render(
+			reg,
+			`${tmpl}/src/main/kotlin/demo/ThymeleafExtraConfiguration.kt.ejs`,
+			options,
+			`${out}/src/main/kotlin/${options.packagePath}/ThymeleafExtraConfiguration.kt`
+		);
+	}
+
 	await render(
 		reg,
 		`${tmpl}/src/main/kotlin/demo/RepositoryRestCustomization.kt.ejs`,
