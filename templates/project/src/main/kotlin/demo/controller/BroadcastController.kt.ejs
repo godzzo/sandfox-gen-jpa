@@ -1,0 +1,18 @@
+package <%= package %>
+
+import org.springframework.messaging.handler.annotation.MessageMapping
+import org.springframework.messaging.handler.annotation.SendTo
+import org.springframework.stereotype.Controller
+
+@Controller
+class BroadcastController {
+    @MessageMapping("/broadcast")
+    @SendTo("/topic/broadcast")
+    @Throws(Exception::class)
+    fun custom(message: MutableMap<String?, Any?>): Map<String?, Any?> {
+        println("message: $message")
+
+        message["broadcast"] = "How are You today?"
+        return message
+    }
+}

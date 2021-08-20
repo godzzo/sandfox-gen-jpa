@@ -26,10 +26,6 @@
 	"license": "ISC",
 	"types": "dist/index.d.ts",
 	"dependencies": {
-		"@types/ejs": "^3.0.4",
-		"@types/md5": "^2.2.0",
-		"@types/node": "^12.12.6",
-		"@types/pluralize": "0.0.29",
 		"chalk": "^2.4.2",
 		"command-line-args": "^5.1.1",
 		"ejs": "^3.1.5",
@@ -40,7 +36,11 @@
 	},
 	"devDependencies": {
 		"@types/command-line-args": "^5.0.0",
+		"@types/ejs": "^3.0.4",
 		"@types/jest": "^26.0.18",
+		"@types/md5": "^2.2.0",
+		"@types/node": "^12.20.19",
+		"@types/pluralize": "0.0.29",
 		"husky": "^4.3.0",
 		"jest": "^26.6.3",
 		"prettier": "^2.3.2",
