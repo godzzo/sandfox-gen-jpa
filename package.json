@@ -36,7 +36,6 @@
 		"command-line-args": "^5.1.1",
 		"ejs": "^3.1.5",
 		"gdut-gsheet": "^0.1.3",
-		"google-spreadsheet-to-json": "^1.0.0",
 		"md5": "^2.3.0",
 		"pluralize": "^8.0.0"
 	},

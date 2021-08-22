@@ -1,5 +1,4 @@
 import { LoadSpreadsheetData } from 'gdut-gsheet';
-import gsjson from 'google-spreadsheet-to-json';
 import fs from 'fs';
 import path from 'path';
 import util from 'util';
@@ -18,18 +17,6 @@ export interface GSInfo {
 
 export async function LoadSheet(spreadsheetId: string, credentials: string) {
 	return (await LoadSpreadsheetData(spreadsheetId, credentials)) as GSInfo;
-}
-
-export async function LoadSpreadsheetDataOld(
-	spreadsheetId: string,
-	credentials: string
-) {
-	return gsjson({
-		spreadsheetId,
-		credentials,
-		// worksheet: [0, 1, 2]
-		allWorksheets: true,
-	});
 }
 
 export function LogObj(obj: any, msg: string = '') {
