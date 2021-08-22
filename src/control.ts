@@ -39,7 +39,7 @@ export async function Main(options: Options) {
 	}
 }
 
-async function PrintLogo(options: Options) {
+export async function PrintLogo(options: Options) {
 	if (options.showLogo === 'yes') {
 		const logo = await ReadFile(`${options.foxPath}/config/logo.txt`);
 
@@ -47,12 +47,12 @@ async function PrintLogo(options: Options) {
 	}
 }
 
-async function InfoGSMeta(options: Options) {
+export async function InfoGSMeta(options: Options) {
 	const data = await LoadGSMeta(options);
 	LogObj(data, 'InfoGSMeta');
 }
 
-async function SaveGSMeta(options: Options) {
+export async function SaveGSMeta(options: Options) {
 	const data = await LoadGSMeta(options);
 
 	await MkDir(`${options.directory}/config`);
@@ -63,13 +63,13 @@ async function SaveGSMeta(options: Options) {
 	await WriteJsonFile(jsonPath, data);
 }
 
-async function InvokeGenerate(options: Options) {
+export async function InvokeGenerate(options: Options) {
 	const { tables, data } = await LoadMeta(options);
 
 	await ProcGenerate(options, options.project, tables, data);
 }
 
-async function InvokeCustom(options: Options) {
+export async function InvokeCustom(options: Options) {
 	const register = await ReadJsonFile(
 		`${options.directory}/config/generateRegister.json`
 	);

@@ -1,17 +1,8 @@
-#!/usr/bin/env node
-import { Main } from './control';
-import { ParseCliArgs } from './lib/cli.args';
-
-console.log('SandFox GEN JPA - Loaded...');
-
-async function Start() {
-	const options = await ParseCliArgs();
-
-	await Main(options);
-}
-
-Start().catch((err) => {
-	console.log(err);
-});
-
-export const NgModelGen = (name: string) => 'Hello ' + name;
+export * from './config';
+export * from './control';
+export * from './lib/cli.args';
+export * from './lib/common';
+export * from './lib/meta';
+export * from './lib/generate';
+export * from './proc/common';
+export * from './proc/proc';

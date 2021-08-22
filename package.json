@@ -1,7 +1,7 @@
 {
 	"name": "sandfox-gen-jpa",
-	"version": "1.0.1",
-	"description": "",
+	"version": "1.0.6",
+	"description": "Spring Boot (JPA, Kotlin, Data Rest) project generator. Based on json (Google Spreadsheet) config. Using EJS templates.",
 	"main": "dist/index.js",
 	"scripts": {
 		"start": "node dist/index.js",
@@ -18,11 +18,14 @@
 			"pre-commit": "npm run format"
 		}
 	},
-	"bin": {
-		"sfox": "./lib/index.js"
-	},
-	"keywords": [],
-	"author": "",
+	"keywords": [
+		"typescript",
+		"generator",
+		"kotlin",
+		"jpa",
+		"spring"
+	],
+	"author": "eGodzzo",
 	"license": "ISC",
 	"types": "dist/index.d.ts",
 	"dependencies": {
