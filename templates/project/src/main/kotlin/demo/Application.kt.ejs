@@ -10,14 +10,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories<% } 
 import org.springframework.boot.runApplication
 import org.slf4j.LoggerFactory
 import org.springframework.boot.web.servlet.ServletComponentScan
+import org.springframework.scheduling.annotation.EnableScheduling
 
 @ServletComponentScan
 @SpringBootApplication<% 
 if ( hints.includes('envers') ) {
 %>
 @EnableJpaAuditing
-@EnableJpaRepositories(repositoryFactoryBeanClass = EnversRevisionRepositoryFactoryBean::class)
-<%
+@EnableScheduling
+@EnableJpaRepositories(repositoryFactoryBeanClass = EnversRevisionRepositoryFactoryBean::class)<%
 }
 %>
 class Application : SpringBootServletInitializer() {
