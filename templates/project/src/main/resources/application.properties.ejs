@@ -24,7 +24,6 @@ spring.resources.static-locations=file:upload
 
 spring.servlet.multipart.maxFileSize=100MB
 spring.servlet.multipart.maxRequestSize=100MB
-
 <% if ( hints.includes('thymeleaf') ) { %>
 # ThymeLeaf config
 spring.thymeleaf.prefix=file:./www/
@@ -35,5 +34,4 @@ spring.thymeleaf.encoding=UTF-8
 spring.thymeleaf.servlet.content-type=text/html
 spring.thymeleaf.cache=false
 <% } %>
-
 app.cors.origins=http://localhost
