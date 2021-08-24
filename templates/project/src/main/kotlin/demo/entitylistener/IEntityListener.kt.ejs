@@ -1,0 +1,12 @@
+package <%= options.package %>.entitylistener
+
+interface EntityListener {
+    fun assignable(entity: Any): Boolean
+
+    fun onFlushDirty(
+        entity: Any,
+        id: Any,
+        current: MutableMap<String, Any?>,
+        previous: MutableMap<String, Any?>
+    ): String?
+}

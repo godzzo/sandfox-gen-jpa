@@ -13,14 +13,12 @@ import org.springframework.boot.web.servlet.ServletComponentScan
 import org.springframework.scheduling.annotation.EnableScheduling
 
 @ServletComponentScan
-@SpringBootApplication<% 
-if ( hints.includes('envers') ) {
-%>
+@SpringBootApplication
+@EnableScheduling<% 
+if ( hints.includes('envers') ) { %>
 @EnableJpaAuditing
-@EnableScheduling
 @EnableJpaRepositories(repositoryFactoryBeanClass = EnversRevisionRepositoryFactoryBean::class)<%
-}
-%>
+} %>
 class Application : SpringBootServletInitializer() {
 	override fun configure(application: SpringApplicationBuilder): SpringApplicationBuilder {
 		log.info(">>>>> Application - configure - Called :)")

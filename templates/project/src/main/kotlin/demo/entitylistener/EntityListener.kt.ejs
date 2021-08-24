@@ -15,9 +15,26 @@ import org.springframework.stereotype.Component
 class <%= table.camelName %>EntityListener(
 /*FOXB-CARG*/
 /*FOXE-CARG*/
-) {
-    private val log = LoggerFactory.getLogger(<%= table.camelName %>EntityListener::class.java)
+)<% if (options.hints.includes('hibernate-interceptor')) { %>: EntityListener<% } %> {
+    private val log = LoggerFactory.getLogger(<%= table.camelName %>EntityListener::class.java)<% 
+if (options.hints.includes('hibernate-interceptor')) { %>
+    override fun assignable(entity: Any): Boolean = (entity is <%= table.camelName %>)
 
+    override fun onFlushDirty(
+        entity: Any,
+        id: Any,
+        current: MutableMap<String, Any?>,
+        previous: MutableMap<String, Any?>
+    ): String? {
+        val <%= table.lowerCamelName %> = entity as <%= table.camelName %>
+        var message : String? = null
+
+/*FOXB-FLUSH*/
+/*FOXE-FLUSH*/
+
+        return message
+    }<% 
+} %>
     fun preSave(type: String, entity: <%= table.camelName %>) {
 /*FOXB-PRE*/
 /*FOXE-PRE*/

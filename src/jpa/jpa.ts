@@ -6,6 +6,7 @@ import { GenerateProject } from './project';
 import { GenerateTables } from './table';
 import { GenerateGroups } from './group';
 import { GenerateAuthentication } from './auth';
+import { GenerateHibernate } from './hibernate';
 import { GenerateMap } from './map';
 
 export async function JpaGenerateProject(
@@ -24,6 +25,8 @@ export async function JpaGenerateProject(
 	await GenerateAuthentication(register, options, project, tables, groups);
 
 	await GenerateMap(register, options, project, tables, groups);
+
+	await GenerateHibernate(register, options, project, tables, groups);
 }
 
 export async function JpaGeneratedConfig(
