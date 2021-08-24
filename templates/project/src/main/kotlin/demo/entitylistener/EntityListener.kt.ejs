@@ -3,9 +3,15 @@ package <%= options.package %>.entitylistener
 import <%= options.package %>.domain.<%= table.camelName %>
 import org.slf4j.LoggerFactory
 import javax.persistence.*
+import org.springframework.stereotype.Component
 /*FOXB-IMPORT*/
 /*FOXE-IMPORT*/
 
+/*
+ * You need to Inject with Lazy!
+ * @Lazy @Autowired val someRepository: SomeRepository
+ */
+@Component
 class <%= table.camelName %>EntityListener(
 /*FOXB-CARG*/
 /*FOXE-CARG*/
