@@ -8,6 +8,7 @@ import { GenerateGroups } from './group';
 import { GenerateAuthentication } from './auth';
 import { GenerateHibernate } from './hibernate';
 import { GenerateMap } from './map';
+import { GenerateWebHandler } from './web-handler';
 
 export async function JpaGenerateProject(
 	register: Register,
@@ -27,6 +28,8 @@ export async function JpaGenerateProject(
 	await GenerateMap(register, options, project, tables, groups);
 
 	await GenerateHibernate(register, options, project, tables, groups);
+
+	await GenerateWebHandler(register, options, project, tables, groups);
 }
 
 export async function JpaGeneratedConfig(
