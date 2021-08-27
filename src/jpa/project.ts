@@ -20,7 +20,7 @@ export async function GenerateProject(
 	await RegCpFile(reg, `${tmpl}/gradlew`, `${out}/gradlew`);
 	await RegCpFile(reg, `${tmpl}/gradlew.bat`, `${out}/gradlew.bat`);
 	await RegCpFile(reg, `${tmpl}/README.md`, `${out}/README.md`);
-	await RegCpFile(reg, `${tmpl}/.gitignore`, `${out}/.gitignore`);
+	await RegCpFile(reg, `${tmpl}/gitignore`, `${out}/.gitignore`);
 
 	await render(
 		reg,

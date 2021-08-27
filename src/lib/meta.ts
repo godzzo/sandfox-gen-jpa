@@ -1,5 +1,5 @@
 import { Options } from '../proc/common';
-import { Log, ReadJsonFile } from '../lib/common';
+import { FileExists, Log, ReadJsonFile } from '../lib/common';
 import { LoadSheet, GSInfo } from '../lib/common';
 
 export async function LoadGSMeta(options: Options) {
@@ -7,7 +7,9 @@ export async function LoadGSMeta(options: Options) {
 		throw new Error('Missing sheetId parameter!');
 	}
 
-	const credPath = `${options.foxPath}/${options.credential}`;
+	const credPath = FileExists(options.credential)
+		? options.credential
+		: `${options.foxPath}/${options.credential}`;
 
 	Log(`credential: ${credPath}, sheetId: ${options.sheetId}`);
 

@@ -6,7 +6,7 @@ import { ParseCliArgs } from './lib/cli.args';
 console.log('SandFox GEN JPA - Loaded...');
 
 async function Start() {
-	const options = await ParseCliArgs();
+	const options = await ParseCliArgs(__dirname);
 
 	await Main(options);
 }

@@ -41,7 +41,7 @@ export async function Main(options: Options) {
 
 export async function PrintLogo(options: Options) {
 	if (options.showLogo === 'yes') {
-		const logo = await ReadFile(`${options.foxPath}/config/logo.txt`);
+		const logo = await ReadFile(`${options.foxPath}/logo.txt`);
 
 		Log(chalk.yellow.bgRed.bold(logo));
 	}
