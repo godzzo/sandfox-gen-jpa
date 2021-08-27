@@ -1,6 +1,6 @@
 {
 	"name": "sandfox-gen-jpa",
-	"version": "1.0.7",
+	"version": "1.0.9",
 	"description": "Spring Boot (JPA, Kotlin, Data Rest) project generator. Based on json (Google Spreadsheet) config. Using EJS templates.",
 	"main": "dist/index.js",
 	"bin": {
@@ -14,7 +14,9 @@
 		"format": "prettier --config ./.prettierrc --write \"src/**/*.ts\" \"tests/**/*.ts\"",
 		"lint": "tslint -p src/tsconfig.json -c tslint.json",
 		"test": "jest",
-		"coverage": "jest --coverage"
+		"coverage": "jest --coverage",
+		"simple:save": "ts-node --project src/tsconfig.json src/main.ts --config config/simple.json save",
+		"simple:generate": "ts-node --project src/tsconfig.json src/main.ts --config config/simple.json generate"
 	},
 	"husky": {
 		"hooks": {

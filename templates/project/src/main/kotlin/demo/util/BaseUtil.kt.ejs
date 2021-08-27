@@ -1,0 +1,104 @@
+package <%= package %>.util
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.apache.commons.io.FileUtils
+import org.springframework.core.io.ClassPathResource
+import java.io.File
+import java.io.InputStream
+import java.nio.charset.Charset
+import java.util.*
+
+object BaseUtil {
+    const val strHUAccent = "áéíóöőúüűÁÉÍÓÖŐÚÜŰ "
+    const val strAccent = "aeiooouuuAEIOOOUUU_"
+
+    fun normalizeText(from: String): String {
+        var strFrom = from.replace("&[^;]*;".toRegex(), "")
+
+        for (i in strHUAccent.indices) {
+            val huAccent = strHUAccent.substring(i, i + 1)
+            val accent = strAccent.substring(i, i + 1)
+
+            //		System.out.printf("%s,%s,%s \n", i, huAccent, accent);
+            strFrom = strFrom.replace(huAccent.toRegex(), accent)
+        }
+
+        return strFrom.replace("[^a-zA-Z0-9_]".toRegex(), "")
+    }
+
+    fun makeIdPath(id: String): Any {
+        val chars = id.map { (it) }
+
+        return chars.joinToString(separator = "/")
+    }
+
+    fun parseJsonFile(dataFilePath: String): Map<String, Any> {
+        return parseJsonFile(File(dataFilePath))
+    }
+
+    fun parseJsonString(json: String): Map<String, Any> {
+        val objectMapper = ObjectMapper()
+
+        return objectMapper.readValue(json, Map::class.java) as Map<String, Any>
+    }
+
+    fun <T> parseJsonString(json: String, valueType: Class<T>): T {
+        val objectMapper = ObjectMapper()
+
+        return objectMapper.readValue(json, valueType)
+    }
+
+    fun parseJsonFile(dataFile: File): Map<String, Any> {
+        val mapper = ObjectMapper()
+
+        return mapper.readValue(dataFile, Map::class.java) as Map<String, Any>
+    }
+
+    fun parseJsonResource(resourceLocator: String): Map<String, Any> {
+        val file = ClassPathResource(resourceLocator).file
+
+        return parseJsonFile(file)
+    }
+
+    fun writeJsonString(json: Any): String {
+        val objectMapper = ObjectMapper()
+        return objectMapper.writeValueAsString(json)
+    }
+
+    fun writeJsonFile(dataPath: String, dataFilePath: String, json: Any) {
+        val objectMapper = ObjectMapper()
+        val jsonContent = objectMapper.writeValueAsString(json)
+
+        // log.debug("jsonContent: ${jsonContent}")
+
+        File(dataPath).mkdirs()
+        File(dataFilePath).writeText(jsonContent)
+
+    }
+
+    fun generateParms(reqMap: Map<String, Any>): String {
+        val buffer = StringBuffer()
+
+        reqMap.forEach {
+            k, v ->
+            if (buffer.length != 0) {
+                buffer.append("&")
+            }
+
+            buffer.append("$k=$v")
+        }
+
+        return buffer.toString()
+    }
+
+    fun encodeFileToBase64(filePath: String): String {
+        val fileContent: ByteArray = FileUtils.readFileToByteArray(File(filePath))
+        val encodedString = Base64.getEncoder().encodeToString(fileContent)
+
+        return encodedString
+    }
+}
+
+fun InputStream.readTextAndClose(charset: Charset = Charsets.UTF_8): String {
+    return this.bufferedReader(charset).use { it.readText() }
+}

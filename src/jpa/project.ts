@@ -111,6 +111,12 @@ export async function GenerateProject(
 		options,
 		`${out}/src/main/kotlin/${options.packagePath}/util/FilterHelper.kt`
 	);
+	await render(
+		reg,
+		`${tmpl}/src/main/kotlin/demo/util/BaseUtil.kt.ejs`,
+		options,
+		`${out}/src/main/kotlin/${options.packagePath}/util/BaseUtil.kt`
+	);
 
 	await GenerateTest(reg, options, tmpl, out);
 	await GenerateWebSocket(

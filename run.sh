@@ -1,1 +1,1 @@
-ts-node --project src/tsconfig.json src/index.ts --config config/widgetz.json save
+ts-node --project src/tsconfig.json src/main.ts --config config/widgetz.json save

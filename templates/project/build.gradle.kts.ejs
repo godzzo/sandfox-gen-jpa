@@ -51,6 +51,7 @@ if ( hints.includes('envers') ) { %>
 	implementation("org.springframework.data:spring-data-envers")<% } %><% 
 if ( hints.includes('excel') ) { %>
 	implementation("org.apache.poi:poi-ooxml:4.1.2")<% } %>
+	implementation("commons-io:commons-io:2.11.0")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	compileOnly("org.projectlombok:lombok")
