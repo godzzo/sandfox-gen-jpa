@@ -68,7 +68,7 @@ async function GenerateProject(
 	}
 }
 
-async function LoadTemplateConfig(options: Options) {
+export async function LoadTemplateConfig(options: Options) {
 	const templateRoot =
 		options.templateRoot === 'NONE'
 			? `${options.foxPath}/templates`
