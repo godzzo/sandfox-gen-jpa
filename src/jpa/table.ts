@@ -1,11 +1,12 @@
+import { TableInfo } from '../config';
 import { render } from '../lib/generate';
 import { MkDir, Warn } from '../lib/common';
-import { Register } from '../proc/common';
+import { Options, Register } from '../proc/common';
 
 export async function GenerateTables(
 	reg: Register,
-	options: any,
-	tables: any[],
+	options: Options,
+	tables: TableInfo[],
 	project: string
 ) {
 	for (const table of tables) {
@@ -23,18 +24,11 @@ export async function GenerateTables(
 
 async function GenerateTable(
 	reg: Register,
-	options: any,
+	options: Options,
 	project: string,
 	meta: any
 ) {
-	// console.log("GENERATE TABLE: ", JSON.stringify(meta, null, 4));
-
-	/*
-./src/test/kotlin/org/godzzo/sb/sbkvscone/repository/TestUserRepository.kt	GEN
-	*/
-
 	const prjPath = 'src/main/kotlin/demo';
-	const tprjPath = 'src/test/kotlin/demo';
 
 	const domainPath = `${options.directory}/src/main/kotlin/${options.packagePath}/domain`;
 	await MkDir(domainPath);
@@ -46,6 +40,51 @@ async function GenerateTable(
 		`${domainPath}/${meta.table.camelName}.kt`
 	);
 
+	const controllerPath = `${options.directory}/src/main/kotlin/${options.packagePath}/controller`;
+	await MkDir(controllerPath);
+
+	await render(
+		reg,
+		`${options.tmpl}/${prjPath}/controller/FilterController.kt.ejs`,
+		meta,
+		`${controllerPath}/${meta.table.camelName}FilterController.kt`
+	);
+
+	const servicePath = `${options.directory}/src/main/kotlin/${options.packagePath}/service`;
+	await MkDir(servicePath);
+
+	await render(
+		reg,
+		`${options.tmpl}/${prjPath}/service/FilterService.kt.ejs`,
+		meta,
+		`${servicePath}/${meta.table.camelName}FilterService.kt`
+	);
+
+	const repoPath = `${options.directory}/src/main/kotlin/${options.packagePath}/repository`;
+	await MkDir(repoPath);
+
+	// if (meta.table.menu && meta.table.menu == 'yes') {
+	await render(
+		reg,
+		`${options.tmpl}/${prjPath}/repository/Repository.kt.ejs`,
+		meta,
+		`${repoPath}/${meta.table.camelName}Repository.kt`
+	);
+	// }
+
+	await GenerateEvents(reg, options, project, meta, prjPath);
+	await GenerateProjections(reg, options, project, meta, prjPath);
+	await GenerateTests(reg, options, project, meta);
+	await GenerateXls(reg, options, project, meta, prjPath);
+}
+
+async function GenerateEvents(
+	reg: Register,
+	options: Options,
+	project: string,
+	meta: any,
+	prjPath: string
+) {
 	const entitylistenerPath = `${options.directory}/src/main/kotlin/${options.packagePath}/entitylistener`;
 	await MkDir(entitylistenerPath);
 
@@ -65,29 +104,15 @@ async function GenerateTable(
 		meta,
 		`${eventhandlerPath}/${meta.table.camelName}EventHandler.kt`
 	);
+}
 
-	const controllerPath = `${options.directory}/src/main/kotlin/${options.packagePath}/controller`;
-	await MkDir(controllerPath);
-
-	await render(
-		reg,
-		`${options.tmpl}/${prjPath}/controller/FilterController.kt.ejs`,
-		meta,
-		`${controllerPath}/${meta.table.camelName}FilterController.kt`
-	);
-
-	const repoPath = `${options.directory}/src/main/kotlin/${options.packagePath}/repository`;
-	await MkDir(repoPath);
-
-	// if (meta.table.menu && meta.table.menu == 'yes') {
-	await render(
-		reg,
-		`${options.tmpl}/${prjPath}/repository/Repository.kt.ejs`,
-		meta,
-		`${repoPath}/${meta.table.camelName}Repository.kt`
-	);
-	// }
-
+async function GenerateProjections(
+	reg: Register,
+	options: Options,
+	project: string,
+	meta: any,
+	prjPath: string
+) {
 	const projPath = `${options.directory}/src/main/kotlin/${options.packagePath}/projection`;
 	await MkDir(projPath);
 
@@ -100,6 +125,7 @@ async function GenerateTable(
 		meta,
 		`${projPath}/${meta.table.camelName}Projection.kt`
 	);
+
 	meta.extraNameTag = 'Base';
 	meta.generateGenerateOne = false;
 	meta.generateGenerateMany = false;
@@ -121,6 +147,15 @@ async function GenerateTable(
 			`${projPath}/${meta.table.camelName}RevisionProjection.kt`
 		);
 	}
+}
+
+async function GenerateTests(
+	reg: Register,
+	options: Options,
+	project: string,
+	meta: any
+) {
+	const tprjPath = 'src/test/kotlin/demo';
 
 	const trepoPath = `${options.directory}/src/test/kotlin/${options.packagePath}/repository`;
 	await MkDir(trepoPath);
@@ -141,4 +176,42 @@ async function GenerateTable(
 		meta,
 		`${tctrlPath}/TestFilter${meta.table.camelName}Controller.kt`
 	);
+}
+
+async function GenerateXls(
+	reg: Register,
+	options: Options,
+	project: string,
+	meta: any,
+	prjPath: string
+) {
+	if (options.hints.includes('excel')) {
+		const controllerPath = `${options.directory}/src/main/kotlin/${options.packagePath}/controller`;
+
+		await render(
+			reg,
+			`${options.tmpl}/${prjPath}/controller/XlsController.kt.ejs`,
+			meta,
+			`${controllerPath}/${meta.table.camelName}XlsController.kt`
+		);
+
+		const servicePath = `${options.directory}/src/main/kotlin/${options.packagePath}/service`;
+
+		await render(
+			reg,
+			`${options.tmpl}/${prjPath}/service/XlsService.kt.ejs`,
+			meta,
+			`${servicePath}/${meta.table.camelName}XlsService.kt`
+		);
+
+		const generatorPath = `${options.directory}/src/main/kotlin/${options.packagePath}/generator`;
+		await MkDir(generatorPath);
+
+		await render(
+			reg,
+			`${options.tmpl}/${prjPath}/generator/XlsGenerator.kt.ejs`,
+			meta,
+			`${generatorPath}/${meta.table.camelName}XlsGenerator.kt`
+		);
+	}
 }

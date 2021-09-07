@@ -1,15 +1,15 @@
+import { TableInfo } from '../config';
 import { render, RegCpFile } from '../lib/generate';
 import { MkDir } from '../lib/common';
-import { Register } from '../proc/common';
+import { Options, Register } from '../proc/common';
 
 export async function GenerateProject(
 	reg: Register,
-	options: any,
+	options: Options,
 	project: string,
-	tables: any,
+	tables: TableInfo[],
 	groups: any
 ) {
-	options.tmpl = `${options.foxPath}/templates/project`;
 	options.packagePath = options.package.replace(/\./g, '/');
 
 	const tmpl = options.tmpl;
@@ -20,7 +20,7 @@ export async function GenerateProject(
 	await RegCpFile(reg, `${tmpl}/gradlew`, `${out}/gradlew`);
 	await RegCpFile(reg, `${tmpl}/gradlew.bat`, `${out}/gradlew.bat`);
 	await RegCpFile(reg, `${tmpl}/README.md`, `${out}/README.md`);
-	await RegCpFile(reg, `${tmpl}/.gitignore`, `${out}/.gitignore`);
+	await RegCpFile(reg, `${tmpl}/gitignore`, `${out}/.gitignore`);
 
 	await render(
 		reg,
@@ -101,6 +101,9 @@ export async function GenerateProject(
 		`${filterPath}/ApiFilter.kt`
 	);
 
+	const servicePath = `${out}/src/main/kotlin/${options.packagePath}/service`;
+	await MkDir(servicePath);
+
 	await MkDir(`${out}/src/main/kotlin/${options.packagePath}/util`);
 	await render(
 		reg,
@@ -108,7 +111,87 @@ export async function GenerateProject(
 		options,
 		`${out}/src/main/kotlin/${options.packagePath}/util/FilterHelper.kt`
 	);
+	await render(
+		reg,
+		`${tmpl}/src/main/kotlin/demo/util/BaseUtil.kt.ejs`,
+		options,
+		`${out}/src/main/kotlin/${options.packagePath}/util/BaseUtil.kt`
+	);
 
+	await GenerateTest(reg, options, tmpl, out);
+	await GenerateWebSocket(
+		reg,
+		options,
+		tmpl,
+		out,
+		controllerPath,
+		servicePath
+	);
+	await GenerateThymeleaf(reg, options, tmpl, out, controllerPath);
+}
+
+async function GenerateWebSocket(
+	reg: Register,
+	options: Options,
+	tmpl: string,
+	out: string,
+	controllerPath: string,
+	servicePath: string
+) {
+	if (options.hints.includes('websocket')) {
+		await render(
+			reg,
+			`${tmpl}/src/main/kotlin/demo/WebSocketConfig.kt.ejs`,
+			options,
+			`${out}/src/main/kotlin/${options.packagePath}/WebSocketConfig.kt`
+		);
+
+		await render(
+			reg,
+			`${tmpl}/src/main/kotlin/demo/controller/BroadcastController.kt.ejs`,
+			options,
+			`${controllerPath}/BroadcastController.kt`
+		);
+
+		await render(
+			reg,
+			`${tmpl}/src/main/kotlin/demo/service/EntityMessageService.kt.ejs`,
+			options,
+			`${servicePath}/EntityMessageService.kt`
+		);
+	}
+}
+
+async function GenerateThymeleaf(
+	reg: Register,
+	options: Options,
+	tmpl: string,
+	out: string,
+	controllerPath: string
+) {
+	if (options.hints.includes('thymeleaf')) {
+		await render(
+			reg,
+			`${tmpl}/src/main/kotlin/demo/ThymeleafExtraConfiguration.kt.ejs`,
+			options,
+			`${out}/src/main/kotlin/${options.packagePath}/ThymeleafExtraConfiguration.kt`
+		);
+
+		await render(
+			reg,
+			`${tmpl}/src/main/kotlin/demo/controller/PageController.kt.ejs`,
+			options,
+			`${controllerPath}/PageController.kt`
+		);
+	}
+}
+
+async function GenerateTest(
+	reg: Register,
+	options: Options,
+	tmpl: string,
+	out: string
+) {
 	await MkDir(`${out}/src/test/kotlin/${options.packagePath}`);
 	await render(
 		reg,

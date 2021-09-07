@@ -3,7 +3,6 @@ package <%= options.package %>.service
 import <%= options.package %>.domain.User
 import <%= options.package %>.map.AuthUserDetails
 import <%= options.package %>.repository.UserRepository
-import org.godzzo.daedalus.util.FilterHelper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.jpa.domain.Specification
@@ -13,13 +12,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.criteria.Predicate
-
+/*FOXB-IMPORT*/
+/*FOXE-IMPORT*/
 
 @Service("userDetailsServiceImpl")
 class UserDetailsServiceImpl : UserDetailsService {
+/*FOXB-INIT*/
+/*FOXE-INIT*/
     @Autowired
     private val userRepository: UserRepository? = null
-
+    
     @Transactional(readOnly = true)
     @Throws(UsernameNotFoundException::class)
     override fun loadUserByUsername(email: String): UserDetails {
@@ -31,6 +33,9 @@ class UserDetailsServiceImpl : UserDetailsService {
             ?: throw UsernameNotFoundException("User not found.")
 
         log.info("loadUserByUsername() : {}", email)
+
+/*FOXB-FOUND*/
+/*FOXE-FOUND*/
 
         return AuthUserDetails(user)
     }

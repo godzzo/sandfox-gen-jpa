@@ -12,6 +12,6 @@
 		"declaration": true,
 		"sourceMap": true,
 		"typeRoots": ["../types", "../node_modules/@types"],
-		"types": ["reflect-metadata", "jest"]
+		"types": ["jest"]
 	}
 }

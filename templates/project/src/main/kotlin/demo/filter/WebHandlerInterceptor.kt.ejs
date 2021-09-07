@@ -1,0 +1,38 @@
+package <%= options.package %>.filter
+
+import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
+import org.springframework.web.servlet.HandlerInterceptor
+import org.springframework.web.servlet.ModelAndView
+import java.lang.Exception
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
+
+@Component
+class WebHandlerInterceptor : HandlerInterceptor {
+    private val log = LoggerFactory.getLogger(WebHandlerInterceptor::class.java)
+
+    override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+        log.info("preHandle ${handler.javaClass.name}")
+
+        return true
+    }
+
+    override fun postHandle(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        handler: Any,
+        modelAndView: ModelAndView?
+    ) {
+        log.info("postHandle ${handler.javaClass.name}")
+    }
+
+    override fun afterCompletion(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        handler: Any,
+        ex: Exception?
+    ) {
+        log.info("afterCompletion ${handler.javaClass.name}, ex: $ex")
+    }
+}

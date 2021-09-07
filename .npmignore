@@ -1,0 +1,10 @@
+.vscode
+config
+credentials
+out
+src
+*.log
+tests
+types
+jest*
+tslint.json

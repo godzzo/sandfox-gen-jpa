@@ -1,0 +1,19 @@
+package <%= options.package %>
+
+import <%= options.package %>.filter.WebHandlerInterceptor
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import org.springframework.web.servlet.handler.MappedInterceptor
+
+
+@Configuration
+class WebMvcConfig(
+    private val interceptor: WebHandlerInterceptor
+) : WebMvcConfigurer {
+    @Bean
+    fun webAllInterceptor(): MappedInterceptor {
+        return MappedInterceptor(arrayOf("/**"), interceptor)
+    }
+}

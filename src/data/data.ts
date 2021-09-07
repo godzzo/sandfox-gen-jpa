@@ -1,35 +1,45 @@
+import { ColumnInfo } from './../config';
+import { ColumnConfig, TableConfig, TableInfo } from '../config';
 import { SetColumnAnnotation, SetNames } from '../lib/generate';
-import { Register } from '../proc/common';
+import { Register, Options } from '../proc/common';
 import { Warn } from '../lib/common';
 import { AddGroupsForTable } from './group';
-import { CheckBidirectionalRelation, LookRelationTables } from './relation';
+import {
+	CheckBidirectionalRelation,
+	LookRelationTables,
+	RelationInfo,
+} from './relation';
 
 export async function PrepareData(
-	tables: any[],
+	tables: TableConfig[],
 	register: Register,
-	options: string,
+	options: Options,
 	project: string,
 	data: any[],
 	groups: any
 ) {
-	tables.forEach((table: any) => {
+	tables.forEach((table) => {
 		SetNames(table);
 
 		table.audit = table.audit && table.audit === 'yes';
+		table.nested = table.nested && table.nested === 'yes';
+		table.owner = table.owner ? table.owner : 'NONE';
 	});
 
 	await ParseTables(register, options, project, tables, data, groups);
+
+	return tables as TableInfo[];
 }
 
 async function ParseTables(
 	reg: Register,
-	options: string,
+	options: Options,
 	project: string,
 	tables: any[],
 	data: any[],
 	groups: any
 ) {
-	const relations: any[] = [];
+	const relations: RelationInfo[] = [];
 
 	tables.forEach((table: any) => {
 		let columns = null;
@@ -61,8 +71,6 @@ async function ParseTables(
 function PrepareColumns(data: any[], table: any, columns: any): any[] {
 	console.log('PrepareColumns: ', JSON.stringify(columns, null, 4));
 
-	columns.forEach(SetNames);
-
 	table.primaries = [];
 
 	return columns.map((column: any) =>
@@ -78,28 +86,60 @@ function PrepareColumn(
 ): any {
 	column = ParseDomain(data, column);
 
-	column.annotations = SetColumnAnnotation(column);
-	column.ktType = column.kttype;
-	column.writeOnly = column.writeonly ? column.writeonly === 'yes' : false;
+	SetupColumn(column, table);
 
-	if (column.type) {
-		if (column.type.startsWith('primary')) {
+	return column;
+}
+
+export function SetupColumn(columnConfig: ColumnConfig, table?: any) {
+	SetNames(columnConfig);
+
+	const column = columnConfig as unknown as ColumnInfo;
+
+	column.annotations = SetColumnAnnotation(columnConfig);
+	// column.ktType = column.kttype;
+	column.ktValue = columnConfig.ktType === 'String' ? '""' : '0';
+
+	PrepareTsType(columnConfig);
+
+	column.writeOnly = columnConfig.writeOnly
+		? columnConfig.writeOnly === 'yes'
+		: false;
+	column.resultMode = columnConfig.resultMode
+		? columnConfig.resultMode
+		: 'NONE';
+	column.options = columnConfig.opts ? columnConfig.opts.split(',') : [];
+
+	if (columnConfig.type) {
+		if (columnConfig.type.startsWith('primary') && table) {
 			table.primary = column;
 			table.primaries.push(column);
 		}
 	} else {
-		console.log('Column type not found', column);
+		console.log('Column type not found', columnConfig);
 	}
 
-	if (column.type.startsWith('relation.one')) {
+	if (columnConfig.type.startsWith('relation.one')) {
 		const lName = column.lowerCamelName;
 
 		column.relName = lName.endsWith('Id')
 			? lName.substring(0, lName.length - 2)
 			: lName;
 	}
+}
 
-	return column;
+function PrepareTsType(column: ColumnConfig): any {
+	if (!column.tsType) {
+		column.tsType = column.type;
+
+		if (!column.type) {
+			console.error('Column Type node found!', column);
+		}
+
+		if (column.type.startsWith('primary')) {
+			column.tsType = 'number';
+		}
+	}
 }
 
 /**

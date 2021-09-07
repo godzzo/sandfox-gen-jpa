@@ -1,0 +1,128 @@
+package <%= options.package %>.generator
+
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import <%= options.package %>.domain.<%= table.camelName %>
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+/*FOXB-IMPORT*/
+/*FOXE-IMPORT*/
+
+class <%= table.camelName %>XlsGenerator(
+    private val items: List<<%= table.camelName %>>,
+    private val sheetName: String = "Adat"
+) {
+    private val workbook = XSSFWorkbook()
+    private lateinit var sheet: XSSFSheet
+
+
+    private fun writeHeaderLine() {
+        val style = createHeadStyle()
+        sheet = workbook.createSheet(sheetName)
+
+        val row: Row = sheet.createRow(0)
+        var columnCount = 0
+<%
+// A nem relációs vagyis egyszerű tulajdonságok generálása
+table.columns.forEach((column, idx) => {
+    if (!column.type.startsWith('relation')
+        // && !column.type.startsWith('primary')
+        // && !column.writeOnly
+    ) {
+%>
+        createCell(row, columnCount++, "<%= column.caption %>", style)<%
+    }
+});
+%>
+    }
+
+    private fun writeDataLines() {
+        var rowCount = 1
+        val style = createRowStyle()
+
+        for (item in items) {
+            val row: Row = sheet.createRow(rowCount++)
+            var columnCount = 0
+<%
+// A nem relációs vagyis egyszerű tulajdonságok generálása
+table.columns.forEach((column, idx) => {
+	if (!column.type.startsWith('relation')
+		// && !column.type.startsWith('primary')
+		// && !column.writeOnly
+	) {
+%>
+	// <%= column.caption %>
+            createCell(row, columnCount++, item.<%= column.lowerCamelName %>, style)<%
+	}
+});
+%>
+        }
+    }
+
+    fun export(file: String) {
+        export(FileOutputStream(File(file)))
+    }
+
+    fun export(outputStream: OutputStream) {
+        writeHeaderLine()
+        writeDataLines()
+
+        workbook.write(outputStream)
+        workbook.close()
+
+        outputStream.close()
+    }
+
+    private fun createCell(row: Row, columnCount: Int, value: Any?, style: CellStyle) {
+        sheet.autoSizeColumn(columnCount)
+
+        val cell = row.createCell(columnCount)
+
+        if (value == null) {
+            cell.setCellValue("")
+        } else if (value is ZonedDateTime) {
+            val dateStr = DateTimeFormatter.ofPattern("yyyy. MM. dd. HH:mm").format(value)
+            cell.setCellValue(dateStr)
+        } else if (value is Int) {
+            val dVal: Double = value.toDouble()
+            cell.setCellValue(dVal)
+        } else if (value is Long) {
+            val dVal: Double = value.toDouble()
+            cell.setCellValue(dVal)
+        } else if (value is Boolean) {
+            cell.setCellValue(value)
+        } else {
+            cell.setCellValue(value as String)
+        }
+
+        cell.cellStyle = style
+    }
+
+    private fun createHeadStyle(): CellStyle {
+        val style: CellStyle = workbook.createCellStyle()
+
+        val font = workbook.createFont()
+        font.bold = true
+        font.setFontHeight(16.0)
+
+        style.setFont(font)
+
+        return style
+    }
+
+    private fun createRowStyle(): CellStyle {
+        val style: CellStyle = workbook.createCellStyle()
+
+        val font = workbook.createFont()
+        font.setFontHeight(14.0)
+        style.setFont(font)
+
+        return style
+    }
+
+}

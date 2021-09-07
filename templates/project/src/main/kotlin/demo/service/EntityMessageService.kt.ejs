@@ -1,0 +1,25 @@
+package <%= options.package %>.service
+
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.messaging.simp.SimpMessagingTemplate
+import org.springframework.stereotype.Service
+
+@Service
+class EntityMessageService(
+    @Autowired val messagingTemplate: SimpMessagingTemplate
+) {
+    val log = LoggerFactory.getLogger(EntityMessageService::class.java)
+
+    fun send(name: String, type: String, id: Int) {
+        val message = mutableMapOf<String?, Any?>()
+
+        message["name"] = name
+        message["type"] = type
+        message["id"] = id
+
+        log.info("Send: /topic/entity", message)
+
+        messagingTemplate.convertAndSend("/topic/entity", message);
+    }
+}

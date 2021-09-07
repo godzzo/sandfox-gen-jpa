@@ -1,0 +1,46 @@
+package <%= options.package %>.filter
+
+import <%= options.package %>.entitylistener.EntityListener
+import org.hibernate.EmptyInterceptor
+import org.hibernate.type.Type
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.stereotype.Component
+import java.io.Serializable
+
+@Component
+class HibernateSessionEventInterceptor : EmptyInterceptor() {
+	private val log = LoggerFactory.getLogger(HibernateSessionEventInterceptor::class.java)
+
+	@Autowired lateinit var listeners: List<EntityListener>
+
+	override fun onFlushDirty(
+		entity: Any,
+		id: Serializable,
+		currentState: Array<Any>,
+		previousState: Array<Any>,
+		propertyNames: Array<String>,
+		types: Array<Type>
+	): Boolean {
+		val current = mutableMapOf<String, Any?>()
+		val previous = mutableMapOf<String, Any?>()
+
+		propertyNames.forEachIndexed { i, it ->
+			current[it] = currentState[i]
+			previous[it] = previousState[i]
+		}
+
+		listeners.forEach {
+			if (it.assignable(entity)) {
+				val error = it.onFlushDirty(entity, id, current, previous)
+
+				if (error != null) {
+					throw DataIntegrityViolationException(error)
+				}
+			}
+		}
+
+		return super.onFlushDirty(entity, id, currentState, previousState, propertyNames, types)
+	}
+}

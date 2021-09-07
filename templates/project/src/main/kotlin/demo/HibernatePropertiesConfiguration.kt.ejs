@@ -1,0 +1,15 @@
+package <%= options.package %>
+
+import <%= options.package %>.filter.HibernateSessionEventInterceptor
+import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer
+import org.springframework.context.annotation.Configuration
+
+// https://docs.jboss.org/hibernate/orm/5.5/userguide/html_single/Hibernate_User_Guide.html#configurations-session-events
+@Configuration
+class HibernatePropertiesConfiguration (
+    val interceptor: HibernateSessionEventInterceptor
+) : HibernatePropertiesCustomizer {
+    override fun customize(hibernateProperties: MutableMap<String, Any>) {
+        hibernateProperties["hibernate.session_factory.interceptor"] = interceptor
+    }
+}

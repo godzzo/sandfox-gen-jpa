@@ -1,0 +1,36 @@
+package <%= package %>.controller
+
+import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
+import org.springframework.ui.set
+import org.springframework.beans.factory.annotation.Value
+import org.slf4j.LoggerFactory
+import java.io.File
+import <%= package %>.util.BaseUtil
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.*
+
+@Controller
+class PageController(
+) {
+    private val log = LoggerFactory.getLogger(PageController::class.java)
+
+    @Value("\${spring.thymeleaf.prefix}")
+    val templatePath: String? = null
+
+    @RequestMapping(value = ["/page/{page}"], method = [RequestMethod.GET])
+    fun sample(@PathVariable("page") page: String, model: Model): String {
+        val configFile = File("${templatePath}${page}.json".substring(5))
+        log.info("Check JSON: ${templatePath}${page}.json")
+
+        if (configFile.exists()) {
+            val config = BaseUtil.parseJsonFile(configFile)
+
+            log.info("Load JSON: ${templatePath}${page}.json")
+
+            model["data"] = config
+        }
+
+        return page
+    }
+}

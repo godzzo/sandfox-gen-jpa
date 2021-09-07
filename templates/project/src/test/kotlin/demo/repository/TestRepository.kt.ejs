@@ -44,7 +44,7 @@ class Test<%= table.camelName %>Repository(
     fun createSpecifications(): Specification<<%= table.camelName %>>? = Specification.where { root, query, cb ->
         val predicates = mutableListOf<Predicate>()
 
-        FilterHelper.equal(root, query, cb, predicates, "id", 1)
+        FilterHelper.equal(root, query, cb, predicates, "id", 1 as Int)
 
         // predicates.add(cb.isNotNull(root.get<String>("id")))
 

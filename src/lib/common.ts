@@ -1,20 +1,22 @@
-import gsjson from 'google-spreadsheet-to-json';
+import { LoadSpreadsheetData } from 'gdut-gsheet';
 import fs from 'fs';
 import path from 'path';
 import util from 'util';
 import md5 from 'md5';
 import chalk from 'chalk';
 
-export async function LoadSpreadsheetData(
-	spreadsheetId: string,
-	credentials: string
-) {
-	return gsjson({
-		spreadsheetId,
-		credentials,
-		// worksheet: [0, 1, 2]
-		allWorksheets: true,
-	});
+export interface GSSheet {
+	title: string;
+	headers: string[];
+	recs: any[];
+}
+
+export interface GSInfo {
+	sheets: GSSheet[];
+}
+
+export async function LoadSheet(spreadsheetId: string, credentials: string) {
+	return (await LoadSpreadsheetData(spreadsheetId, credentials)) as GSInfo;
 }
 
 export function LogObj(obj: any, msg: string = '') {

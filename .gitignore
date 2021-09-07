@@ -3,3 +3,4 @@ dist
 out
 in
 *.log
+config/sf-*.json

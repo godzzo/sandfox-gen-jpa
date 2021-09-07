@@ -49,10 +49,14 @@ table.columns.forEach((column, idx) => {
 }); 
 %>
 <%if (table.primaries.length < 2) { %>
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id<%
+	if (!table.primary.options.includes('no-auto')) {
+%>
+	@GeneratedValue(strategy = GenerationType.IDENTITY)<%
+	}
+%>
 	@Column(name = "<%= table.primary.name %>")
-	var <%= table.primary.lowerCamelName %>: Long = 0
+	var <%= table.primary.lowerCamelName %>: <%= table.primary.ktType %> = <%- table.primary.ktValue %>
 <%} else {%><% 
 table.primaries.forEach((column, idx) => { 
 %>
@@ -71,7 +75,9 @@ table.primaries.forEach((column, idx) => {
 <% 
 table.columns.forEach((column, idx) => { 
 %><% 
-	if (column.type.startsWith('relation.one')) { 
+	if (column.type.startsWith('relation.one') 
+		&& !(column.relation.name === table.owner && table.nested)
+	) { 
 %>
 	// <%= column.caption %>
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -89,14 +95,20 @@ if ( options.hints.includes('envers') && table.audit && !column.relation.audit) 
 }); 
 %><% 
 table.columns.forEach((column, idx) => { 
-%><% 
 	if (column.type.startsWith('relation.many')) { 
+		if (table.name === column.relation.owner && column.relation.nested) {
 %>
+	@OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+	@JoinColumn(name = "<%= table.lowerCamelName %>_id", nullable=false,
+		foreignKey = ForeignKey(name = "fk_<%= column.relation.name %>_<%= table.name %>")
+	)
+	var <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf()
+<% } else {%>
 	@OneToMany(mappedBy = "<%= table.lowerCamelName %>", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
 	var <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf()
 <% 
+		}
 	} 
-%><% 
 }); 
 %>
 /*FOXB-BLOCKE*/

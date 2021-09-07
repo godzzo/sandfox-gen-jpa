@@ -9,15 +9,16 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories<% } %>
 import org.springframework.boot.runApplication
 import org.slf4j.LoggerFactory
+import org.springframework.boot.web.servlet.ServletComponentScan
+import org.springframework.scheduling.annotation.EnableScheduling
 
-@SpringBootApplication<% 
-if ( hints.includes('envers') ) {
-%>
+@ServletComponentScan
+@SpringBootApplication
+@EnableScheduling<% 
+if ( hints.includes('envers') ) { %>
 @EnableJpaAuditing
-@EnableJpaRepositories(repositoryFactoryBeanClass = EnversRevisionRepositoryFactoryBean::class)
-<%
-}
-%>
+@EnableJpaRepositories(repositoryFactoryBeanClass = EnversRevisionRepositoryFactoryBean::class)<%
+} %>
 class Application : SpringBootServletInitializer() {
 	override fun configure(application: SpringApplicationBuilder): SpringApplicationBuilder {
 		log.info(">>>>> Application - configure - Called :)")

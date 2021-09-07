@@ -11,7 +11,7 @@ import javax.persistence.*
 @Projection(name = "<%= table.camelName %>Projection", types = [<%= table.camelName %>::class])
 interface <%= table.camelName %><%= extraNameTag %>Projection {
 	@Value("#{target.<%= table.primary.lowerCamelName %>}")
-	fun get<%= table.primary.camelName %>(): Int
+	fun get<%= table.primary.camelName %>(): <%= table.primary.ktType %>
 
 /*FOXB-BLOCK*/
 /*FOXE-BLOCK*/

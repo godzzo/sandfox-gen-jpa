@@ -1,6 +1,9 @@
 package <%= options.package %>.eventhandler
 
-import <%= options.package %>.domain.<%= table.camelName %>
+import <%= options.package %>.domain.<%= table.camelName %><%
+if (options.hints.includes('websocket')) { %>
+import <%= options.package %>.service.EntityMessageService<%
+} %>
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.rest.core.annotation.*
 import org.springframework.stereotype.Component
@@ -12,9 +15,15 @@ import org.slf4j.LoggerFactory
 @RepositoryEventHandler(<%= table.camelName %>::class)
 class <%= table.camelName %>EventHandler(
 /*FOXB-CARG*/
-/*FOXE-CARG*/
+/*FOXE-CARG*/<%
+if (options.hints.includes('websocket')) { %>
+    @Autowired val messageService : EntityMessageService<%
+} %>
 ) {
     private val log = LoggerFactory.getLogger(<%= table.camelName %>EventHandler::class.java)
+
+/*FOXB-CODE*/
+/*FOXE-CODE*/
 
     fun before(type: String, entity: <%= table.camelName %>) {
 /*FOXB-BEFORE*/
@@ -23,7 +32,10 @@ class <%= table.camelName %>EventHandler(
 
     fun after(type: String, entity: <%= table.camelName %>) {
 /*FOXB-AFTER*/
-/*FOXE-AFTER*/
+/*FOXE-AFTER*/<% 
+if (options.hints.includes('websocket')) { %>
+        messageService.send("<%= table.name %>", type, entity.id)<%
+} %>
     }
 
     @HandleBeforeCreate

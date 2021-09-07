@@ -1,7 +1,9 @@
 import CliArgs from 'command-line-args';
+import { Options } from '../proc/common';
 import { ReadJsonFile, FileExists } from './common';
+import path from 'path';
 
-export async function ParseCliArgs() {
+export async function ParseCliArgs(procPath: string) {
 	// https://github.com/75lb/command-line-args/blob/master/doc/option-definition.md
 	const optDef = [
 		{
@@ -35,9 +37,11 @@ export async function ParseCliArgs() {
 		},
 		{ name: 'hint', alias: 'h', type: String, defaultValue: '' },
 		{ name: 'sheetId', alias: 's', type: String, defaultValue: 'NONE' }, // 1A-CnEIWo4YUtYWqw8QZGkfOJzzw0TBXEL1kll3C9nbE
+		{ name: 'template', alias: 't', type: String, defaultValue: 'project' },
+		{ name: 'templateRoot', type: String, defaultValue: 'NONE' },
 	];
 
-	let options = CliArgs(optDef);
+	let options = CliArgs(optDef) as Options;
 
 	if (FileExists(options.config)) {
 		const json = await ReadJsonFile(options.config);
@@ -45,7 +49,10 @@ export async function ParseCliArgs() {
 		options = Object.assign(options, json);
 	}
 
-	options.foxPath = process.env.SANDFOX ? process.env.SANDFOX : '.';
+	options.foxPath = process.env.SANDFOX
+		? process.env.SANDFOX
+		: path.resolve(`${procPath}/../`);
+
 	options.hints = options.hint.split(',');
 
 	return options;

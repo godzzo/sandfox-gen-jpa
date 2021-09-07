@@ -1,16 +1,15 @@
 package <%= options.package %>.controller
 
-import <%= options.package %>.domain.<%= table.camelName %>
 import <%= options.package %>.repository.<%= table.camelName %>Repository
 import <%= options.package %>.projection.<%= table.camelName %>Projection<% 
 if ( options.hints.includes('envers') && table.audit ) { %>
 import <%= options.package %>.projection.<%= table.camelName %>RevisionProjection<% 
 } %>
-import <%= options.package %>.util.FilterHelper
+import <%= options.package %>.service.<%= table.camelName %>Filter
+import <%= options.package %>.service.<%= table.camelName %>FilterService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
-import org.springframework.data.jpa.domain.Specification
 import org.springframework.data.projection.ProjectionFactory
 import org.springframework.data.rest.webmvc.RepositoryRestController
 import org.springframework.data.web.PagedResourcesAssembler
@@ -22,8 +21,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RequestParam
-import javax.persistence.criteria.Predicate
 import javax.servlet.http.HttpSession
 /*FOXB-IMPORT*/
 /*FOXE-IMPORT*/
@@ -33,22 +30,23 @@ import javax.servlet.http.HttpSession
 @RepositoryRestController
 @CrossOrigin
 class <%= table.camelName %>FilterController(
-	@Autowired val repository: <%= table.camelName %>Repository,
 /*FOXB-INIT*/
 /*FOXE-INIT*/
+	@Autowired val repository: <%= table.camelName %>Repository,
+	@Autowired val filterService: <%= table.camelName %>FilterService,
 	@Autowired val factory: ProjectionFactory
 ) {
 	val log = LoggerFactory.getLogger(<%= table.camelName %>FilterController::class.java)
 
 	init {
-		log.info("<%= table.camelName %>FilterController INITIALIZED...");
+		log.info("<%= table.camelName %>FilterController INITIALIZED...")
 	}
 
 /*FOXB-BODY*/
 /*FOXE-BODY*/
 <% 
 if ( options.hints.includes('envers') && table.audit ) { %>
-	@RequestMapping(value = ["/{repository}/revision<%= table.pluralCamelName %>"], method = arrayOf(RequestMethod.GET))
+	@RequestMapping(value = ["/{repository}/revision<%= table.pluralCamelName %>"], method = [RequestMethod.GET])
 	fun versions(id : Long, pageable: Pageable, assembler: PagedResourcesAssembler<<%= table.camelName %>Revision>) 
 			: ResponseEntity<PagedModel<EntityModel<<%= table.camelName %>Revision>>> {
 
@@ -58,112 +56,33 @@ if ( options.hints.includes('envers') && table.audit ) { %>
 			val revisionNumber = it.revisionNumber.get()
 			val projection = factory.createProjection(<%= table.camelName %>RevisionProjection::class.java, it.entity)
 
-			<%= table.camelName %>Revision(revisionNumber, projection)			
+			<%= table.camelName %>Revision(revisionNumber, projection)
 		}
 
-		return ResponseEntity(assembler.toModel(projected), HttpStatus.OK);
+		return ResponseEntity(assembler.toModel(projected), HttpStatus.OK)
 	}
 <% 
 }
 %>
-	@RequestMapping(value = ["/{repository}/filter<%= table.pluralCamelName %>"], method = arrayOf(RequestMethod.GET))
+	@RequestMapping(value = ["/{repository}/filter<%= table.pluralCamelName %>"], method = [RequestMethod.GET])
 	fun <%= table.pluralLowerCamelName %>Filter(filter: <%= table.camelName %>Filter,
 		pageable: Pageable,
 		assembler: PagedResourcesAssembler<<%= table.camelName %>Projection>,
 		session: HttpSession
 	) : ResponseEntity<PagedModel<EntityModel<<%= table.camelName %>Projection>>> {
+		val result = filterService.invoke(filter, session, pageable)
 
-		val specifications = createSpecifications(filter, session)
-		val result = repository.findAll(specifications, pageable)
-		
 		val projected = result.map {
 			factory.createProjection(<%= table.camelName %>Projection::class.java, it)
 		}
 
-		return ResponseEntity(assembler.toModel(projected), HttpStatus.OK);
+		return ResponseEntity(assembler.toModel(projected), HttpStatus.OK)
 	}
-
-	fun createSpecifications(filter: <%= table.camelName %>Filter, session: HttpSession): Specification<<%= table.camelName %>>? = Specification.where(
-		Specification { root, query, cb ->
-			val predicates = mutableListOf<Predicate>()
-
-			// predicates.add(cb.like(root.get<String>("lastName"), "${search}%"))
-			// FilterHelper.like(root, query, cb, predicates, "firstName", search);
-			
-		<% 
-		table.columns.forEach((column, idx) => { 
-		%><% 
-			if (column.ktType === 'String') { 
-		%>
-			FilterHelper.fullLike(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_like);
-			FilterHelper.fullLike(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.fullText_like);
-			FilterHelper.equal(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_equal);
-		<%
-			} 
-		%><% 
-			if (column.ktType === 'Int' && !column.type.startsWith('relation')) { 
-		%>
-			FilterHelper.equal(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_equal);
-		<%
-			} 
-		%><% 
-			if (column.type.startsWith('relation.one')) { 
-		%>
-			FilterHelper.equal(root, query, cb, predicates, "<%= column.lowerCamelName.substring(0, column.lowerCamelName.length-2)%>", filter.<%= column.lowerCamelName%>_equal);
-		<%
-			} 
-		%><% 
-		}); 
-		%>
-
-/*FOXB-SPEC*/
-/*FOXE-SPEC*/
-		
-			if (predicates.size < 1) {
-				predicates.add(cb.isNotNull(root.get<String>("id")))
-			}
-
-			if (filter.isAnd) {
-				cb.and(*predicates.toTypedArray())
-			} else {
-				cb.or(*predicates.toTypedArray())
-			}
-		}
-	)
 }
 <% 
 if ( options.hints.includes('envers') && table.audit ) { 
 %>
-data class <%= table.camelName %>Revision(val revisionNumber: Int, val projection: <%= table.camelName %>RevisionProjection) {}
+data class <%= table.camelName %>Revision(val revisionNumber: Int, val projection: <%= table.camelName %>RevisionProjection)
 <% 
 } 
 %>
-data class <%= table.camelName %>Filter(
-<% 
-table.columns.forEach((column, idx) => { 
-%><% 
-	if (column.ktType === 'String') { 
-%>
-	val <%= column.lowerCamelName %>_like: <%= column.ktType %>?,
-	val <%= column.lowerCamelName %>_equal: <%= column.ktType %>?,
-<%
-	} 
-%><% 
-	if (column.ktType === 'Int') { 
-%>
-	val <%= column.lowerCamelName %>_equal: <%= column.ktType %>?,
-<%
-	} 
-%><% 
-}); 
-%>
-	val fullText_like: String?,
-
-/*FOXB-MODEL_INIT*/
-/*FOXE-MODEL_INIT*/
-
-	val isAnd : Boolean = false
-) {
-/*FOXB-MODEL_BLOCK*/
-/*FOXE-MODEL_BLOCK*/
-}

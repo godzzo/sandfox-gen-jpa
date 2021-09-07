@@ -1,12 +1,14 @@
-[
-	{
-		"path": "$ROOTPATH$\\tests\\data\\main.test.ts",
-		"bookmarks": [
-			{
-				"line": 244,
-				"column": 6,
-				"label": "test ParseDomain"
-			}
-		]
-	}
-]
+{
+	"files": [
+		{
+			"path": "tests/data/main.test.ts",
+			"bookmarks": [
+				{
+					"line": 244,
+					"column": 6,
+					"label": "test ParseDomain"
+				}
+			]
+		}
+	]
+}
