@@ -28,11 +28,13 @@ export function SetNames(data: any): any {
 
 	data.camelName = arrCapital.join('');
 	data.lowerCamelName = arrLowerCamel.join('');
-	data.pluralCamelName = pluralize.plural(data.camelName);
-	data.pluralLowerCamelName = pluralize.plural(data.lowerCamelName);
-
 	data.hyphenName = arrHypen.join('-');
 	data.periodName = arrHypen.join('.');
+
+	data.pluralCamelName = pluralize.plural(data.camelName);
+	data.pluralLowerCamelName = pluralize.plural(data.lowerCamelName);
+	data.pluralHyphenName = pluralize.plural(data.hyphenName);
+	data.pluralPeriodName = pluralize.plural(data.periodName);
 
 	return data;
 }
