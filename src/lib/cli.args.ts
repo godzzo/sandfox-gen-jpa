@@ -66,6 +66,7 @@ function CalculateTemplateLocations(
 ) {
 	// node_modules/dist || ./dist || ./src BY __dirname
 	const moduleRoot = path.resolve(`${procPath}/../`);
+	const ownRoot = path.resolve(`${__dirname}/../../`);
 
 	options.foxPath = process.env.SANDFOX ?? moduleRoot;
 
@@ -83,6 +84,7 @@ function CalculateTemplateLocations(
 		...options.templatePaths,
 		...templateLocations,
 		moduleRoot,
+		ownRoot,
 	];
 
 	console.log('Template locations:', options.templatePaths);
