@@ -36,8 +36,9 @@ async function GenerateTableMap(
 
 	await render(
 		reg,
-		`${options.tmpl}/${prjPath}/map/Map.kt.ejs`,
+		`/${prjPath}/map/Map.kt.ejs`,
 		meta,
-		`${mapDir}/${meta.table.camelName}Map.kt`
+		`${mapDir}/${meta.table.camelName}Map.kt`,
+		options
 	);
 }

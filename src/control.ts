@@ -10,6 +10,7 @@ import {
 import { ProcGenerate } from './proc/proc';
 import { LoadMeta, LoadGSMeta } from './lib/meta';
 import { ApplyCustom } from './lib/custom';
+import { ReadTemplateFile } from './lib/generate';
 
 import chalk from 'chalk';
 
@@ -41,7 +42,7 @@ export async function Main(options: Options) {
 
 export async function PrintLogo(options: Options) {
 	if (options.showLogo === 'yes') {
-		const logo = await ReadFile(`${options.foxPath}/logo.txt`);
+		const logo = await ReadTemplateFile('/logo.txt', options, '');
 
 		Log(chalk.yellow.bgRed.bold(logo));
 	}

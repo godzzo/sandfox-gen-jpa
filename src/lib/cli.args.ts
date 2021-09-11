@@ -3,7 +3,10 @@ import { Options } from '../proc/common';
 import { ReadJsonFile, FileExists } from './common';
 import path from 'path';
 
-export async function ParseCliArgs(procPath: string) {
+export async function ParseCliArgs(
+	procPath: string,
+	templateLocations: string[] = []
+) {
 	// https://github.com/75lb/command-line-args/blob/master/doc/option-definition.md
 	const optDef = [
 		{
@@ -49,11 +52,38 @@ export async function ParseCliArgs(procPath: string) {
 		options = Object.assign(options, json);
 	}
 
-	options.foxPath = process.env.SANDFOX
-		? process.env.SANDFOX
-		: path.resolve(`${procPath}/../`);
+	CalculateTemplateLocations(procPath, templateLocations, options);
 
 	options.hints = options.hint.split(',');
 
 	return options;
+}
+
+function CalculateTemplateLocations(
+	procPath: string,
+	templateLocations: string[],
+	options: Options
+) {
+	// node_modules/dist || ./dist || ./src BY __dirname
+	const moduleRoot = path.resolve(`${procPath}/../`);
+
+	options.foxPath = process.env.SANDFOX ?? moduleRoot;
+
+	options.templatePaths = [];
+
+	if (options.templateRoot !== 'NONE') {
+		options.templatePaths.push(options.templateRoot);
+	}
+
+	if (process.env.SANDFOX) {
+		options.templatePaths.push(process.env.SANDFOX);
+	}
+
+	options.templatePaths = [
+		...options.templatePaths,
+		...templateLocations,
+		moduleRoot,
+	];
+
+	console.log('Template locations:', options.templatePaths);
 }

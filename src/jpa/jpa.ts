@@ -1,7 +1,7 @@
 import { TableInfo } from '../config';
 import { Options, Register } from '../proc/common';
 import { MkDir, WriteJsonFile } from '../lib/common';
-import { RegCpFile } from '../lib/generate';
+import { RegOwnCpFile } from '../lib/generate';
 import { GenerateProject } from './project';
 import { GenerateTables } from './table';
 import { GenerateGroups } from './group';
@@ -46,14 +46,16 @@ export async function JpaGeneratedConfig(
 	await WriteJsonFile(`${configPath}/tables.json`, tables);
 	await WriteJsonFile(`${configPath}/groups.json`, groups);
 
-	await RegCpFile(
+	await RegOwnCpFile(
 		register,
 		`${configPath}/tables.json`,
-		`${outPath}/tables.json`
+		`${outPath}/tables.json`,
+		options
 	);
-	await RegCpFile(
+	await RegOwnCpFile(
 		register,
 		`${configPath}/groups.json`,
-		`${outPath}/groups.json`
+		`${outPath}/groups.json`,
+		options
 	);
 }

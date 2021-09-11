@@ -10,7 +10,6 @@ export async function GenerateHibernate(
 	tables: TableInfo[],
 	groups: any
 ) {
-	const tmpl = options.tmpl;
 	const out = options.directory;
 	const meta = { options, tables, project, groups, reg };
 	const prjPath = 'src/main/kotlin/demo';
@@ -18,9 +17,10 @@ export async function GenerateHibernate(
 	if (options.hints.includes('hibernate-interceptor')) {
 		await render(
 			reg,
-			`${tmpl}/${prjPath}/HibernatePropertiesConfiguration.kt.ejs`,
+			`/${prjPath}/HibernatePropertiesConfiguration.kt.ejs`,
 			meta,
-			`${out}/src/main/kotlin/${options.packagePath}/HibernatePropertiesConfiguration.kt`
+			`${out}/src/main/kotlin/${options.packagePath}/HibernatePropertiesConfiguration.kt`,
+			options
 		);
 
 		const entitylistenerPath = `${options.directory}/src/main/kotlin/${options.packagePath}/entitylistener`;
@@ -28,9 +28,10 @@ export async function GenerateHibernate(
 
 		await render(
 			reg,
-			`${tmpl}/${prjPath}/entitylistener/IEntityListener.kt.ejs`,
+			`/${prjPath}/entitylistener/IEntityListener.kt.ejs`,
 			meta,
-			`${entitylistenerPath}/EntityListener.kt`
+			`${entitylistenerPath}/EntityListener.kt`,
+			options
 		);
 
 		const filterPath = `${out}/src/main/kotlin/${options.packagePath}/filter`;
@@ -38,9 +39,10 @@ export async function GenerateHibernate(
 
 		await render(
 			reg,
-			`${tmpl}/${prjPath}/filter/HibernateSessionEventInterceptor.kt.ejs`,
+			`/${prjPath}/filter/HibernateSessionEventInterceptor.kt.ejs`,
 			meta,
-			`${filterPath}/HibernateSessionEventInterceptor.kt`
+			`${filterPath}/HibernateSessionEventInterceptor.kt`,
+			options
 		);
 	}
 }

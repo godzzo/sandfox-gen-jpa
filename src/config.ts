@@ -35,6 +35,8 @@ export type NameInfo = {
 	lowerCamelName: string;
 	pluralCamelName: string;
 	pluralLowerCamelName: string;
+	pluralHyphenName: string;
+	pluralPeriodName: string;
 	hyphenName: string;
 	periodName: string;
 };

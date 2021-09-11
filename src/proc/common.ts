@@ -44,7 +44,7 @@ export type Options = {
 	foxPath: string;
 	template: string;
 	templateRoot: string;
-	tmpl: string;
+	templatePaths: string[];
 	packagePath: string;
 	templateConfig: TemplateConfig;
 };

@@ -1,8 +1,9 @@
 import { TableInfo, TableConfig } from '../config';
-import { ReadJsonFile, WriteJsonFile } from '../lib/common';
+import { Register, RenderData, CopyData, Options } from './common';
+import { WriteJsonFile } from '../lib/common';
+import { ReadTemplateJsonFile } from '../lib/generate';
 import { PrepareData } from '../data/data';
 import { JpaGenerateProject, JpaGeneratedConfig } from '../jpa/jpa';
-import { Register, RenderData, CopyData, Options } from './common';
 import {
 	TsModelGeneratedConfig,
 	TsModelGenerateProject,
@@ -69,15 +70,9 @@ async function GenerateProject(
 }
 
 export async function LoadTemplateConfig(options: Options) {
-	const templateRoot =
-		options.templateRoot === 'NONE'
-			? `${options.foxPath}/templates`
-			: options.templateRoot;
-
-	options.tmpl = `${templateRoot}/${options.template}`;
-
-	options.templateConfig = await ReadJsonFile(
-		`${options.tmpl}/template.json`
+	options.templateConfig = await ReadTemplateJsonFile(
+		`/template.json`,
+		options
 	);
 }
 

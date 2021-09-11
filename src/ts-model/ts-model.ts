@@ -30,16 +30,18 @@ export async function TsModelGeneratedConfig(
 
 	await render(
 		register,
-		`${options.tmpl}/src/data/TablesConfig.ts.ejs`,
+		`/src/data/TablesConfig.ts.ejs`,
 		meta,
-		`${out}//src/data/TablesConfig.ts`
+		`${out}//src/data/TablesConfig.ts`,
+		options
 	);
 
 	await render(
 		register,
-		`${options.tmpl}/src/data/GroupsConfig.ts.ejs`,
+		`/src/data/GroupsConfig.ts.ejs`,
 		meta,
-		`${out}//src/data/GroupsConfig.ts`
+		`${out}//src/data/GroupsConfig.ts`,
+		options
 	);
 }
 
@@ -51,15 +53,15 @@ export async function GenerateProject(
 	groups: any
 ) {
 	const out = options.directory;
-	const tmpl = options.tmpl;
 
 	register.outPath = out;
 
 	await MkDir(`${out}/config`);
 	await RegCpFile(
 		register,
-		`${tmpl}/config/custom.json`,
-		`${out}/config/custom.json`
+		`/config/custom.json`,
+		`${out}/config/custom.json`,
+		options
 	);
 }
 
@@ -96,8 +98,9 @@ async function GenerateTable(
 
 	await render(
 		reg,
-		`${options.tmpl}/src/data/model/Entity.ts.ejs`,
+		`/src/data/model/Entity.ts.ejs`,
 		meta,
-		`${out}/src/data/model/${meta.table.camelName}.ts`
+		`${out}/src/data/model/${meta.table.camelName}.ts`,
+		options
 	);
 }

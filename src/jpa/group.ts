@@ -21,16 +21,18 @@ export async function GenerateGroups(
 
 		await render(
 			reg,
-			`${options.tmpl}/${prjPath}/group/Group.kt.ejs`,
+			`/${prjPath}/group/Group.kt.ejs`,
 			meta,
-			`${groupPath}/${meta.group.camelName}.kt`
+			`${groupPath}/${meta.group.camelName}.kt`,
+			options
 		);
 
 		await render(
 			reg,
-			`${options.tmpl}/${prjPath}/group/GroupValidator.kt.ejs`,
+			`/${prjPath}/group/GroupValidator.kt.ejs`,
 			meta,
-			`${groupPath}/${meta.group.camelName}Validator.kt`
+			`${groupPath}/${meta.group.camelName}Validator.kt`,
+			options
 		);
 	}
 }

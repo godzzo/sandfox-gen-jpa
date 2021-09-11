@@ -12,93 +12,103 @@ export async function GenerateProject(
 ) {
 	options.packagePath = options.package.replace(/\./g, '/');
 
-	const tmpl = options.tmpl;
 	const out = options.directory;
 
 	reg.outPath = out;
 
-	await RegCpFile(reg, `${tmpl}/gradlew`, `${out}/gradlew`);
-	await RegCpFile(reg, `${tmpl}/gradlew.bat`, `${out}/gradlew.bat`);
-	await RegCpFile(reg, `${tmpl}/README.md`, `${out}/README.md`);
-	await RegCpFile(reg, `${tmpl}/gitignore`, `${out}/.gitignore`);
+	await RegCpFile(reg, `/gradlew`, `${out}/gradlew`, options);
+	await RegCpFile(reg, `/gradlew.bat`, `${out}/gradlew.bat`, options);
+	await RegCpFile(reg, `/README.md`, `${out}/README.md`, options);
+	await RegCpFile(reg, `/gitignore`, `${out}/.gitignore`, options);
 
 	await render(
 		reg,
-		`${tmpl}/build.gradle.kts.ejs`,
+		`/build.gradle.kts.ejs`,
 		options,
-		`${out}/build.gradle.kts`
+		`${out}/build.gradle.kts`,
+		options
 	);
 	await render(
 		reg,
-		`${tmpl}/settings.gradle.kts.ejs`,
+		`/settings.gradle.kts.ejs`,
 		options,
-		`${out}/settings.gradle.kts`
+		`${out}/settings.gradle.kts`,
+		options
 	);
 
 	await MkDir(`${out}/config`);
 	await RegCpFile(
 		reg,
-		`${tmpl}/config/custom.json`,
-		`${out}/config/custom.json`
+		`/config/custom.json`,
+		`${out}/config/custom.json`,
+		options
 	);
 
 	await MkDir(`${out}/gradle/wrapper`);
 	await RegCpFile(
 		reg,
-		`${tmpl}/gradle/wrapper/gradle-wrapper.jar`,
-		`${out}/gradle/wrapper/gradle-wrapper.jar`
+		`/gradle/wrapper/gradle-wrapper.jar`,
+		`${out}/gradle/wrapper/gradle-wrapper.jar`,
+		options
 	);
 	await RegCpFile(
 		reg,
-		`${tmpl}/gradle/wrapper/gradle-wrapper.properties`,
-		`${out}/gradle/wrapper/gradle-wrapper.properties`
+		`/gradle/wrapper/gradle-wrapper.properties`,
+		`${out}/gradle/wrapper/gradle-wrapper.properties`,
+		options
 	);
 
 	await MkDir(`${out}/src/main/resources`);
 	await render(
 		reg,
-		`${tmpl}/src/main/resources/application.properties.ejs`,
+		`/src/main/resources/application.properties.ejs`,
 		options,
-		`${out}/src/main/resources/application.properties`
+		`${out}/src/main/resources/application.properties`,
+		options
 	);
 
 	await MkDir(`${out}/src/main/kotlin/${options.packagePath}`);
 	await render(
 		reg,
-		`${tmpl}/src/main/kotlin/demo/Application.kt.ejs`,
+		`/src/main/kotlin/demo/Application.kt.ejs`,
 		options,
-		`${out}/src/main/kotlin/${options.packagePath}/Application.kt`
+		`${out}/src/main/kotlin/${options.packagePath}/Application.kt`,
+		options
 	);
 	await render(
 		reg,
-		`${tmpl}/src/main/kotlin/demo/SpecConfiguration.kt.ejs`,
+		`/src/main/kotlin/demo/SpecConfiguration.kt.ejs`,
 		options,
-		`${out}/src/main/kotlin/${options.packagePath}/SpecConfiguration.kt`
+		`${out}/src/main/kotlin/${options.packagePath}/SpecConfiguration.kt`,
+		options
 	);
 
 	await render(
 		reg,
-		`${tmpl}/src/main/kotlin/demo/RepositoryRestCustomization.kt.ejs`,
+		`/src/main/kotlin/demo/RepositoryRestCustomization.kt.ejs`,
 		{ options, tables, groups },
-		`${out}/src/main/kotlin/${options.packagePath}/RepositoryRestCustomization.kt`
+		`${out}/src/main/kotlin/${options.packagePath}/RepositoryRestCustomization.kt`,
+		options
 	);
 
 	const controllerPath = `${out}/src/main/kotlin/${options.packagePath}/controller`;
 	await MkDir(controllerPath);
 	await render(
 		reg,
-		`${tmpl}/src/main/kotlin/demo/controller/AppController.kt.ejs`,
+		`/src/main/kotlin/demo/controller/AppController.kt.ejs`,
 		options,
-		`${controllerPath}/AppController.kt`
+		`${controllerPath}/AppController.kt`,
+		options
 	);
 
 	const filterPath = `${out}/src/main/kotlin/${options.packagePath}/filter`;
 	await MkDir(filterPath);
 	await render(
 		reg,
-		`${tmpl}/src/main/kotlin/demo/filter/ApiFilter.kt.ejs`,
+		`/src/main/kotlin/demo/filter/ApiFilter.kt.ejs`,
 		{ options, tables, groups },
-		`${filterPath}/ApiFilter.kt`
+		`${filterPath}/ApiFilter.kt`,
+		options
 	);
 
 	const servicePath = `${out}/src/main/kotlin/${options.packagePath}/service`;
@@ -107,33 +117,27 @@ export async function GenerateProject(
 	await MkDir(`${out}/src/main/kotlin/${options.packagePath}/util`);
 	await render(
 		reg,
-		`${tmpl}/src/main/kotlin/demo/util/FilterHelper.kt.ejs`,
+		`/src/main/kotlin/demo/util/FilterHelper.kt.ejs`,
 		options,
-		`${out}/src/main/kotlin/${options.packagePath}/util/FilterHelper.kt`
+		`${out}/src/main/kotlin/${options.packagePath}/util/FilterHelper.kt`,
+		options
 	);
 	await render(
 		reg,
-		`${tmpl}/src/main/kotlin/demo/util/BaseUtil.kt.ejs`,
+		`/src/main/kotlin/demo/util/BaseUtil.kt.ejs`,
 		options,
-		`${out}/src/main/kotlin/${options.packagePath}/util/BaseUtil.kt`
+		`${out}/src/main/kotlin/${options.packagePath}/util/BaseUtil.kt`,
+		options
 	);
 
-	await GenerateTest(reg, options, tmpl, out);
-	await GenerateWebSocket(
-		reg,
-		options,
-		tmpl,
-		out,
-		controllerPath,
-		servicePath
-	);
-	await GenerateThymeleaf(reg, options, tmpl, out, controllerPath);
+	await GenerateTest(reg, options, out);
+	await GenerateWebSocket(reg, options, out, controllerPath, servicePath);
+	await GenerateThymeleaf(reg, options, out, controllerPath);
 }
 
 async function GenerateWebSocket(
 	reg: Register,
 	options: Options,
-	tmpl: string,
 	out: string,
 	controllerPath: string,
 	servicePath: string
@@ -141,23 +145,26 @@ async function GenerateWebSocket(
 	if (options.hints.includes('websocket')) {
 		await render(
 			reg,
-			`${tmpl}/src/main/kotlin/demo/WebSocketConfig.kt.ejs`,
+			`/src/main/kotlin/demo/WebSocketConfig.kt.ejs`,
 			options,
-			`${out}/src/main/kotlin/${options.packagePath}/WebSocketConfig.kt`
+			`${out}/src/main/kotlin/${options.packagePath}/WebSocketConfig.kt`,
+			options
 		);
 
 		await render(
 			reg,
-			`${tmpl}/src/main/kotlin/demo/controller/BroadcastController.kt.ejs`,
+			`/src/main/kotlin/demo/controller/BroadcastController.kt.ejs`,
 			options,
-			`${controllerPath}/BroadcastController.kt`
+			`${controllerPath}/BroadcastController.kt`,
+			options
 		);
 
 		await render(
 			reg,
-			`${tmpl}/src/main/kotlin/demo/service/EntityMessageService.kt.ejs`,
+			`/src/main/kotlin/demo/service/EntityMessageService.kt.ejs`,
 			options,
-			`${servicePath}/EntityMessageService.kt`
+			`${servicePath}/EntityMessageService.kt`,
+			options
 		);
 	}
 }
@@ -165,46 +172,44 @@ async function GenerateWebSocket(
 async function GenerateThymeleaf(
 	reg: Register,
 	options: Options,
-	tmpl: string,
 	out: string,
 	controllerPath: string
 ) {
 	if (options.hints.includes('thymeleaf')) {
 		await render(
 			reg,
-			`${tmpl}/src/main/kotlin/demo/ThymeleafExtraConfiguration.kt.ejs`,
+			`/src/main/kotlin/demo/ThymeleafExtraConfiguration.kt.ejs`,
 			options,
-			`${out}/src/main/kotlin/${options.packagePath}/ThymeleafExtraConfiguration.kt`
+			`${out}/src/main/kotlin/${options.packagePath}/ThymeleafExtraConfiguration.kt`,
+			options
 		);
 
 		await render(
 			reg,
-			`${tmpl}/src/main/kotlin/demo/controller/PageController.kt.ejs`,
+			`/src/main/kotlin/demo/controller/PageController.kt.ejs`,
 			options,
-			`${controllerPath}/PageController.kt`
+			`${controllerPath}/PageController.kt`,
+			options
 		);
 	}
 }
 
-async function GenerateTest(
-	reg: Register,
-	options: Options,
-	tmpl: string,
-	out: string
-) {
+async function GenerateTest(reg: Register, options: Options, out: string) {
 	await MkDir(`${out}/src/test/kotlin/${options.packagePath}`);
 	await render(
 		reg,
-		`${tmpl}/src/test/kotlin/demo/ApplicationTests.kt.ejs`,
+		`/src/test/kotlin/demo/ApplicationTests.kt.ejs`,
 		options,
-		`${out}/src/test/kotlin/${options.packagePath}/ApplicationTests.kt`
+		`${out}/src/test/kotlin/${options.packagePath}/ApplicationTests.kt`,
+		options
 	);
 
 	await MkDir(`${out}/src/test/kotlin/${options.packagePath}/util`);
 	await render(
 		reg,
-		`${tmpl}/src/test/kotlin/demo/util/TestPageRequest.kt.ejs`,
+		`/src/test/kotlin/demo/util/TestPageRequest.kt.ejs`,
 		options,
-		`${out}/src/test/kotlin/${options.packagePath}/util/TestPageRequest.kt`
+		`${out}/src/test/kotlin/${options.packagePath}/util/TestPageRequest.kt`,
+		options
 	);
 }

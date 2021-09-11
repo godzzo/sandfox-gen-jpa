@@ -10,7 +10,6 @@ export async function GenerateWebHandler(
 	tables: TableInfo[],
 	groups: any
 ) {
-	const tmpl = options.tmpl;
 	const out = options.directory;
 	const meta = { options, tables, project, groups, reg };
 	const prjPath = 'src/main/kotlin/demo';
@@ -18,9 +17,10 @@ export async function GenerateWebHandler(
 	if (options.hints.includes('web-handler')) {
 		await render(
 			reg,
-			`${tmpl}/${prjPath}/WebMvcConfig.kt.ejs`,
+			`/${prjPath}/WebMvcConfig.kt.ejs`,
 			meta,
-			`${out}/src/main/kotlin/${options.packagePath}/WebMvcConfig.kt`
+			`${out}/src/main/kotlin/${options.packagePath}/WebMvcConfig.kt`,
+			options
 		);
 
 		const filterPath = `${out}/src/main/kotlin/${options.packagePath}/filter`;
@@ -28,9 +28,10 @@ export async function GenerateWebHandler(
 
 		await render(
 			reg,
-			`${tmpl}/${prjPath}/filter/WebHandlerInterceptor.kt.ejs`,
+			`/${prjPath}/filter/WebHandlerInterceptor.kt.ejs`,
 			meta,
-			`${filterPath}/WebHandlerInterceptor.kt`
+			`${filterPath}/WebHandlerInterceptor.kt`,
+			options
 		);
 
 		const controllerPath = `${out}/src/main/kotlin/${options.packagePath}/controller`;
@@ -38,9 +39,10 @@ export async function GenerateWebHandler(
 
 		await render(
 			reg,
-			`${tmpl}/${prjPath}/controller/RestRuntimeExceptionHandler.kt.ejs`,
+			`/${prjPath}/controller/RestRuntimeExceptionHandler.kt.ejs`,
 			meta,
-			`${controllerPath}/RestRuntimeExceptionHandler.kt`
+			`${controllerPath}/RestRuntimeExceptionHandler.kt`,
+			options
 		);
 	}
 }

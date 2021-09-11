@@ -1,9 +1,17 @@
+import { Options } from './../proc/common';
 import * as util from 'util';
 import * as fs from 'fs';
 import * as pluralize from 'pluralize';
 
 import { renderFile } from 'ejs';
-import { CopyFile, FileSize, Log } from './common';
+import {
+	CopyFile,
+	FileExists,
+	FileSize,
+	Log,
+	ReadFile,
+	ReadJsonFile,
+} from './common';
 import { Register } from '../proc/common';
 
 export function SetNames(data: any): any {
@@ -39,13 +47,59 @@ export function SetNames(data: any): any {
 	return data;
 }
 
+export async function ReadTemplateJsonFile(path: string, options: Options) {
+	const filePath = LocateTemplateFile(path, options);
+
+	return await ReadJsonFile(filePath);
+}
+
+export function LocateTemplateFile(
+	path: string,
+	options: Options,
+	template?: string
+) {
+	template = template ?? options.template;
+
+	for (const templatePath of options.templatePaths) {
+		const checkPath = `${templatePath}/${template}${path}`;
+		const checkTemplatePath = `${templatePath}/templates/${template}${path}`;
+
+		if (FileExists(checkPath)) {
+			return checkPath;
+		}
+
+		if (FileExists(checkTemplatePath)) {
+			return checkTemplatePath;
+		}
+	}
+
+	throw new Error(
+		`Template not found: ${path} in templateHierarchy: ${JSON.stringify(
+			options.templatePaths
+		)}`
+	);
+}
+
+export async function ReadTemplateFile(
+	path: string,
+	options: Options,
+	template?: string
+) {
+	path = LocateTemplateFile(path, options, template);
+
+	return await ReadFile(path);
+}
+
 export async function render(
 	register: Register,
 	templatePath: string,
 	model: any,
-	outputPath: string
+	outputPath: string,
+	options: Options
 ) {
 	const writeFile = util.promisify(fs.writeFile);
+
+	templatePath = LocateTemplateFile(templatePath, options);
 
 	// Log(`GENERATE? ${templatePath}\n -- TO: ${outputPath}`);
 
@@ -69,11 +123,30 @@ export async function render(
 	}
 }
 
+export async function RegOwnCpFile(
+	register: Register,
+	srcPath: string,
+	destPath: string,
+	options: Options
+) {
+	await CopyFile(srcPath, destPath);
+
+	register.copies.push({
+		srcPath,
+		destPath,
+		size: FileSize(destPath),
+		custom: null,
+	});
+}
+
 export async function RegCpFile(
 	register: Register,
 	srcPath: string,
-	destPath: string
+	destPath: string,
+	options: Options
 ) {
+	srcPath = LocateTemplateFile(srcPath, options);
+
 	await CopyFile(srcPath, destPath);
 
 	register.copies.push({

@@ -35,9 +35,10 @@ async function GenerateTable(
 
 	await render(
 		reg,
-		`${options.tmpl}/${prjPath}/domain/Entity.kt.ejs`,
+		`/${prjPath}/domain/Entity.kt.ejs`,
 		meta,
-		`${domainPath}/${meta.table.camelName}.kt`
+		`${domainPath}/${meta.table.camelName}.kt`,
+		options
 	);
 
 	const controllerPath = `${options.directory}/src/main/kotlin/${options.packagePath}/controller`;
@@ -45,9 +46,10 @@ async function GenerateTable(
 
 	await render(
 		reg,
-		`${options.tmpl}/${prjPath}/controller/FilterController.kt.ejs`,
+		`/${prjPath}/controller/FilterController.kt.ejs`,
 		meta,
-		`${controllerPath}/${meta.table.camelName}FilterController.kt`
+		`${controllerPath}/${meta.table.camelName}FilterController.kt`,
+		options
 	);
 
 	const servicePath = `${options.directory}/src/main/kotlin/${options.packagePath}/service`;
@@ -55,9 +57,10 @@ async function GenerateTable(
 
 	await render(
 		reg,
-		`${options.tmpl}/${prjPath}/service/FilterService.kt.ejs`,
+		`/${prjPath}/service/FilterService.kt.ejs`,
 		meta,
-		`${servicePath}/${meta.table.camelName}FilterService.kt`
+		`${servicePath}/${meta.table.camelName}FilterService.kt`,
+		options
 	);
 
 	const repoPath = `${options.directory}/src/main/kotlin/${options.packagePath}/repository`;
@@ -66,9 +69,10 @@ async function GenerateTable(
 	// if (meta.table.menu && meta.table.menu == 'yes') {
 	await render(
 		reg,
-		`${options.tmpl}/${prjPath}/repository/Repository.kt.ejs`,
+		`/${prjPath}/repository/Repository.kt.ejs`,
 		meta,
-		`${repoPath}/${meta.table.camelName}Repository.kt`
+		`${repoPath}/${meta.table.camelName}Repository.kt`,
+		options
 	);
 	// }
 
@@ -90,9 +94,10 @@ async function GenerateEvents(
 
 	await render(
 		reg,
-		`${options.tmpl}/${prjPath}/entitylistener/EntityListener.kt.ejs`,
+		`/${prjPath}/entitylistener/EntityListener.kt.ejs`,
 		meta,
-		`${entitylistenerPath}/${meta.table.camelName}EntityListener.kt`
+		`${entitylistenerPath}/${meta.table.camelName}EntityListener.kt`,
+		options
 	);
 
 	const eventhandlerPath = `${options.directory}/src/main/kotlin/${options.packagePath}/eventhandler`;
@@ -100,9 +105,10 @@ async function GenerateEvents(
 
 	await render(
 		reg,
-		`${options.tmpl}/${prjPath}/eventhandler/EventHandler.kt.ejs`,
+		`/${prjPath}/eventhandler/EventHandler.kt.ejs`,
 		meta,
-		`${eventhandlerPath}/${meta.table.camelName}EventHandler.kt`
+		`${eventhandlerPath}/${meta.table.camelName}EventHandler.kt`,
+		options
 	);
 }
 
@@ -121,9 +127,10 @@ async function GenerateProjections(
 	meta.generateGenerateMany = false;
 	await render(
 		reg,
-		`${options.tmpl}/${prjPath}/projection/Projection.kt.ejs`,
+		`/${prjPath}/projection/Projection.kt.ejs`,
 		meta,
-		`${projPath}/${meta.table.camelName}Projection.kt`
+		`${projPath}/${meta.table.camelName}Projection.kt`,
+		options
 	);
 
 	meta.extraNameTag = 'Base';
@@ -131,9 +138,10 @@ async function GenerateProjections(
 	meta.generateGenerateMany = false;
 	await render(
 		reg,
-		`${options.tmpl}/${prjPath}/projection/Projection.kt.ejs`,
+		`/${prjPath}/projection/Projection.kt.ejs`,
 		meta,
-		`${projPath}/${meta.table.camelName}BaseProjection.kt`
+		`${projPath}/${meta.table.camelName}BaseProjection.kt`,
+		options
 	);
 
 	if (meta.table.audit) {
@@ -142,9 +150,10 @@ async function GenerateProjections(
 		meta.generateGenerateMany = true;
 		await render(
 			reg,
-			`${options.tmpl}/${prjPath}/projection/Projection.kt.ejs`,
+			`/${prjPath}/projection/Projection.kt.ejs`,
 			meta,
-			`${projPath}/${meta.table.camelName}RevisionProjection.kt`
+			`${projPath}/${meta.table.camelName}RevisionProjection.kt`,
+			options
 		);
 	}
 }
@@ -162,9 +171,10 @@ async function GenerateTests(
 
 	await render(
 		reg,
-		`${options.tmpl}/${tprjPath}/repository/TestRepository.kt.ejs`,
+		`/${tprjPath}/repository/TestRepository.kt.ejs`,
 		meta,
-		`${trepoPath}/Test${meta.table.camelName}Repository.kt`
+		`${trepoPath}/Test${meta.table.camelName}Repository.kt`,
+		options
 	);
 
 	const tctrlPath = `${options.directory}/src/test/kotlin/${options.packagePath}/controller`;
@@ -172,9 +182,10 @@ async function GenerateTests(
 
 	await render(
 		reg,
-		`${options.tmpl}/${tprjPath}/controller/TestFilterController.kt.ejs`,
+		`/${tprjPath}/controller/TestFilterController.kt.ejs`,
 		meta,
-		`${tctrlPath}/TestFilter${meta.table.camelName}Controller.kt`
+		`${tctrlPath}/TestFilter${meta.table.camelName}Controller.kt`,
+		options
 	);
 }
 
@@ -190,18 +201,20 @@ async function GenerateXls(
 
 		await render(
 			reg,
-			`${options.tmpl}/${prjPath}/controller/XlsController.kt.ejs`,
+			`/${prjPath}/controller/XlsController.kt.ejs`,
 			meta,
-			`${controllerPath}/${meta.table.camelName}XlsController.kt`
+			`${controllerPath}/${meta.table.camelName}XlsController.kt`,
+			options
 		);
 
 		const servicePath = `${options.directory}/src/main/kotlin/${options.packagePath}/service`;
 
 		await render(
 			reg,
-			`${options.tmpl}/${prjPath}/service/XlsService.kt.ejs`,
+			`/${prjPath}/service/XlsService.kt.ejs`,
 			meta,
-			`${servicePath}/${meta.table.camelName}XlsService.kt`
+			`${servicePath}/${meta.table.camelName}XlsService.kt`,
+			options
 		);
 
 		const generatorPath = `${options.directory}/src/main/kotlin/${options.packagePath}/generator`;
@@ -209,9 +222,10 @@ async function GenerateXls(
 
 		await render(
 			reg,
-			`${options.tmpl}/${prjPath}/generator/XlsGenerator.kt.ejs`,
+			`/${prjPath}/generator/XlsGenerator.kt.ejs`,
 			meta,
-			`${generatorPath}/${meta.table.camelName}XlsGenerator.kt`
+			`${generatorPath}/${meta.table.camelName}XlsGenerator.kt`,
+			options
 		);
 	}
 }

@@ -1,6 +1,7 @@
 import { Options } from '../proc/common';
 import { FileExists, Log, ReadJsonFile } from '../lib/common';
 import { LoadSheet, GSInfo } from '../lib/common';
+import { LocateTemplateFile } from '../lib/generate';
 
 export async function LoadGSMeta(options: Options) {
 	if (options.sheetId === 'NONE') {
@@ -9,7 +10,7 @@ export async function LoadGSMeta(options: Options) {
 
 	const credPath = FileExists(options.credential)
 		? options.credential
-		: `${options.foxPath}/${options.credential}`;
+		: LocateTemplateFile(options.credential, options, '');
 
 	Log(`credential: ${credPath}, sheetId: ${options.sheetId}`);
 
