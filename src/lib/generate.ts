@@ -15,6 +15,7 @@ import {
 	ReadFile,
 	ReadJsonFile,
 	ScanDir,
+	TrimParentPath,
 } from './common';
 import { Register } from '../proc/common';
 
@@ -68,12 +69,6 @@ export function LocateTemplateFile(
 		const checkPath = `${templatePath}/${template}${tPath}`;
 		const checkTemplatePath = `${templatePath}/templates/${template}${tPath}`;
 
-		console.log({
-			checkPath,
-			checkTemplatePath,
-			exists: [FileExists(checkPath), FileExists(checkTemplatePath)],
-		});
-
 		if (FileExists(checkPath)) {
 			return checkPath;
 		}
@@ -122,11 +117,7 @@ export async function RenderDir(
 	console.log('sourceFiles IN', [sourceDir, sourceFiles]);
 
 	// Clear template source folder from founded file path
-	sourceFiles = sourceFiles.map((el) =>
-		GetAbsolutePath(el)
-			.replace(GetAbsolutePath(templateFromDir), '')
-			.replace(/\\/g, '/')
-	);
+	sourceFiles = sourceFiles.map((el) => TrimParentPath(el, templateFromDir));
 
 	console.log('sourceFiles OUT', sourceFiles);
 

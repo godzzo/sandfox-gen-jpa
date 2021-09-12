@@ -8,6 +8,7 @@ import {
 	FileChecksum,
 	Checksum,
 	ReadJsonFile,
+	TrimParentPath,
 } from './common';
 import { Register, RenderData, CopyData, Options } from '../proc/common';
 
@@ -105,7 +106,8 @@ async function CustomFile(
 }
 
 function ParsePath(outputPath: string, options: Options) {
-	const basePath = outputPath.replace(options.directory, '');
+	const basePath = TrimParentPath(outputPath, options.directory);
+
 	const oldFile = `${options.customDir}${basePath}`;
 
 	return { basePath, oldFile };

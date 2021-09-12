@@ -1,7 +1,36 @@
 import { TableInfo } from '../config';
-import { render, RegCpFile, RegCpFiles, RenderFiles } from '../lib/generate';
-import { MkDir } from '../lib/common';
+import { RegCpFile, RegCpFiles, RenderFiles } from '../lib/generate';
 import { Options, Register } from '../proc/common';
+
+export type JpaContext = {
+	source: string;
+	service: string;
+	controller: string;
+	filter: string;
+	util: string;
+	test: string;
+	testUtil: string;
+};
+
+export function PreparePath(options: Options): JpaContext {
+	const source = `/src/main/kotlin/${options.packagePath}`;
+	const test = `/src/test/kotlin/${options.packagePath}`;
+	const service = `${source}/service`;
+	const controller = `${source}/controller`;
+	const filter = `${source}/filter`;
+	const util = `${source}/util`;
+	const testUtil = `${test}/util`;
+
+	return {
+		source,
+		test,
+		service,
+		controller,
+		filter,
+		util,
+		testUtil,
+	};
+}
 
 export async function GenerateProject(
 	reg: Register,
@@ -11,8 +40,8 @@ export async function GenerateProject(
 	groups: any
 ) {
 	options.packagePath = options.package.replace(/\./g, '/');
-
 	const out = options.directory;
+	const ctx = PreparePath(options);
 
 	reg.outPath = out;
 
@@ -21,149 +50,99 @@ export async function GenerateProject(
 	await RegCpFile(reg, `/README.md`, `${out}/README.md`, options);
 	await RegCpFile(reg, `/gitignore`, `${out}/.gitignore`, options);
 
-	await render(
+	await RenderFiles(
+		[
+			['/build.gradle.kts.ejs', '/build.gradle.kts'],
+			['/settings.gradle.kts.ejs', '/settings.gradle.kts'],
+			['/config/custom.json', '/config/custom.json'],
+			[
+				'/src/main/resources/application.properties.ejs',
+				'/src/main/resources/application.properties',
+			],
+			[
+				`/src/main/kotlin/demo/Application.kt.ejs`,
+				`${ctx.source}/Application.kt`,
+			],
+			[
+				`/src/main/kotlin/demo/SpecConfiguration.kt.ejs`,
+				`${ctx.source}/SpecConfiguration.kt`,
+			],
+			[
+				`/src/main/kotlin/demo/RepositoryRestCustomization.kt.ejs`,
+				`${ctx.source}/RepositoryRestCustomization.kt`,
+			],
+			[
+				`/src/main/kotlin/demo/controller/AppController.kt.ejs`,
+				`${ctx.controller}/AppController.kt`,
+			],
+			[
+				`/src/main/kotlin/demo/filter/ApiFilter.kt.ejs`,
+				`${ctx.filter}/ApiFilter.kt`,
+			],
+			[
+				`/src/main/kotlin/demo/util/FilterHelper.kt.ejs`,
+				`${ctx.util}/FilterHelper.kt`,
+			],
+			[
+				`/src/main/kotlin/demo/util/BaseUtil.kt.ejs`,
+				`${ctx.util}/BaseUtil.kt`,
+			],
+		],
+		'',
+		out,
+		{ ...options, options, tables, groups },
 		reg,
-		`/build.gradle.kts.ejs`,
-		options,
-		`${out}/build.gradle.kts`,
-		options
-	);
-	await render(
-		reg,
-		`/settings.gradle.kts.ejs`,
-		options,
-		`${out}/settings.gradle.kts`,
-		options
-	);
-
-	await MkDir(`${out}/config`);
-	await RegCpFile(
-		reg,
-		`/config/custom.json`,
-		`${out}/config/custom.json`,
-		options
-	);
-
-	await MkDir(`${out}/gradle/wrapper`);
-	await RegCpFile(
-		reg,
-		`/gradle/wrapper/gradle-wrapper.jar`,
-		`${out}/gradle/wrapper/gradle-wrapper.jar`,
-		options
-	);
-	await RegCpFile(
-		reg,
-		`/gradle/wrapper/gradle-wrapper.properties`,
-		`${out}/gradle/wrapper/gradle-wrapper.properties`,
-		options
-	);
-
-	await MkDir(`${out}/src/main/resources`);
-	await render(
-		reg,
-		`/src/main/resources/application.properties.ejs`,
-		options,
-		`${out}/src/main/resources/application.properties`,
-		options
-	);
-
-	await MkDir(`${out}/src/main/kotlin/${options.packagePath}`);
-	await render(
-		reg,
-		`/src/main/kotlin/demo/Application.kt.ejs`,
-		options,
-		`${out}/src/main/kotlin/${options.packagePath}/Application.kt`,
-		options
-	);
-	await render(
-		reg,
-		`/src/main/kotlin/demo/SpecConfiguration.kt.ejs`,
-		options,
-		`${out}/src/main/kotlin/${options.packagePath}/SpecConfiguration.kt`,
 		options
 	);
 
-	await render(
+	await RegCpFiles(
+		[
+			[
+				'/gradle/wrapper/gradle-wrapper.jar',
+				'/gradle/wrapper/gradle-wrapper.jar',
+			],
+			[
+				'/gradle/wrapper/gradle-wrapper.properties',
+				'/gradle/wrapper/gradle-wrapper.properties',
+			],
+		],
+		'',
+		out,
 		reg,
-		`/src/main/kotlin/demo/RepositoryRestCustomization.kt.ejs`,
-		{ options, tables, groups },
-		`${out}/src/main/kotlin/${options.packagePath}/RepositoryRestCustomization.kt`,
 		options
 	);
 
-	const controllerPath = `${out}/src/main/kotlin/${options.packagePath}/controller`;
-	await MkDir(controllerPath);
-	await render(
-		reg,
-		`/src/main/kotlin/demo/controller/AppController.kt.ejs`,
-		options,
-		`${controllerPath}/AppController.kt`,
-		options
-	);
-
-	const filterPath = `${out}/src/main/kotlin/${options.packagePath}/filter`;
-	await MkDir(filterPath);
-	await render(
-		reg,
-		`/src/main/kotlin/demo/filter/ApiFilter.kt.ejs`,
-		{ options, tables, groups },
-		`${filterPath}/ApiFilter.kt`,
-		options
-	);
-
-	const servicePath = `${out}/src/main/kotlin/${options.packagePath}/service`;
-	await MkDir(servicePath);
-
-	await MkDir(`${out}/src/main/kotlin/${options.packagePath}/util`);
-	await render(
-		reg,
-		`/src/main/kotlin/demo/util/FilterHelper.kt.ejs`,
-		options,
-		`${out}/src/main/kotlin/${options.packagePath}/util/FilterHelper.kt`,
-		options
-	);
-	await render(
-		reg,
-		`/src/main/kotlin/demo/util/BaseUtil.kt.ejs`,
-		options,
-		`${out}/src/main/kotlin/${options.packagePath}/util/BaseUtil.kt`,
-		options
-	);
-
-	await GenerateTest(reg, options, out);
-	await GenerateWebSocket(reg, options, out, controllerPath, servicePath);
-	await GenerateThymeleaf(reg, options, out, controllerPath);
+	await GenerateTest(reg, options, out, ctx);
+	await GenerateWebSocket(reg, options, out, ctx);
+	await GenerateThymeleaf(reg, options, out, ctx);
 }
 
 async function GenerateWebSocket(
 	reg: Register,
 	options: Options,
 	out: string,
-	controllerPath: string,
-	servicePath: string
+	ctx: JpaContext
 ) {
 	if (options.hints.includes('websocket')) {
-		await render(
-			reg,
-			`/src/main/kotlin/demo/WebSocketConfig.kt.ejs`,
+		await RenderFiles(
+			[
+				[
+					`/src/main/kotlin/demo/WebSocketConfig.kt.ejs`,
+					`${ctx.source}/WebSocketConfig.kt`,
+				],
+				[
+					`/src/main/kotlin/demo/controller/BroadcastController.kt.ejs`,
+					`${ctx.controller}/BroadcastController.kt`,
+				],
+				[
+					`/src/main/kotlin/demo/service/EntityMessageService.kt.ejs`,
+					`${ctx.service}/EntityMessageService.kt`,
+				],
+			],
+			'',
+			out,
 			options,
-			`${out}/src/main/kotlin/${options.packagePath}/WebSocketConfig.kt`,
-			options
-		);
-
-		await render(
 			reg,
-			`/src/main/kotlin/demo/controller/BroadcastController.kt.ejs`,
-			options,
-			`${controllerPath}/BroadcastController.kt`,
-			options
-		);
-
-		await render(
-			reg,
-			`/src/main/kotlin/demo/service/EntityMessageService.kt.ejs`,
-			options,
-			`${servicePath}/EntityMessageService.kt`,
 			options
 		);
 	}
@@ -173,43 +152,50 @@ async function GenerateThymeleaf(
 	reg: Register,
 	options: Options,
 	out: string,
-	controllerPath: string
+	ctx: JpaContext
 ) {
 	if (options.hints.includes('thymeleaf')) {
-		await render(
-			reg,
-			`/src/main/kotlin/demo/ThymeleafExtraConfiguration.kt.ejs`,
+		await RenderFiles(
+			[
+				[
+					`/src/main/kotlin/demo/ThymeleafExtraConfiguration.kt.ejs`,
+					`${ctx.source}/ThymeleafExtraConfiguration.kt`,
+				],
+				[
+					`/src/main/kotlin/demo/controller/PageController.kt.ejs`,
+					`${ctx.controller}/PageController.kt`,
+				],
+			],
+			'',
+			out,
 			options,
-			`${out}/src/main/kotlin/${options.packagePath}/ThymeleafExtraConfiguration.kt`,
-			options
-		);
-
-		await render(
 			reg,
-			`/src/main/kotlin/demo/controller/PageController.kt.ejs`,
-			options,
-			`${controllerPath}/PageController.kt`,
 			options
 		);
 	}
 }
 
-async function GenerateTest(reg: Register, options: Options, out: string) {
-	await MkDir(`${out}/src/test/kotlin/${options.packagePath}`);
-	await render(
-		reg,
-		`/src/test/kotlin/demo/ApplicationTests.kt.ejs`,
+async function GenerateTest(
+	reg: Register,
+	options: Options,
+	out: string,
+	ctx: JpaContext
+) {
+	await RenderFiles(
+		[
+			[
+				`/src/test/kotlin/demo/ApplicationTests.kt.ejs`,
+				`${ctx.test}/ApplicationTests.kt`,
+			],
+			[
+				`/src/test/kotlin/demo/util/TestPageRequest.kt.ejs`,
+				`${ctx.testUtil}/TestPageRequest.kt`,
+			],
+		],
+		'',
+		out,
 		options,
-		`${out}/src/test/kotlin/${options.packagePath}/ApplicationTests.kt`,
-		options
-	);
-
-	await MkDir(`${out}/src/test/kotlin/${options.packagePath}/util`);
-	await render(
 		reg,
-		`/src/test/kotlin/demo/util/TestPageRequest.kt.ejs`,
-		options,
-		`${out}/src/test/kotlin/${options.packagePath}/util/TestPageRequest.kt`,
 		options
 	);
 }

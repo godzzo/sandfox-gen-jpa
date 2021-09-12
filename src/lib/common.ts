@@ -132,3 +132,9 @@ export async function WriteJsonFile(filePath: string, data: any) {
 		console.log(error);
 	}
 }
+
+export function TrimParentPath(filePath: string, parentPath: string) {
+	return GetAbsolutePath(filePath)
+		.replace(GetAbsolutePath(parentPath), '')
+		.replace(/\\/g, '/');
+}

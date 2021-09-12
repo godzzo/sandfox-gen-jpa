@@ -65,7 +65,7 @@
 		},
 		{
 			"name": "Run clip/render-dir",
-			"command": "ts-node --project tests/tsconfig.json tests/clip/render-dir.ts",
+			"command": "ts-node --project tests/tsconfig.json tests/clip/apply-custom.ts",
 			"request": "launch",
 			"type": "node-terminal",
 			"skipFiles": [
