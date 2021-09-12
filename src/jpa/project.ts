@@ -1,5 +1,5 @@
 import { TableInfo } from '../config';
-import { render, RegCpFile } from '../lib/generate';
+import { render, RegCpFile, RegCpFiles, RenderFiles } from '../lib/generate';
 import { MkDir } from '../lib/common';
 import { Options, Register } from '../proc/common';
 

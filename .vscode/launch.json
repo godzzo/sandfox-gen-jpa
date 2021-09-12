@@ -62,6 +62,16 @@
 			"outFiles": ["${workspaceFolder}/dist/**/*.js"],
 			"args": ["--config", "config/simple.json", "save"],
 			"skipFiles": ["<node_internals>/**/*.js"]
+		},
+		{
+			"name": "Run clip/render-dir",
+			"command": "ts-node --project tests/tsconfig.json tests/clip/render-dir.ts",
+			"request": "launch",
+			"type": "node-terminal",
+			"skipFiles": [
+				"${workspaceRoot}/node_modules/**/*.js",
+				"<node_internals>/**/*.js"
+			]
 		}
 	]
 }

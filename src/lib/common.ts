@@ -31,8 +31,28 @@ export function Warn(msg: string) {
 	console.log(chalk.red.bgWhite(msg));
 }
 
+export function ScanDir(dirPath: string, files: string[]) {
+	fs.readdirSync(dirPath).forEach((file) => {
+		const absolutePath = path.join(dirPath, file);
+
+		if (fs.statSync(absolutePath).isDirectory()) {
+			ScanDir(absolutePath, files);
+		} else {
+			files.push(absolutePath);
+		}
+	});
+}
+
 export function GetDir(filePath: string) {
 	return path.dirname(filePath);
+}
+
+export function GetFileName(dirPath: string) {
+	return path.basename(dirPath);
+}
+
+export function GetAbsolutePath(dirPath: string) {
+	return path.resolve(dirPath);
 }
 
 export async function MakeDirFromFile(oldFile: string) {

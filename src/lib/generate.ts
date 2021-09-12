@@ -1,6 +1,7 @@
 import { Options } from './../proc/common';
 import * as util from 'util';
 import * as fs from 'fs';
+import path from 'path';
 import * as pluralize from 'pluralize';
 
 import { renderFile } from 'ejs';
@@ -8,9 +9,12 @@ import {
 	CopyFile,
 	FileExists,
 	FileSize,
+	GetAbsolutePath,
 	Log,
+	MakeDirFromFile,
 	ReadFile,
 	ReadJsonFile,
+	ScanDir,
 } from './common';
 import { Register } from '../proc/common';
 
@@ -47,22 +51,28 @@ export function SetNames(data: any): any {
 	return data;
 }
 
-export async function ReadTemplateJsonFile(path: string, options: Options) {
-	const filePath = LocateTemplateFile(path, options);
+export async function ReadTemplateJsonFile(tPath: string, options: Options) {
+	const filePath = LocateTemplateFile(tPath, options);
 
 	return await ReadJsonFile(filePath);
 }
 
 export function LocateTemplateFile(
-	path: string,
+	tPath: string,
 	options: Options,
 	template?: string
 ) {
 	template = template ?? options.template;
 
 	for (const templatePath of options.templatePaths) {
-		const checkPath = `${templatePath}/${template}${path}`;
-		const checkTemplatePath = `${templatePath}/templates/${template}${path}`;
+		const checkPath = `${templatePath}/${template}${tPath}`;
+		const checkTemplatePath = `${templatePath}/templates/${template}${tPath}`;
+
+		console.log({
+			checkPath,
+			checkTemplatePath,
+			exists: [FileExists(checkPath), FileExists(checkTemplatePath)],
+		});
 
 		if (FileExists(checkPath)) {
 			return checkPath;
@@ -74,20 +84,96 @@ export function LocateTemplateFile(
 	}
 
 	throw new Error(
-		`Template not found: ${path} in templateHierarchy: ${JSON.stringify(
+		`Template not found: ${tPath} in templateHierarchy: ${JSON.stringify(
 			options.templatePaths
 		)}`
 	);
 }
 
 export async function ReadTemplateFile(
-	path: string,
+	tPath: string,
 	options: Options,
 	template?: string
 ) {
-	path = LocateTemplateFile(path, options, template);
+	tPath = LocateTemplateFile(tPath, options, template);
 
-	return await ReadFile(path);
+	return await ReadFile(tPath);
+}
+
+type GenerateName = (source: string) => string;
+type RenderMode = 'RENDER' | 'COPY' | 'NONE';
+
+export async function RenderDir(
+	sourceDir: string,
+	targetDir: string,
+	model: any,
+	register: Register,
+	options: Options,
+	targetPath?: string | GenerateName,
+	modeCheck?: (source: string) => RenderMode
+) {
+	let sourceFiles: string[] = [];
+
+	// Calculate template source folder
+	const templateFromDir = LocateTemplateFile(sourceDir, options);
+
+	ScanDir(templateFromDir, sourceFiles);
+
+	console.log('sourceFiles IN', [sourceDir, sourceFiles]);
+
+	// Clear template source folder from founded file path
+	sourceFiles = sourceFiles.map((el) =>
+		GetAbsolutePath(el)
+			.replace(GetAbsolutePath(templateFromDir), '')
+			.replace(/\\/g, '/')
+	);
+
+	console.log('sourceFiles OUT', sourceFiles);
+
+	for (const sourceFile of sourceFiles) {
+		const mode = modeCheck ? modeCheck(sourceFile) : 'RENDER';
+
+		if (mode !== 'NONE') {
+			const source = path.join(sourceDir, sourceFile);
+
+			let targetFile = sourceFile;
+
+			if (targetPath) {
+				if (typeof targetPath === 'string') {
+					targetFile = sourceFile.replace(/_code_/g, targetPath);
+				} else {
+					targetFile = targetPath(sourceFile);
+				}
+			}
+
+			const target = path.join(targetDir, targetFile);
+
+			if (mode === 'RENDER') {
+				await render(register, source, model, target, options);
+			} else {
+				await RegCpFile(register, source, target, options);
+			}
+		}
+	}
+}
+
+export async function RenderFiles(
+	files: [source: string, target: string][],
+	templatePath: string,
+	outputPath: string,
+	model: any,
+	register: Register,
+	options: Options
+) {
+	for (const [source, target] of files) {
+		await render(
+			register,
+			path.join(templatePath, source),
+			model,
+			path.join(outputPath, target),
+			options
+		);
+	}
 }
 
 export async function render(
@@ -107,6 +193,8 @@ export async function render(
 		const html = await renderFile(templatePath, model, {
 			outputFunctionName: 'echo',
 		});
+
+		await MakeDirFromFile(outputPath);
 
 		await writeFile(outputPath, html, 'utf8');
 
@@ -139,6 +227,23 @@ export async function RegOwnCpFile(
 	});
 }
 
+export async function RegCpFiles(
+	files: [source: string, target: string][],
+	templatePath: string,
+	outputPath: string,
+	register: Register,
+	options: Options
+) {
+	for (const [source, target] of files) {
+		await RegCpFile(
+			register,
+			path.join(templatePath, source),
+			path.join(outputPath, target),
+			options
+		);
+	}
+}
+
 export async function RegCpFile(
 	register: Register,
 	srcPath: string,
@@ -146,6 +251,8 @@ export async function RegCpFile(
 	options: Options
 ) {
 	srcPath = LocateTemplateFile(srcPath, options);
+
+	await MakeDirFromFile(destPath);
 
 	await CopyFile(srcPath, destPath);
 

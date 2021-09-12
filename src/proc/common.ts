@@ -21,6 +21,15 @@ export type CopyData = {
 	custom: CustomData | null;
 };
 
+export function InitRegister(outPath = './out/tmp'): Register {
+	return {
+		renders: [],
+		copies: [],
+		outPath,
+		created: new Date().toISOString(),
+	};
+}
+
 export type Register = {
 	outPath: string;
 	created: string;
