@@ -1,4 +1,4 @@
-import { RenderFiles } from '../../src/lib/generate';
+import { RenderFiles } from 'gdut-generate';
 import { InitRegister, Options } from '../../src/proc/common';
 import { ParseCliArgs } from '../../src/lib/cli.args';
 import { WriteJsonFile } from '../../src/lib/common';

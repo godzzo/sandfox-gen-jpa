@@ -9,8 +9,8 @@ import {
 } from './lib/common';
 import { ProcGenerate } from './proc/proc';
 import { LoadMeta, LoadGSMeta } from './lib/meta';
-import { ApplyCustom } from './lib/custom';
-import { ReadTemplateFile } from './lib/generate';
+import { ApplyCustom } from 'gdut-generate';
+import { ReadTemplateFile } from 'gdut-generate';
 
 import chalk from 'chalk';
 

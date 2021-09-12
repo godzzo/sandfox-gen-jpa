@@ -1,5 +1,5 @@
 import { TableInfo, ColumnInfo } from './../config';
-import { SetNames } from '../lib/generate';
+import { SetNames } from 'gdut-generate';
 import pluralize from 'pluralize';
 
 export type RelationInfo = {

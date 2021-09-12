@@ -1,6 +1,6 @@
 import { TableInfo } from '../config';
-import { RegCpFile, render } from '../lib/generate';
-import { MkDir, Warn, WriteJsonFile } from '../lib/common';
+import { RegCpFile, render } from 'gdut-generate';
+import { MkDir, Warn } from '../lib/common';
 import { Options, Register } from '../proc/common';
 
 export async function TsModelGenerateProject(

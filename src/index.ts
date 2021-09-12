@@ -5,7 +5,6 @@ export * from './jpa/jpa';
 export * from './lib/cli.args';
 export * from './lib/common';
 export * from './lib/meta';
-export * from './lib/generate';
 export * from './proc/common';
 export * from './proc/proc';
 export * from './ts-model/ts-model';

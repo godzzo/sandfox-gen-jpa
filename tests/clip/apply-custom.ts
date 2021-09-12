@@ -1,8 +1,8 @@
-import { RenderDir } from '../../src/lib/generate';
+import { RenderDir } from 'gdut-generate';
 import { InitRegister, Options, Register } from '../../src/proc/common';
 import { ParseCliArgs } from '../../src/lib/cli.args';
 import { ReadJsonFile, WriteJsonFile } from '../../src/lib/common';
-import { ApplyCustom } from '../../src/lib/custom';
+import { ApplyCustom } from 'gdut-generate';
 
 const out = './out/tmp/custom-src-dir';
 const custom = './out/tmp/custom-real-dir';

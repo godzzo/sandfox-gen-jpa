@@ -1,7 +1,7 @@
 import { TableInfo } from '../config';
 import { Options, Register } from '../proc/common';
 import { MkDir, WriteJsonFile } from '../lib/common';
-import { RegOwnCpFile } from '../lib/generate';
+import { RegOwnCpFile } from 'gdut-generate';
 import { GenerateProject } from './project';
 import { GenerateTables } from './table';
 import { GenerateGroups } from './group';

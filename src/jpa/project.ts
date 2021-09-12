@@ -1,5 +1,5 @@
 import { TableInfo } from '../config';
-import { RegCpFile, RegCpFiles, RenderFiles } from '../lib/generate';
+import { RegCpFile, RegCpFiles, RenderFiles } from 'gdut-generate';
 import { Options, Register } from '../proc/common';
 
 export type JpaContext = {
@@ -45,16 +45,32 @@ export async function GenerateProject(
 
 	reg.outPath = out;
 
-	await RegCpFile(reg, `/gradlew`, `${out}/gradlew`, options);
-	await RegCpFile(reg, `/gradlew.bat`, `${out}/gradlew.bat`, options);
-	await RegCpFile(reg, `/README.md`, `${out}/README.md`, options);
-	await RegCpFile(reg, `/gitignore`, `${out}/.gitignore`, options);
+	await RegCpFiles(
+		[
+			[`/gradlew`, `/gradlew`],
+			[`/gradlew.bat`, `/gradlew.bat`],
+			[`/README.md`, `/README.md`],
+			[`/gitignore`, `/.gitignore`],
+			['/config/custom.json', '/config/custom.json'],
+			[
+				'/gradle/wrapper/gradle-wrapper.jar',
+				'/gradle/wrapper/gradle-wrapper.jar',
+			],
+			[
+				'/gradle/wrapper/gradle-wrapper.properties',
+				'/gradle/wrapper/gradle-wrapper.properties',
+			],
+		],
+		'',
+		out,
+		reg,
+		options
+	);
 
 	await RenderFiles(
 		[
 			['/build.gradle.kts.ejs', '/build.gradle.kts'],
 			['/settings.gradle.kts.ejs', '/settings.gradle.kts'],
-			['/config/custom.json', '/config/custom.json'],
 			[
 				'/src/main/resources/application.properties.ejs',
 				'/src/main/resources/application.properties',
@@ -91,23 +107,6 @@ export async function GenerateProject(
 		'',
 		out,
 		{ ...options, options, tables, groups },
-		reg,
-		options
-	);
-
-	await RegCpFiles(
-		[
-			[
-				'/gradle/wrapper/gradle-wrapper.jar',
-				'/gradle/wrapper/gradle-wrapper.jar',
-			],
-			[
-				'/gradle/wrapper/gradle-wrapper.properties',
-				'/gradle/wrapper/gradle-wrapper.properties',
-			],
-		],
-		'',
-		out,
 		reg,
 		options
 	);

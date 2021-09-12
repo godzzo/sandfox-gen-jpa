@@ -1,7 +1,7 @@
 import { Options } from '../proc/common';
 import { FileExists, Log, ReadJsonFile } from '../lib/common';
 import { LoadSheet, GSInfo } from '../lib/common';
-import { LocateTemplateFile } from '../lib/generate';
+import { LocateTemplateFile } from 'gdut-generate';
 
 export async function LoadGSMeta(options: Options) {
 	if (options.sheetId === 'NONE') {

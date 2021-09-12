@@ -1,4 +1,4 @@
-import { render } from '../lib/generate';
+import { render } from 'gdut-generate';
 import { MkDir, Warn } from '../lib/common';
 import { Options, Register } from '../proc/common';
 

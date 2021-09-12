@@ -1,7 +1,7 @@
 import { TableInfo, TableConfig } from '../config';
 import { Register, RenderData, CopyData, Options } from './common';
 import { WriteJsonFile } from '../lib/common';
-import { ReadTemplateJsonFile } from '../lib/generate';
+import { ReadTemplateJsonFile } from 'gdut-generate';
 import { PrepareData } from '../data/data';
 import { JpaGenerateProject, JpaGeneratedConfig } from '../jpa/jpa';
 import {

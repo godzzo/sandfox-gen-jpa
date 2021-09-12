@@ -1,4 +1,4 @@
-import { SetNames } from '../lib/generate';
+import { SetNames } from 'gdut-generate';
 import { ParseDomain, SetupColumn } from './data';
 
 /**

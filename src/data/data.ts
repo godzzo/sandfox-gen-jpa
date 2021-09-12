@@ -1,6 +1,6 @@
 import { ColumnInfo } from './../config';
 import { ColumnConfig, TableConfig, TableInfo } from '../config';
-import { SetNames } from '../lib/generate';
+import { SetNames } from 'gdut-generate';
 import { Register, Options } from '../proc/common';
 import { Warn } from '../lib/common';
 import { AddGroupsForTable } from './group';
