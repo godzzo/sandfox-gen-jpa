@@ -5,8 +5,10 @@ import org.apache.commons.io.FileUtils
 import org.springframework.core.io.ClassPathResource
 import java.io.File
 import java.io.InputStream
-import java.nio.charset.Charset
 import java.util.*
+import java.nio.charset.Charset
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 
 object BaseUtil {
     const val strHUAccent = "áéíóöőúüűÁÉÍÓÖŐÚÜŰ "
@@ -36,23 +38,50 @@ object BaseUtil {
         return parseJsonFile(File(dataFilePath))
     }
 
-    fun parseJsonString(json: String): Map<String, Any> {
+    fun parseJsonArrayFile(dataFilePath: String): List<Map<String, Any>> {
+        return parseJsonArrayFile(File(dataFilePath))
+    }
+
+    fun createObjectMapper(): ObjectMapper {
         val objectMapper = ObjectMapper()
+
+        // objectMapper.registerModule(JSR310Module())
+        objectMapper.registerModule(JavaTimeModule())
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+
+        return objectMapper
+    }
+
+    fun parseJsonString(json: String): Map<String, Any> {
+        val objectMapper = createObjectMapper()
 
         return objectMapper.readValue(json, Map::class.java) as Map<String, Any>
     }
 
     fun <T> parseJsonString(json: String, valueType: Class<T>): T {
-        val objectMapper = ObjectMapper()
+        val objectMapper = createObjectMapper()
 
         return objectMapper.readValue(json, valueType)
     }
 
     fun parseJsonFile(dataFile: File): Map<String, Any> {
-        val mapper = ObjectMapper()
+        val mapper = createObjectMapper()
 
         return mapper.readValue(dataFile, Map::class.java) as Map<String, Any>
     }
+
+    fun parseJsonArrayFile(dataFile: File): List<Map<String, Any>> {
+        val mapper = createObjectMapper()
+
+        return mapper.readValue(dataFile, List::class.java) as List<Map<String, Any>>
+    }
+
+    fun parseJsonArrayResource(resourceLocator: String): List<Map<String, Any>> {
+        val file = ClassPathResource(resourceLocator).file
+
+        return parseJsonArrayFile(file)
+    }
+
 
     fun parseJsonResource(resourceLocator: String): Map<String, Any> {
         val file = ClassPathResource(resourceLocator).file
@@ -60,13 +89,14 @@ object BaseUtil {
         return parseJsonFile(file)
     }
 
-    fun writeJsonString(json: Any): String {
-        val objectMapper = ObjectMapper()
+    fun toJsonString(json: Any): String {
+        val objectMapper = createObjectMapper()
         return objectMapper.writeValueAsString(json)
     }
 
     fun writeJsonFile(dataPath: String, dataFilePath: String, json: Any) {
-        val objectMapper = ObjectMapper()
+        val objectMapper = createObjectMapper()
+
         val jsonContent = objectMapper.writeValueAsString(json)
 
         // log.debug("jsonContent: ${jsonContent}")
