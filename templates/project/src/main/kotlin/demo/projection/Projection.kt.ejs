@@ -29,14 +29,17 @@ table.columns.forEach((column, idx) => {
 	}
 });
 %>
-<% 
+<%
 // Az egy (1:N) oldalu relációk getter -ként berakása
 if (generateGenerateOne) {
 	table.columns.forEach((column, idx) => {
-		if (column.type.startsWith('relation.one')) {
+		if (
+			column.type.startsWith('relation.one')
+			&& !(column.relation.name === table.owner && table.nested)
+		) {
 %>
-	fun get<%= column.lowerCamelName.endsWith('Id')? 
-		column.camelName.substring(0, column.lowerCamelName.length-2): 
+	fun get<%= column.lowerCamelName.endsWith('Id')?
+		column.camelName.substring(0, column.lowerCamelName.length-2):
 		column.camelName %>(): <%= column.relation.camelName %>BaseProjection
 <%
 		}
@@ -52,7 +55,7 @@ if (generateGenerateMany) {
 	fun get<%= column.camelName %>(): List<<%= column.relation.camelName %>BaseProjection>
 <%
 		}
-	}); 
+	});
 }
 %>
 }
