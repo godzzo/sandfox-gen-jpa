@@ -31,11 +31,11 @@ table.columns.forEach((column, idx) => {
 %>
 <%
 // Az egy (1:N) oldalu relációk getter -ként berakása
-if (generateGenerateOne) {
+if (extraNameTag !== 'Base') {
 	table.columns.forEach((column, idx) => {
 		if (
 			column.type.startsWith('relation.one')
-			&& !(column.relation.name === table.owner && table.nested)
+			&& !(table.owner === column.relation.name && table.nested)
 		) {
 %>
 	fun get<%= column.lowerCamelName.endsWith('Id')?
@@ -48,7 +48,23 @@ if (generateGenerateOne) {
 %>
 <%
 // Az egy (N:1) oldalu relációk getter -ként berakása
-if (generateGenerateMany) {
+// Az alapnál a saját beágyazott alrekordok mennek le
+if (extraNameTag === '') {
+	table.columns.forEach((column, idx) => {
+		if (
+			column.type.startsWith('relation.many')
+			&& (table.name === column.relation.owner && column.relation.nested)
+		) {
+%>
+	fun get<%= column.camelName %>(): List<<%= column.relation.camelName %>BaseProjection>
+<%
+		}
+	});
+}
+%><%
+// Az egy (N:1) oldalu relációk getter -ként berakása
+// Revision -nél az összes many relation
+if (extraNameTag === 'Revision') {
 	table.columns.forEach((column, idx) => {
 		if (column.type.startsWith('relation.many')) {
 %>

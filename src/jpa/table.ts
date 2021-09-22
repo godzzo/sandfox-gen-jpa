@@ -123,8 +123,6 @@ async function GenerateProjections(
 	await MkDir(projPath);
 
 	meta.extraNameTag = '';
-	meta.generateGenerateOne = true;
-	meta.generateGenerateMany = false;
 	await render(
 		reg,
 		`/${prjPath}/projection/Projection.kt.ejs`,
@@ -134,8 +132,6 @@ async function GenerateProjections(
 	);
 
 	meta.extraNameTag = 'Base';
-	meta.generateGenerateOne = false;
-	meta.generateGenerateMany = false;
 	await render(
 		reg,
 		`/${prjPath}/projection/Projection.kt.ejs`,
@@ -146,8 +142,6 @@ async function GenerateProjections(
 
 	if (meta.table.audit) {
 		meta.extraNameTag = 'Revision';
-		meta.generateGenerateOne = true;
-		meta.generateGenerateMany = true;
 		await render(
 			reg,
 			`/${prjPath}/projection/Projection.kt.ejs`,
