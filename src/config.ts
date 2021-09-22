@@ -9,6 +9,7 @@ export interface TableConfig {
 	nested?: string | boolean;
 	owner?: string;
 	hint?: string; // mtom:keyword
+	hints?: { [name: string]: string };
 }
 
 export type ColumnConfig = {

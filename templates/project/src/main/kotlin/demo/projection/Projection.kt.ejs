@@ -45,6 +45,22 @@ if (extraNameTag !== 'Base') {
 		}
 	});
 }
+%><%
+// Az egy (1:N) oldalu relációk getter -ként berakása
+if (extraNameTag === 'Base') {
+	table.columns.forEach((column, idx) => {
+		if (
+			column.type.startsWith('relation.one')
+			&& table.hints.mtom && table.hints.mtom === column.relation.name
+		) {
+%>
+	fun get<%= column.lowerCamelName.endsWith('Id')?
+		column.camelName.substring(0, column.lowerCamelName.length-2):
+		column.camelName %>(): <%= column.relation.camelName %>BaseProjection
+<%
+		}
+	});
+}
 %>
 <%
 // Az egy (N:1) oldalu relációk getter -ként berakása

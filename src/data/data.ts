@@ -25,6 +25,19 @@ export async function PrepareData(
 		table.audit = table.audit && table.audit === 'yes';
 		table.nested = table.nested && table.nested === 'yes';
 		table.owner = table.owner ? table.owner : 'NONE';
+
+		table.hints = {};
+
+		if (table.hint) {
+			table.hint
+				.split(/\n/g)
+				.map((el) => el.split(':'))
+				.forEach(([name, val]) => {
+					if (table.hints) {
+						table.hints[name] = val;
+					}
+				});
+		}
 	});
 
 	await ParseTables(register, options, project, tables, data, groups);
