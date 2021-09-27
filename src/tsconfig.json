@@ -8,7 +8,7 @@
 		"module": "CommonJS",
 		"strict": true,
 		"esModuleInterop": true,
-		"lib": ["es2017", "es7", "es6", "dom"],
+		"lib": ["es2019", "es7", "es6", "dom"],
 		"declaration": true,
 		"outDir": "../dist",
 		"sourceMap": true

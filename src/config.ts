@@ -70,6 +70,8 @@ export type TableInfo = NameInfo & {
 	groups: string;
 	authority: string;
 	audit: boolean;
+	nested: boolean;
+	owner: string;
 	groupNames: string[];
 	groupConfigs: GroupInfo[];
 	primaries: ColumnInfo[];

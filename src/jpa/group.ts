@@ -1,3 +1,4 @@
+import { TableInfo } from './../config';
 import { render } from 'gdut-generate';
 import { MkDir, Warn } from '../lib/common';
 import { Options, Register } from '../proc/common';
@@ -5,7 +6,7 @@ import { Options, Register } from '../proc/common';
 export async function GenerateGroups(
 	reg: Register,
 	options: Options,
-	tables: any[],
+	tables: TableInfo[],
 	project: string,
 	groups: any
 ) {
@@ -17,7 +18,7 @@ export async function GenerateGroups(
 	for (const groupName of Object.keys(groups)) {
 		const group = groups[groupName];
 
-		const meta = { group, options, project };
+		const meta = { group, tables, options, project };
 
 		await render(
 			reg,
@@ -27,10 +28,33 @@ export async function GenerateGroups(
 			options
 		);
 
+		const subCols = tables
+			.map((table, idx) =>
+				table.columns
+					.filter(
+						(el) =>
+							el.type.startsWith('relation.many') &&
+							typeof el.relation !== 'string' &&
+							table.name === el.relation.owner &&
+							el.relation.nested &&
+							el.relation.groupNames.includes(group.name)
+					)
+					.map((column) => ({
+						table,
+						column,
+					}))
+			)
+			.flat();
+
+		const unique = (value: string, index: number, self: string[]) =>
+			self.indexOf(value) === index;
+
+		const subTypes = subCols.map((el) => el.table.camelName).filter(unique);
+
 		await render(
 			reg,
 			`/${prjPath}/group/GroupValidator.kt.ejs`,
-			meta,
+			{ ...meta, subCols, subTypes },
 			`${groupPath}/${meta.group.camelName}Validator.kt`,
 			options
 		);
