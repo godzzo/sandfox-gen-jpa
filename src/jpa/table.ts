@@ -52,6 +52,14 @@ async function GenerateTable(
 		options
 	);
 
+	await render(
+		reg,
+		`/${prjPath}/controller/BatchController.kt.ejs`,
+		meta,
+		`${controllerPath}/${meta.table.camelName}BatchController.kt`,
+		options
+	);
+
 	const servicePath = `${options.directory}/src/main/kotlin/${options.packagePath}/service`;
 	await MkDir(servicePath);
 

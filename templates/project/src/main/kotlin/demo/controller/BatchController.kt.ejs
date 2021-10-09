@@ -1,0 +1,78 @@
+package <%= options.package %>.controller
+
+import <%= options.package %>.domain.<%= table.camelName %>
+import <%= options.package %>.repository.<%= table.camelName %>Repository
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationEventPublisher
+import org.springframework.data.projection.ProjectionFactory
+import org.springframework.data.rest.core.event.AfterCreateEvent
+import org.springframework.data.rest.core.event.AfterSaveEvent
+import org.springframework.data.rest.core.event.BeforeCreateEvent
+import org.springframework.data.rest.core.event.BeforeSaveEvent
+import org.springframework.data.rest.webmvc.*
+import org.springframework.hateoas.CollectionModel
+import org.springframework.hateoas.EntityModel
+import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.*
+
+@Controller
+@RepositoryRestController
+@CrossOrigin
+class <%= table.camelName %>BatchController(
+    @Autowired val repository: <%= table.camelName %>Repository,
+    @Autowired val factory: ProjectionFactory,
+    @Autowired val publisher: ApplicationEventPublisher,
+) {
+    val log = LoggerFactory.getLogger(<%= table.camelName %>BatchController::class.java)
+
+    @RequestMapping(
+        value = ["/{repository}/save<%= table.pluralCamelName %>"],
+        method = [RequestMethod.POST]
+    )
+    fun saveAll(
+        @RequestBody data: EntityModel<<%= table.camelName %>Entities>,
+        assembler: PersistentEntityResourceAssembler
+    ): ResponseEntity<*>? {
+
+        if (data.content != null) {
+            val list = data.content!!.data.toMutableList()
+
+            val status = list.map {
+                val old = repository.findById(it.id)
+
+                if (old.isPresent) {
+                    publisher.publishEvent(BeforeSaveEvent(it))
+
+                    "save"
+                } else {
+                    publisher.publishEvent(BeforeCreateEvent(it))
+
+                    "create"
+                }
+            }
+
+            val result = repository.saveAll(list)
+            var i = 0
+
+            result.map {
+                if (status[i] == "save") {
+                    publisher.publishEvent(AfterSaveEvent(it))
+                } else {
+                    publisher.publishEvent(AfterCreateEvent(it))
+                }
+
+                i++
+            }
+
+            val resources = CollectionModel.of<MutableList<<%= table.camelName %>>>(result)
+
+            return ResponseEntity.ok<Any>(resources)
+        } else {
+            return ResponseEntity.ok<Any>(CollectionModel.empty<MutableList<<%= table.camelName %>>>())
+        }
+    }
+}
+
+class <%= table.camelName %>Entities(var data: MutableList<<%= table.camelName %>>)
