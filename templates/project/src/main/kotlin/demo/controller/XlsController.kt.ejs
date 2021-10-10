@@ -1,8 +1,8 @@
-package <%= options.package %>.controller
+package <%= options.package %>.controller.xls
 
-import <%= options.package %>.service.<%= table.camelName %>Filter
-import <%= options.package %>.service.<%= table.camelName %>FilterService
-import <%= options.package %>.service.<%= table.camelName %>XlsService
+import <%= options.package %>.service.filter.<%= table.camelName %>Filter
+import <%= options.package %>.service.filter.<%= table.camelName %>FilterService
+import <%= options.package %>.service.xls.<%= table.camelName %>XlsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Controller

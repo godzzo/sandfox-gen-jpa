@@ -1,12 +1,12 @@
-package <%= options.package %>.controller
+package <%= options.package %>.controller.filter
 
 import <%= options.package %>.repository.<%= table.camelName %>Repository
-import <%= options.package %>.projection.<%= table.camelName %>Projection<% 
+import <%= options.package %>.projection.<%= table.camelName %>Projection<%
 if ( options.hints.includes('envers') && table.audit ) { %>
-import <%= options.package %>.projection.<%= table.camelName %>RevisionProjection<% 
+import <%= options.package %>.projection.<%= table.camelName %>RevisionProjection<%
 } %>
-import <%= options.package %>.service.<%= table.camelName %>Filter
-import <%= options.package %>.service.<%= table.camelName %>FilterService
+import <%= options.package %>.service.filter.<%= table.camelName %>Filter
+import <%= options.package %>.service.filter.<%= table.camelName %>FilterService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
@@ -44,10 +44,10 @@ class <%= table.camelName %>FilterController(
 
 /*FOXB-BODY*/
 /*FOXE-BODY*/
-<% 
+<%
 if ( options.hints.includes('envers') && table.audit ) { %>
 	@RequestMapping(value = ["/{repository}/revision<%= table.pluralCamelName %>"], method = [RequestMethod.GET])
-	fun versions(id : Long, pageable: Pageable, assembler: PagedResourcesAssembler<<%= table.camelName %>Revision>) 
+	fun versions(id : Long, pageable: Pageable, assembler: PagedResourcesAssembler<<%= table.camelName %>Revision>)
 			: ResponseEntity<PagedModel<EntityModel<<%= table.camelName %>Revision>>> {
 
 		val result = repository.findRevisions(id, pageable)
@@ -61,7 +61,7 @@ if ( options.hints.includes('envers') && table.audit ) { %>
 
 		return ResponseEntity(assembler.toModel(projected), HttpStatus.OK)
 	}
-<% 
+<%
 }
 %>
 	@RequestMapping(value = ["/{repository}/filter<%= table.pluralCamelName %>"], method = [RequestMethod.GET])
@@ -79,10 +79,10 @@ if ( options.hints.includes('envers') && table.audit ) { %>
 		return ResponseEntity(assembler.toModel(projected), HttpStatus.OK)
 	}
 }
-<% 
-if ( options.hints.includes('envers') && table.audit ) { 
+<%
+if ( options.hints.includes('envers') && table.audit ) {
 %>
 data class <%= table.camelName %>Revision(val revisionNumber: Int, val projection: <%= table.camelName %>RevisionProjection)
-<% 
-} 
+<%
+}
 %>

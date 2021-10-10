@@ -48,7 +48,7 @@ async function GenerateTable(
 		reg,
 		`/${prjPath}/controller/FilterController.kt.ejs`,
 		meta,
-		`${controllerPath}/${meta.table.camelName}FilterController.kt`,
+		`${controllerPath}/filter/${meta.table.camelName}FilterController.kt`,
 		options
 	);
 
@@ -56,7 +56,7 @@ async function GenerateTable(
 		reg,
 		`/${prjPath}/controller/BatchController.kt.ejs`,
 		meta,
-		`${controllerPath}/${meta.table.camelName}BatchController.kt`,
+		`${controllerPath}/batch/${meta.table.camelName}BatchController.kt`,
 		options
 	);
 
@@ -67,7 +67,7 @@ async function GenerateTable(
 		reg,
 		`/${prjPath}/service/FilterService.kt.ejs`,
 		meta,
-		`${servicePath}/${meta.table.camelName}FilterService.kt`,
+		`${servicePath}/filter/${meta.table.camelName}FilterService.kt`,
 		options
 	);
 
@@ -205,7 +205,7 @@ async function GenerateXls(
 			reg,
 			`/${prjPath}/controller/XlsController.kt.ejs`,
 			meta,
-			`${controllerPath}/${meta.table.camelName}XlsController.kt`,
+			`${controllerPath}/xls/${meta.table.camelName}XlsController.kt`,
 			options
 		);
 
@@ -215,7 +215,7 @@ async function GenerateXls(
 			reg,
 			`/${prjPath}/service/XlsService.kt.ejs`,
 			meta,
-			`${servicePath}/${meta.table.camelName}XlsService.kt`,
+			`${servicePath}/xls/${meta.table.camelName}XlsService.kt`,
 			options
 		);
 
