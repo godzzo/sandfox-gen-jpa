@@ -40,6 +40,7 @@ class <%= table.camelName %>FilterService(
 	fun createSpecifications(filter: <%= table.camelName %>Filter, session: HttpSession): Specification<<%= table.camelName %>>? = Specification.where(
 		Specification { root, query, cb ->
 			val predicates = mutableListOf<Predicate>()
+			val fullText = mutableListOf<Predicate>()
 
 			// predicates.add(cb.like(root.get<String>("lastName"), "${search}%"))
 			// FilterHelper.like(root, query, cb, predicates, "firstName", search)
@@ -50,7 +51,7 @@ class <%= table.camelName %>FilterService(
 			if (column.ktType === 'String') {
 		%>
 			FilterHelper.fullLike(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_like)
-			FilterHelper.fullLike(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.fullText_like)
+			FilterHelper.fullLike(root, query, cb, fullText, "<%= column.lowerCamelName%>", filter.fullText_like)
 			FilterHelper.equal(root, query, cb, predicates, "<%= column.lowerCamelName%>", filter.<%= column.lowerCamelName%>_equal)
 		<%
 			}
@@ -69,6 +70,10 @@ class <%= table.camelName %>FilterService(
 		%><%
 		})
 		%>
+
+			if (filter.fullText_like != null) {
+				predicates.add(cb.or(*fullText.toTypedArray()))
+			}
 
 /*FOXB-SPEC*/
 /*FOXE-SPEC*/
