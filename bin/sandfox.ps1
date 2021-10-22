@@ -1,9 +1,10 @@
 Function GetCredential([ref]$path) {
 	if (Test-Path 'env:SANDFOX') {
-		$sandFoxPath = Get-Variable SANDFOX -valueOnly
+		$sandFoxPath = $Env:SANDFOX
+		# $sandFoxPath = Get-Variable SANDFOX -valueOnly
 
 		if (Test-Path "$sandFoxPath/$credentialPath") {
-			$path.Value = "$currentPath/$credentialPath"
+			$path.Value = "$sandFoxPath/$credentialPath"
 		} else {
 			throw "CREDENTIALS not found need to exists: $currentPath/$credentialPath !"
 		}
@@ -25,11 +26,18 @@ $credentialPath = "credentials/gd-drive-access.json"
 GetCredential -path ([ref]$credentialPath)
 
 if (Test-Path 'env:SANDFOX') {
-	$sandFoxPath = Get-Variable SANDFOX -valueOnly
+	$sandFoxPath = $Env:SANDFOX
+	# $sandFoxPath = Get-Variable SANDFOX -valueOnly
 
 	Set-Location "$sandFoxPath"
 
-	Write-Output 'node dist/main.js --config "$configPath" generate'
+	Write-Output "node dist/main.js --customDir $currentPath --credential $credentialPath --config $configPath generate"
+
+	node dist/main.js --customDir "$currentPath" --credential "$credentialPath" --config "$configPath" generate
+
+	Start-Sleep -s 2
+
+	node dist/main.js --customDir "$currentPath" --credential "$credentialPath" --config "$configPath" custom
 } else {
 	Write-Output 'SANDFOX Environment variable not set! Fallback to NPX...'
 
