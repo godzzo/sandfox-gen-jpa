@@ -1,0 +1,59 @@
+package <%= options.package %>.group
+
+import <%= options.package %>.group.<%= group.camelName %>
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.rest.core.annotation.*
+import org.springframework.stereotype.Component
+import org.slf4j.LoggerFactory
+/*FOXB-IMPORT*/
+/*FOXE-IMPORT*/
+
+@Component
+@RepositoryEventHandler(<%= group.camelName %>::class)
+class <%= group.camelName %>EventHandler(
+/*FOXB-CARG*/
+/*FOXE-CARG*/
+) {
+    private val log = LoggerFactory.getLogger(<%= group.camelName %>EventHandler::class.java)
+
+/*FOXB-CODE*/
+/*FOXE-CODE*/
+
+    fun before(type: String, entity: <%= group.camelName %>) {
+/*FOXB-BEFORE*/
+/*FOXE-BEFORE*/
+    }
+
+    fun after(type: String, entity: <%= group.camelName %>) {
+/*FOXB-AFTER*/
+/*FOXE-AFTER*/
+    }
+
+    @HandleBeforeCreate
+    fun beforeCreate(entity: <%= group.camelName %>) {
+        before("insert", entity)
+
+    }
+    @HandleBeforeDelete
+    fun beforeDelete(entity: <%= group.camelName %>) {
+        before("delete", entity)
+    }
+    @HandleBeforeSave
+    fun beforeSave(entity: <%= group.camelName %>) {
+        before("update", entity)
+    }
+
+    @HandleAfterCreate
+    fun afterCreate(entity: <%= group.camelName %>) {
+        after("insert", entity)
+
+    }
+    @HandleAfterDelete
+    fun afterDelete(entity: <%= group.camelName %>) {
+        after("delete", entity)
+    }
+    @HandleAfterSave
+    fun afterSave(entity: <%= group.camelName %>) {
+        after("update", entity)
+    }
+}

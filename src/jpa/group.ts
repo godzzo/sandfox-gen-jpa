@@ -58,5 +58,13 @@ export async function GenerateGroups(
 			`${groupPath}/${meta.group.camelName}Validator.kt`,
 			options
 		);
+
+		await render(
+			reg,
+			`/${prjPath}/group/EventHandler.kt.ejs`,
+			{ ...meta, table: group },
+			`${groupPath}/${meta.group.camelName}EventHandler.kt`,
+			options
+		);
 	}
 }
