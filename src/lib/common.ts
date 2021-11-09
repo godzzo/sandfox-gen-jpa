@@ -15,6 +15,14 @@ export interface GSInfo {
 	sheets: GSSheet[];
 }
 
+export function SplitOpts(opts?: string) {
+	if (opts) {
+		return opts.includes('\n') ? opts.split(/\n/g) : opts.split(',');
+	} else {
+		return [];
+	}
+}
+
 export async function LoadSheet(spreadsheetId: string, credentials: string) {
 	return (await LoadSpreadsheetData(spreadsheetId, credentials)) as GSInfo;
 }

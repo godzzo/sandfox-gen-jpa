@@ -1,5 +1,6 @@
 import { SetNames } from 'gdut-generate';
 import { ParseDomain, SetupColumn } from './data';
+import { SplitOpts } from '../lib/common';
 
 /**
  * Locate Groups of given Table (add Group Columns)
@@ -11,7 +12,7 @@ export function AddGroupsForTable(
 	groups: any
 ) {
 	if (table.groups) {
-		table.groupNames = table.groups.split(',');
+		table.groupNames = SplitOpts(table.groups);
 
 		table.groupConfigs = table.groupNames.map((groupName: string) => {
 			return LocateAndRegisterGroup(groupName, groups, data);

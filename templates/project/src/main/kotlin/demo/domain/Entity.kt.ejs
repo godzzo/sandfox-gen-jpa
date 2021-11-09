@@ -3,7 +3,7 @@ package <%= options.package %>.domain
 import java.io.Serializable
 import java.time.*
 import javax.persistence.*
-import javax.validation.constraints.*<% 
+import javax.validation.constraints.*<%
 if ( options.hints.includes('envers') && table.audit ) { %>
 import org.hibernate.envers.*<% } %>
 import <%= options.package %>.group.*
@@ -11,13 +11,13 @@ import <%= options.package %>.entitylistener.<%= table.camelName %>EntityListene
 /*FOXB-IMPORT*/
 /*FOXE-IMPORT*/
 
-@Entity<% 
+@Entity<%
 if ( options.hints.includes('envers') && table.audit ) {%>
 @Audited<%}%>
 @EntityListeners(<%= table.camelName %>EntityListener::class)
 @Table(name = "<%= table.name %>")<%
 if (table.primaries.length > 1) { %>
-@IdClass(<%= table.camelName %>Id::class)<% 
+@IdClass(<%= table.camelName %>Id::class)<%
 } %>
 class <%= table.camelName %>(
 /*FOXB-CARGB*/
@@ -28,25 +28,28 @@ class <%= table.camelName %>(
 ): <%
 if (table.groupConfigs.length > 0) {
 	table.groupConfigs.forEach((group, idx) => {
-%><%= idx === 0? group.camelName: ', ' + group.camelName%><% 
+%><%= idx === 0? group.camelName: ', ' + group.camelName%><%
 	});%>, <%
 }
-%>Serializable {
+%>Serializable
+/*FOXB-IFACE*/
+/*FOXE-IFACE*/
+{
 /*FOXB-BLOCKB*/
 /*FOXE-BLOCKB*/
-<% 
-table.columns.forEach((column, idx) => { 
-%><% 
-	if (!column.type.startsWith('relation') 
+<%
+table.columns.forEach((column, idx) => {
+%><%
+	if (!column.type.startsWith('relation')
 		&& !column.type.startsWith('primary')
 		) { // NORMAL Columns
 %>
 	// <%= column.caption %>
 	<%- column.annotations %>
-	<%= (column.group ? 'override ' : '') %>var <%= column.lowerCamelName %>: <%= column.ktType %>? = null
-<%	} 
-%><% 
-}); 
+	<%= (column.group || column.options.includes('override')? 'override ' : '') %>var <%= column.lowerCamelName %>: <%= column.ktType %>? = null
+<%	}
+%><%
+});
 %>
 <%if (table.primaries.length < 2) { %>
 	@Id<%
@@ -57,45 +60,45 @@ table.columns.forEach((column, idx) => {
 %>
 	@Column(name = "<%= table.primary.name %>")
 	var <%= table.primary.lowerCamelName %>: <%= table.primary.ktType %> = <%- table.primary.ktValue %>
-<%} else {%><% 
-table.primaries.forEach((column, idx) => { 
+<%} else {%><%
+table.primaries.forEach((column, idx) => {
 %>
 	// <%= column.caption %>
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "<%= column.name + (column.name.endsWith('_id')? '': '_id') %>")
-	val <%= column.lowerCamelName.endsWith('Id')? 
-		column.lowerCamelName.substring(0, column.lowerCamelName.length-2): 
+	val <%= column.lowerCamelName.endsWith('Id')?
+		column.lowerCamelName.substring(0, column.lowerCamelName.length-2):
 		column.lowerCamelName %>: <%= column.relation.camelName %><%if (idx<table.primaries.length-1) {%>,<%}%>
 <%
 });
 %>
 <%}%>
 
-<% 
-table.columns.forEach((column, idx) => { 
-%><% 
-	if (column.type.startsWith('relation.one') 
+<%
+table.columns.forEach((column, idx) => {
+%><%
+	if (column.type.startsWith('relation.one')
 		&& !(column.relation.name === table.owner && table.nested)
-	) { 
+	) {
 %>
 	// <%= column.caption %>
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "<%= column.name + (column.name.endsWith('_id')? '': '_id') %>", nullable=<%= column.needed != 'yes'? 'true': 'false'  %>,
 		foreignKey = ForeignKey(name = "fk_<%= table.name%>_<%= (column.name.endsWith('_id')? column.name.substring(0, column.name.length-3): column.name) %>")
-	)<% 
+	)<%
 if ( options.hints.includes('envers') && table.audit && !column.relation.audit) { %>
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)<% } %>
-	<%= 
-		(column.group ? 'override ' : '') 
+	<%=
+		(column.group || column.options.includes('override')? 'override ' : '')
 	%>var <%= column.relName %>: <%= column.relation.camelName %>? = null
 <%
-	} 
-%><% 
-}); 
-%><% 
-table.columns.forEach((column, idx) => { 
-	if (column.type.startsWith('relation.many')) { 
+	}
+%><%
+});
+%><%
+table.columns.forEach((column, idx) => {
+	if (column.type.startsWith('relation.many')) {
 		if (table.name === column.relation.owner && column.relation.nested) {
 %>
 	@OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
@@ -106,10 +109,10 @@ table.columns.forEach((column, idx) => {
 <% } else {%>
 	@OneToMany(mappedBy = "<%= table.lowerCamelName %>", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
 	var <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf()
-<% 
+<%
 		}
-	} 
-}); 
+	}
+});
 %>
 /*FOXB-BLOCKE*/
 /*FOXE-BLOCKE*/
@@ -119,16 +122,16 @@ if (table.primaries.length > 1) {
 %>
 // https://stackoverflow.com/questions/23837561/jpa-2-0-many-to-many-with-extra-column
 data class <%= table.camelName %>Id (
-<% 
-table.primaries.forEach((column, idx) => { 
+<%
+table.primaries.forEach((column, idx) => {
 %>	<%if (idx>0) {%>,<%}%>
-	val <%= column.lowerCamelName.endsWith('Id')? 
-		column.lowerCamelName.substring(0, column.lowerCamelName.length-2): 
+	val <%= column.lowerCamelName.endsWith('Id')?
+		column.lowerCamelName.substring(0, column.lowerCamelName.length-2):
 		column.lowerCamelName %>: Long = 0
 <%
 });
 %>
 ): Serializable
-<% 
-} 
+<%
+}
 %>

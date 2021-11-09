@@ -2,7 +2,7 @@ import { ColumnInfo } from './../config';
 import { ColumnConfig, TableConfig, TableInfo } from '../config';
 import { SetNames } from 'gdut-generate';
 import { Register, Options } from '../proc/common';
-import { Warn } from '../lib/common';
+import { SplitOpts, Warn } from '../lib/common';
 import { AddGroupsForTable } from './group';
 import {
 	CheckBidirectionalRelation,
@@ -122,7 +122,7 @@ export function SetupColumn(columnConfig: ColumnConfig, table?: any) {
 	column.resultMode = columnConfig.resultMode
 		? columnConfig.resultMode
 		: 'NONE';
-	column.options = columnConfig.opts ? columnConfig.opts.split(',') : [];
+	column.options = SplitOpts(columnConfig.opts);
 
 	if (columnConfig.type) {
 		if (columnConfig.type.startsWith('primary') && table) {
