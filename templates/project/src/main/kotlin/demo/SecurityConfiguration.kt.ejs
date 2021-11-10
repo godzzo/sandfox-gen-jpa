@@ -43,13 +43,19 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
 
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
+/*FOXB-CFGSEC-INIT*/
+/*FOXE-CFGSEC-INIT*/
         val authorizeRequests = http
             .csrf().disable()
             .authorizeRequests()
+/*FOXB-CFGSEC-REQ*/
+/*FOXE-CFGSEC-REQ*/
 
         val access = configAccess(authorizeRequests)
 
         access!!
+/*FOXB-CFGSEC-ACC*/
+/*FOXE-CFGSEC-ACC*/
             .anyRequest()
                 .authenticated()
             .and()
@@ -60,10 +66,10 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
             : ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry? {
         var cfg = configurer
 <%
-tables.forEach((table, idx) => { 
+tables.forEach((table, idx) => {
 %>
         cfg = configApiAccess("<%= table.pluralLowerCamelName %>", cfg)
-<% 
+<%
 });
 %>
         return cfg;
