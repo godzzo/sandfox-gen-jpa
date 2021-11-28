@@ -105,6 +105,7 @@ function PrepareColumn(
 	return column;
 }
 
+// TODO: ColumnConfig is ColumnInfo when called with GroupColumn to create TableColumn! Handling like writeOnly...
 export function SetupColumn(columnConfig: ColumnConfig, table?: any) {
 	SetNames(columnConfig);
 
@@ -116,9 +117,11 @@ export function SetupColumn(columnConfig: ColumnConfig, table?: any) {
 
 	PrepareTsType(columnConfig);
 
+	// prettier-ignore
 	column.writeOnly = columnConfig.writeOnly
-		? columnConfig.writeOnly === 'yes'
+		? (columnConfig.writeOnly as any) === true || columnConfig.writeOnly === 'yes'
 		: false;
+
 	column.resultMode = columnConfig.resultMode
 		? columnConfig.resultMode
 		: 'NONE';
