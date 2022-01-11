@@ -52,6 +52,12 @@ object BaseUtil {
         return objectMapper
     }
 
+    fun convertToMap(value: Any): Map<String, Any> {
+        val objectMapper = createObjectMapper()
+
+        return objectMapper.convertValue(value, Map::class.java) as Map<String, Any>
+    }
+
     fun parseJsonString(json: String): Map<String, Any> {
         val objectMapper = createObjectMapper()
 
