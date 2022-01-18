@@ -1,0 +1,158 @@
+package <%= package %>.service
+
+import <%= package %>.util.*
+import <%= package %>.util.BaseUtil.convertToMap
+import org.springframework.beans.factory.BeanFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
+import org.springframework.context.ApplicationEventPublisher
+import org.springframework.data.projection.SpelAwareProxyProjectionFactory
+import org.springframework.data.repository.CrudRepository
+import org.springframework.data.rest.core.event.AfterCreateEvent
+import org.springframework.data.rest.core.event.AfterSaveEvent
+import org.springframework.data.rest.core.event.BeforeCreateEvent
+import org.springframework.data.rest.core.event.BeforeSaveEvent
+import org.springframework.stereotype.Service
+import java.util.*
+
+@Service
+class RepositoryService(
+    val applicationContext: ApplicationContext,
+    @Autowired val publisher: ApplicationEventPublisher,
+    @Autowired val beanFactory: BeanFactory,
+) {
+    fun getCrudRepository(name: String): CrudRepository<Any, Int> =
+        applicationContext.getBean("${name}Repository") as CrudRepository<Any, Int>
+
+    fun <T> findById(name: String, id: Int): Optional<T> {
+        val repository = getCrudRepository(name)
+
+        return repository.findById(id) as Optional<T>
+    }
+
+    fun <T> createProjection(entity: Any, entityName: String, type: String = "Base"): T {
+        val factory = SpelAwareProxyProjectionFactory()
+
+        factory.setBeanFactory(beanFactory)
+
+        val klass = Class.forName(projectionClassName(entityName, type))
+
+        return factory.createProjection(klass, entity) as T
+    }
+
+    fun <T> createProjection(entity: Any, klass: Class<T>): T {
+        val factory = SpelAwareProxyProjectionFactory()
+
+        factory.setBeanFactory(beanFactory)
+
+        return factory.createProjection(klass, entity)
+    }
+
+    fun projectToMap(entity: Any, klass: Class<*>): Map<String, Any> {
+        val projected = createProjection(entity, klass)
+
+        return convertToMap(projected)
+    }
+
+    fun <T> findByIdWithProjection(name: String, id: Int, type: String = "Base"): T? {
+        val writingOpt = findById<Any>(name, id)
+
+        return if (writingOpt.isPresent) {
+            createProjection<T>(writingOpt.get(), name, type)
+        } else {
+            null
+        }
+    }
+
+    fun beforeEvent(entity: Any) {
+        val id = getId(entity)
+
+        if (id == null || id < 1) {
+            publisher.publishEvent(BeforeCreateEvent(entity))
+        } else {
+            publisher.publishEvent(BeforeSaveEvent(entity))
+        }
+    }
+
+    fun afterEvent(savedEntity: Any, id: Int?) {
+        if (id == null) {
+            publisher.publishEvent(AfterCreateEvent(savedEntity))
+        } else {
+            publisher.publishEvent(AfterSaveEvent(savedEntity))
+        }
+    }
+
+    fun save(name: String, entity: Any, event: Boolean = true): Any {
+        val repository = getCrudRepository(name)
+        val id = getId(entity)
+
+        if (event) {
+            beforeEvent(entity)
+        }
+
+        val savedEntity = repository.save(entity)
+
+        if (event) {
+            afterEvent(savedEntity, id)
+        }
+
+        return savedEntity
+    }
+
+    fun <T> findAndGetProp(name: String, id: Int, propName: String): T? {
+        val opt = findById<Any>(name, id)
+
+        return if (opt.isPresent) {
+            return getProp<T?>(opt.get(), propName)
+        } else {
+            null
+        }
+    }
+
+    fun <T> findAndSetProp(
+        entityName: String,
+        id: Int,
+        propName: String,
+        value: Any?,
+        event: Boolean = true
+    ): T? {
+        val opt = findById<Any>(entityName, id)
+        var savedEntity: T? = null
+
+        if (opt.isPresent) {
+            val entity = opt.get()
+
+            setProp(entity, propName, value)
+
+            savedEntity = save(entityName, entity, event) as T
+        }
+
+        return savedEntity
+    }
+
+    fun newEntity(name: String): Any? {
+        return newObject(entityClassName(name))
+    }
+
+    fun entityClassName(name: String): String {
+        val repository = getCrudRepository(name)
+        val interfaces = repository::class.java.interfaces
+
+        val domainName = interfaces[0].packageName!!.replace(
+            "\\.repository.*$".toRegex(),
+            ".domain.${name.capitalize()}"
+        )
+
+        return domainName
+    }
+
+    fun projectionClassName(name: String, type: String = "Base"): String {
+        val repository = getCrudRepository(name)
+        val interfaces = repository::class.java.interfaces
+
+        return interfaces[0].packageName.replace(
+            "\\.repository.*$".toRegex(),
+            ".projection.${name.capitalize()}${type}Projection"
+        )
+    }
+}

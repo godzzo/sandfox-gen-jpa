@@ -114,6 +114,30 @@ export async function GenerateProject(
 	await GenerateTest(reg, options, out, ctx);
 	await GenerateWebSocket(reg, options, out, ctx);
 	await GenerateThymeleaf(reg, options, out, ctx);
+	await GenerateRepositoryService(reg, options, out, ctx);
+}
+
+async function GenerateRepositoryService(
+	reg: Register,
+	options: Options,
+	out: string,
+	ctx: JpaContext
+) {
+	if (options.hints.includes('repository-service')) {
+		await RenderFiles(
+			[
+				[
+					`/src/main/kotlin/demo/service/RepositoryService.kt.ejs`,
+					`${ctx.service}/RepositoryService.kt`,
+				],
+			],
+			'',
+			out,
+			options,
+			reg,
+			options
+		);
+	}
 }
 
 async function GenerateWebSocket(
