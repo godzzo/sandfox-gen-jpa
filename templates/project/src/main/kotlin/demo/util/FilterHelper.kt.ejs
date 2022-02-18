@@ -105,6 +105,13 @@ object FilterHelper {
         }
     }
 
+	fun equal(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+			  predicates: MutableList<Predicate>, name: String?, value: Boolean?) {
+		if (value != null) {
+			predicates.add(cb.equal(root.get<String>(name), value))
+		}
+	}
+
     fun equal(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
             predicates: MutableList<Predicate>, name: String?, value: Int?) {
         if (value != null) {
