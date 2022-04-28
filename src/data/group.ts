@@ -24,6 +24,7 @@ export function AddGroupsForTable(
 			columns.push(...groupConfig.columns);
 		});
 	} else {
+		table.groupNames = [];
 		table.groupConfigs = [];
 	}
 }
