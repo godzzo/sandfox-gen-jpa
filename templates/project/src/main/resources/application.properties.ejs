@@ -1,14 +1,23 @@
+<% if ( hints.includes('postgis') ) { %>
+spring.datasource.url=jdbc:postgresql://localhost:5432/<%= project %>
+spring.datasource.driver-class-name=org.postgresql.Driver
+<% } else { %>
 spring.datasource.url=jdbc:mysql://localhost:3306/<%= project %>?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Budapest&characterEncoding=utf8
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+<% } %>
 spring.datasource.username=user
 spring.datasource.password=abc123
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 # https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#data-properties
 # https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#configurations
 
 # spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
-
+<% if ( hints.includes('postgis') ) { %>
+spring.jpa.database-platform=org.hibernate.spatial.dialect.postgis.PostgisDialect
+spring.jpa.properties.hibernate.dialect=org.hibernate.spatial.dialect.postgis.PostgisDialect
+<% } else { %>
 spring.jpa.database-platform=org.hibernate.dialect.MySQL55Dialect
+<% } %>
 
 spring.jpa.generate-ddl=true
 spring.jpa.hibernate.ddl-auto=update

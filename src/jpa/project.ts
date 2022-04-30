@@ -115,6 +115,7 @@ export async function GenerateProject(
 	await GenerateWebSocket(reg, options, out, ctx);
 	await GenerateThymeleaf(reg, options, out, ctx);
 	await GenerateRepositoryService(reg, options, out, ctx);
+	await GeneratePostGIS(reg, options, out, ctx);
 }
 
 async function GenerateRepositoryService(
@@ -221,4 +222,27 @@ async function GenerateTest(
 		reg,
 		options
 	);
+}
+
+async function GeneratePostGIS(
+	reg: Register,
+	options: Options,
+	out: string,
+	ctx: JpaContext
+) {
+	if (options.hints.includes('postgis')) {
+		await RenderFiles(
+			[
+				[
+					`/src/main/kotlin/demo/JsonBuilderConfig.kt.ejs`,
+					`${ctx.source}/JsonBuilderConfig.kt`,
+				],
+			],
+			'',
+			out,
+			options,
+			reg,
+			options
+		);
+	}
 }
