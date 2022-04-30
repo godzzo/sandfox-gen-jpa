@@ -5,7 +5,7 @@
 	"project": "simple-nest",
 	"package": "org.godzzo.simple",
 	"credential": "credentials/gd-drive-access.json",
-	"hint": "auth",
+	"hint": "auth,postgis,map",
 	"showLogo": "yes",
 	"showArgs": "yes"
 }

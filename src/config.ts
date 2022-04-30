@@ -46,6 +46,7 @@ export type ColumnInfo = NameInfo & {
 	table: string;
 	caption: string;
 	type: string;
+	definition?: string;
 	length?: number;
 	needed: string;
 	defaultValue: any;

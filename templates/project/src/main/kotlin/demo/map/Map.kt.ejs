@@ -1,27 +1,29 @@
 package <%= options.package %>.map
 
-import java.time.*
+import java.time.*<%
+if ( options.hints.includes('postgis') ) { %>
+import org.geolatte.geom.*<% } %>
 import <%= options.package %>.domain.*
 
 class <%= table.camelName %>Map {
-<% 
-table.columns.forEach((column, idx) => { 
-	if (!column.type.startsWith('relation') 
+<%
+table.columns.forEach((column, idx) => {
+	if (!column.type.startsWith('relation')
 		&& !column.type.startsWith('primary')
 	) { // NORMAL Columns
 %>
 	// <%= column.caption %>
-	var <%= column.lowerCamelName %>: <%= column.ktType %>? = null<%	
+	var <%= column.lowerCamelName %>: <%- column.ktType %>? = null<%
 	}
-}); 
+});
 %>
-<% 
+<%
 if (table.primaries.length < 2) {%>
-	var <%= table.primary.lowerCamelName %>: <%= table.primary.ktType %>? = null<% 
+	var <%= table.primary.lowerCamelName %>: <%= table.primary.ktType %>? = null<%
 }
 %>
-<% 
-table.columns.forEach((column, idx) => { 
+<%
+table.columns.forEach((column, idx) => {
 	if (column.type.startsWith('relation.one')
 			&& !(column.relation.name === table.owner && table.nested)) {
 		if (column.relation.owner === table.name) {
@@ -34,7 +36,7 @@ table.columns.forEach((column, idx) => {
 	}
 });
 %>
-<% 
+<%
 table.columns.forEach((column, idx) => { if (column.type.startsWith('relation.many')) {
 	if (column.relation.owner === table.name) {
 %>
@@ -47,9 +49,9 @@ table.columns.forEach((column, idx) => { if (column.type.startsWith('relation.ma
 object <%= table.camelName %>Mapper {
 	fun toObject(entity: <%= table.camelName %>): <%= table.camelName %>Map {
 		val item = <%= table.camelName %>Map()
-<% 
-table.columns.forEach((column, idx) => { 
-	if (!column.type.startsWith('relation') 
+<%
+table.columns.forEach((column, idx) => {
+	if (!column.type.startsWith('relation')
 		&& !column.type.startsWith('primary')
 	) { // NORMAL Columns
 %>
@@ -72,9 +74,9 @@ table.columns.forEach((column, idx) => {
 	}
 
 	fun applyROneForObject(item : <%= table.camelName %>Map, entity: <%= table.camelName %>) {
-<% 
-table.columns.forEach((column, idx) => { 
-	if (column.type.startsWith('relation.one') 
+<%
+table.columns.forEach((column, idx) => {
+	if (column.type.startsWith('relation.one')
 			&& !(column.relation.name === table.owner && table.nested)) {
 		if (column.relation.owner === table.name) {
 %>
@@ -93,7 +95,7 @@ table.columns.forEach((column, idx) => {
 	}
 
 	fun applyRManyForObject(item : <%= table.camelName %>Map, entity: <%= table.camelName %>) {
-<% 
+<%
 table.columns.forEach((column, idx) => { if (column.type.startsWith('relation.many')) {
 	if (column.relation.owner === table.name) {
 %>
@@ -108,13 +110,13 @@ table.columns.forEach((column, idx) => { if (column.type.startsWith('relation.ma
 
 	fun toMap(entity: <%= table.camelName %>): MutableMap<String, Any?> {
 		val item = mutableMapOf<String, Any?>()
-<% 
-table.columns.forEach((column, idx) => { 
-	if (!column.type.startsWith('relation') 
+<%
+table.columns.forEach((column, idx) => {
+	if (!column.type.startsWith('relation')
 		&& !column.type.startsWith('primary')
 	) { // NORMAL Columns
 %>
-		item["<%= column.lowerCamelName %>"] = entity.<%= column.lowerCamelName %><%	
+		item["<%= column.lowerCamelName %>"] = entity.<%= column.lowerCamelName %><%
 	}
 });
 %>
@@ -133,9 +135,9 @@ table.columns.forEach((column, idx) => {
 	}
 
 	fun applyROneForMap(item : MutableMap<String, Any?>, entity: <%= table.camelName %>) {
-<% 
-table.columns.forEach((column, idx) => { 
-	if (column.type.startsWith('relation.one') 
+<%
+table.columns.forEach((column, idx) => {
+	if (column.type.startsWith('relation.one')
 			&& !(column.relation.name === table.owner && table.nested)) {
 		if (column.relation.owner === table.name) {
 %>
@@ -154,7 +156,7 @@ table.columns.forEach((column, idx) => {
 	}
 
 	fun applyRManyForMap(item : MutableMap<String, Any?>, entity: <%= table.camelName %>) {
-<% 
+<%
 table.columns.forEach((column, idx) => { if (column.type.startsWith('relation.many')) {
 	if (column.relation.owner === table.name) {
 %>

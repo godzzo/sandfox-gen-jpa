@@ -4,6 +4,8 @@ import java.io.Serializable
 import java.time.*
 import javax.persistence.*
 import javax.validation.constraints.*<%
+if ( options.hints.includes('postgis') ) { %>
+import org.geolatte.geom.*<% } %><%
 if ( options.hints.includes('envers') && table.audit ) { %>
 import org.hibernate.envers.*<% } %>
 import <%= options.package %>.group.*
@@ -46,7 +48,7 @@ table.columns.forEach((column, idx) => {
 %>
 	// <%= column.caption %>
 	<%- column.annotations %>
-	<%= (column.group || column.options.includes('override')? 'override ' : '') %>var <%= column.lowerCamelName %>: <%= column.ktType %>? = null
+	<%= (column.group || column.options.includes('override')? 'override ' : '') %>var <%= column.lowerCamelName %>: <%- column.ktType %>? = null
 <%	}
 %><%
 });
