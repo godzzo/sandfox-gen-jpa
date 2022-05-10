@@ -215,6 +215,10 @@ async function GenerateTest(
 				`/src/test/kotlin/demo/util/TestPageRequest.kt.ejs`,
 				`${ctx.testUtil}/TestPageRequest.kt`,
 			],
+			[
+				'/src/test/resources/test.properties.ejs',
+				'/src/test/resources/test.properties',
+			],
 		],
 		'',
 		out,

@@ -3,8 +3,11 @@ package <%= options.package %>.controller
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*
+import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
@@ -15,10 +18,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
  */
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestPropertySource(locations = ["/test.properties"])
 class Test<%= table.camelName %>FilterController (
 /*FOXB-CARG*/
 /*FOXE-CARG*/
-        @Autowired val mockMvc: MockMvc
+    @Autowired val mockMvc: MockMvc<%
+if ( options.hints.includes('auth') ) { %>,
+    @Value("\${app.auth.username}") val userName: String,
+    @Value("\${app.auth.password}") val password: String<%
+} %>
 ) {
 /*FOXB-INIT*/
 /*FOXE-INIT*/
@@ -26,7 +34,12 @@ class Test<%= table.camelName %>FilterController (
     @Test
     fun testNoFilter() {
         mockMvc
-            .perform(MockMvcRequestBuilders.get("/api/<%= table.pluralLowerCamelName %>/filter<%= table.pluralCamelName %>"))
+            .perform(MockMvcRequestBuilders
+                .get("/api/<%= table.pluralLowerCamelName %>/filter<%= table.pluralCamelName %>")<%
+if ( options.hints.includes('auth') ) { %>
+                .with(httpBasic(userName, password))<%
+} %>
+            )
             .andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isOk)
 
