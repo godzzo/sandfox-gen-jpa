@@ -1,0 +1,20 @@
+export {};
+<%
+if ( hints.includes('postgis') ) { %>
+type Coordinates = number[] | Coordinates[];
+
+type CRS = {
+	type: string;
+	properties: { name: string };
+};<%
+} %>
+
+declare global {<%
+if ( hints.includes('postgis') ) { %>
+	type geometry = {
+		type: string;
+		crs: CRS;
+		coordinates: Coordinates;
+	};<%
+} %>
+}

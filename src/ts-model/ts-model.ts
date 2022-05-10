@@ -63,6 +63,16 @@ export async function GenerateProject(
 		`${out}/config/custom.json`,
 		options
 	);
+
+	if (options.hints.includes('postgis')) {
+		await render(
+			register,
+			`/src/data/model/model-types.d.ts.ejs`,
+			options,
+			`${out}/src/data/model/model-types.d.ts`,
+			options
+		);
+	}
 }
 
 export async function GenerateTables(
