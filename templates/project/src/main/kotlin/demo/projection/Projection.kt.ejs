@@ -1,6 +1,8 @@
 package <%= options.package %>.projection
 
-import <%= options.package %>.domain.*
+import <%= options.package %>.domain.*<%
+if ( options.hints.includes('postgis') ) { %>
+import org.geolatte.geom.*<% } %>
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.rest.core.config.Projection
 import java.time.*
@@ -24,7 +26,7 @@ table.columns.forEach((column, idx) => {
 	) {
 %>
 	// <%= column.caption %>
-	fun get<%= column.camelName %>(): <%= column.ktType %><%= column.needed != 'yes'? '?': ''  %>
+	fun get<%= column.camelName %>(): <%- column.ktType %><%= column.needed != 'yes'? '?': ''  %>
 <%
 	}
 });

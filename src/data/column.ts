@@ -2,6 +2,10 @@ export function SetColumnAnnotation(column: any): string {
 	let more = '';
 
 	more +=
+		column.definition && column.definition !== 'null'
+			? `, columnDefinition="${column.definition}"`
+			: '';
+	more +=
 		column.length && column.length !== 'null'
 			? `, length=${column.length}`
 			: '';

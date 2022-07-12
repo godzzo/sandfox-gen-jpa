@@ -1,0 +1,22 @@
+package <%= package %>
+
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
+import org.geolatte.geom.crs.CoordinateReferenceSystems.WGS84
+import org.geolatte.geom.json.GeolatteGeomModule
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
+import java.time.format.DateTimeFormatter
+
+@Configuration
+class JsonBuilderConfig {
+	@Bean
+	fun jackson2ObjectMapperBuilder(): Jackson2ObjectMapperBuilder {
+		return Jackson2ObjectMapperBuilder()
+			.modules(GeolatteGeomModule(WGS84), JavaTimeModule())
+			.serializers(LocalDateTimeSerializer(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+			.deserializers(LocalDateTimeDeserializer(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+	}
+}
