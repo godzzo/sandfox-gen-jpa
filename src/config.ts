@@ -79,4 +79,5 @@ export type TableInfo = NameInfo & {
 	primaries: ColumnInfo[];
 	primary: ColumnInfo;
 	columns: ColumnInfo[];
+	tableName: string;
 };

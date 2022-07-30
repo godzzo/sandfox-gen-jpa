@@ -38,6 +38,12 @@ export async function PrepareData(
 					}
 				});
 		}
+
+		if (table.hints && table.hints.tableName) {
+			(table as any).tableName = table.hints.tableName;
+		} else {
+			(table as any).tableName = table.name;
+		}
 	});
 
 	await ParseTables(register, options, project, tables, data, groups);

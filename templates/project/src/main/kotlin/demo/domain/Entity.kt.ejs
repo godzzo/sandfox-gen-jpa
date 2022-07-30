@@ -17,7 +17,7 @@ import <%= options.package %>.entitylistener.<%= table.camelName %>EntityListene
 if ( options.hints.includes('envers') && table.audit ) {%>
 @Audited<%}%>
 @EntityListeners(<%= table.camelName %>EntityListener::class)
-@Table(name = "<%= table.name %>")<%
+@Table(name = "<%= table.tableName %>")<%
 if (table.primaries.length > 1) { %>
 @IdClass(<%= table.camelName %>Id::class)<%
 } %>
