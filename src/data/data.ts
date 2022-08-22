@@ -128,6 +128,10 @@ export function SetupColumn(columnConfig: ColumnConfig, table?: any) {
 		? (columnConfig.writeOnly as any) === true || columnConfig.writeOnly === 'yes'
 		: false;
 
+	column.unique = columnConfig.unique
+		? (columnConfig.unique as any) === true || columnConfig.unique === 'yes'
+		: false;
+
 	column.resultMode = columnConfig.resultMode
 		? columnConfig.resultMode
 		: 'NONE';

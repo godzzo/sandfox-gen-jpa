@@ -27,6 +27,7 @@ export type ColumnConfig = {
 	resultType: string;
 	writeOnly?: string;
 	resultMode?: string;
+	unique?: string;
 	opts?: string; // no-auto
 };
 
@@ -56,6 +57,7 @@ export type ColumnInfo = NameInfo & {
 	tsType: string;
 	writeOnly: boolean;
 	resultMode: string;
+	unique: boolean;
 	options: string[];
 	relName: string;
 	relation: string | TableInfo;

@@ -15,6 +15,7 @@ export function SetColumnAnnotation(column: any): string {
 			: ', nullable=true';
 	more += column.precision ? `, precision=${column.precision}` : '';
 	more += column.scale ? `, precision=${column.scale}` : '';
+	more += column.unique && column.unique === 'yes' ? `, unique=true` : '';
 
 	return `@Column(name="${column.name}"${more})`;
 }
