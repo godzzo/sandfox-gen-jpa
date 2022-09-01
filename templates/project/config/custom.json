@@ -1,10 +1,11 @@
 {
-    "ignore": {
-        "copyAsCustom": true,
-        "masks": [
-            ".*application.properties$",
-            ".*build.gradle.kts$",
-            "/AppController.kt$"
-        ]
-    }
+	"ignore": {
+		"copyAsCustom": true,
+		"masks": [
+			".*application.properties$",
+			".*build.gradle.kts$",
+			"/Application.kt$",
+			"/AppController.kt$"
+		]
+	}
 }

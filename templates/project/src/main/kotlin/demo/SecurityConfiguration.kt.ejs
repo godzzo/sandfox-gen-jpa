@@ -57,7 +57,7 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
 /*FOXB-CFGSEC-ACC*/
 /*FOXE-CFGSEC-ACC*/
             .anyRequest()
-                .authenticated()
+                <%if (options.hints.includes('permit-all')) {%>.permitAll()<%} else {%>.authenticated()<%}%>
             .and()
                 .httpBasic()
     }
