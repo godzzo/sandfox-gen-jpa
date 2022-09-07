@@ -8,6 +8,9 @@ if ( options.hints.includes('postgis') ) { %>
 import org.geolatte.geom.*<% } %><%
 if ( options.hints.includes('envers') && table.audit ) { %>
 import org.hibernate.envers.*<% } %>
+import org.hibernate.annotations.ColumnDefault
+import org.hibernate.annotations.Comment
+import org.hibernate.annotations.Table as HibernateTable
 import <%= options.package %>.group.*
 import <%= options.package %>.entitylistener.<%= table.camelName %>EntityListener
 /*FOXB-IMPORT*/
@@ -17,7 +20,8 @@ import <%= options.package %>.entitylistener.<%= table.camelName %>EntityListene
 if ( options.hints.includes('envers') && table.audit ) {%>
 @Audited<%}%>
 @EntityListeners(<%= table.camelName %>EntityListener::class)
-@Table(name = "<%= table.tableName %>")<%
+@Table(name = "<%= table.tableName %>")
+@HibernateTable(comment = "<%= table.caption %>", appliesTo = "<%= table.tableName %>")<%
 if (table.primaries.length > 1) { %>
 @IdClass(<%= table.camelName %>Id::class)<%
 } %>
@@ -46,8 +50,9 @@ table.columns.forEach((column, idx) => {
 		&& !column.type.startsWith('primary')
 		) { // NORMAL Columns
 %>
-	// <%= column.caption %>
-	<%- column.annotations %>
+	@Comment("<%= column.caption %>")
+	<%- column.annotations %><%if (typeof(column.defaultValue) !== 'undefined' ) { %>
+	@ColumnDefault("<%= column.defaultValue %>")<% } %>
 	<%= (column.group || column.options.includes('override')? 'override ' : '') %>var <%= column.lowerCamelName %>: <%- column.ktType %>? = null
 <%	}
 %><%
@@ -65,7 +70,7 @@ table.columns.forEach((column, idx) => {
 <%} else {%><%
 table.primaries.forEach((column, idx) => {
 %>
-	// <%= column.caption %>
+	@Comment("<%= column.caption %>")
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "<%= column.name + (column.name.endsWith('_id')? '': '_id') %>")
@@ -84,7 +89,7 @@ table.columns.forEach((column, idx) => {
 		&& !(column.name.startsWith(table.owner) && column.relation.name === table.owner && table.nested)
 	) {
 %>
-	// <%= column.caption %>
+	@Comment("<%= column.caption %>")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "<%= column.name + (column.name.endsWith('_id')? '': '_id') %>", nullable=<%= column.needed != 'yes'? 'true': 'false'  %>,
 		foreignKey = ForeignKey(name = "fk_<%= table.name%>_<%= (column.name.endsWith('_id')? column.name.substring(0, column.name.length-3): column.name) %>")
