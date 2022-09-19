@@ -32,9 +32,9 @@ if (options.hints.includes('websocket')) { %>
 
     fun after(type: String, entity: <%= table.camelName %>) {
 /*FOXB-AFTER*/
-/*FOXE-AFTER*/<% 
+/*FOXE-AFTER*/<%
 if (options.hints.includes('websocket')) { %>
-        messageService.send("<%= table.name %>", type, entity.id)<%
+        messageService.send("<%= table.lowerCamelName %>", type, entity.id, entity)<%
 } %>
     }
 

@@ -4,22 +4,37 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Service
+/*FOXB-IMPORT*/
+/*FOXE-IMPORT*/
 
 @Service
 class EntityMessageService(
+/*FOXB-CTOR*/
+/*FOXE-CTOR*/
     @Autowired val messagingTemplate: SimpMessagingTemplate
 ) {
     val log = LoggerFactory.getLogger(EntityMessageService::class.java)
 
-    fun send(name: String, type: String, id: Int) {
+/*FOXB-CODE-BEFORE*/
+/*FOXE-CODE-BEFORE*/
+
+    fun send(name: String, type: String, id: Int, entity: Any) {
         val message = mutableMapOf<String?, Any?>()
 
         message["name"] = name
         message["type"] = type
         message["id"] = id
 
+        // message["data"] = repositoryService.createProjection(entity, name)
+
+/*FOXB-MAP*/
+/*FOXE-MAP*/
+
         log.info("Send: /topic/entity", message)
 
         messagingTemplate.convertAndSend("/topic/entity", message);
     }
+
+/*FOXB-CODE-AFTER*/
+/*FOXE-CODE-AFTER*/
 }
