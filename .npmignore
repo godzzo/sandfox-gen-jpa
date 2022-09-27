@@ -1,10 +1,10 @@
-.vscode
-config
-credentials
-out
-src
+.vscode/**
+config/**
+credentials/**
+out/**
+src/**
 *.log
-tests
-types
+tests/**
+types/**
 jest*
 tslint.json
