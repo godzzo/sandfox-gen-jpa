@@ -54,7 +54,10 @@ table.columns.forEach((column, idx) => {
 %>
 	@Comment("<%= column.caption %>")
 	<%- column.annotations %><%if (typeof(column.defaultValue) !== 'undefined' ) { %>
-	@ColumnDefault("<%- column.defaultValue %>")<% } %>
+	@ColumnDefault("<%- column.defaultValue %>")<% } %><%
+	if (column.type.startsWith('enum.')) {
+	%>
+	@Enumerated(EnumType.<%= column.type.startsWith('enum.ord') ? 'ORDINAL': 'STRING' %>)<% } %>
 	<%= (column.group || column.options.includes('override')? 'override ' : '') %>var <%= column.lowerCamelName %>: <%- column.ktType %>? = null
 <%	}
 %><%
