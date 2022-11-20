@@ -12,7 +12,9 @@ import org.hibernate.annotations.ColumnDefault
 import org.hibernate.annotations.Comment
 import org.hibernate.annotations.Table as HibernateTable
 import <%= options.package %>.group.*
-import <%= options.package %>.entitylistener.<%= table.camelName %>EntityListener
+import <%= options.package %>.entitylistener.<%= table.camelName %>EntityListener<%
+if ( Object.keys(enums).length > 0 ) { %>
+import <%= options.package %>.enum.*<% } %>
 /*FOXB-IMPORT*/
 /*FOXE-IMPORT*/
 

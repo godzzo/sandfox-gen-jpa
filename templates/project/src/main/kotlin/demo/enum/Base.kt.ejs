@@ -1,0 +1,13 @@
+package <%= options.package %>.enum
+
+enum class <%= info.name %> {
+/*FOXB-BEFORE*/
+/*FOXE-BEFORE*/
+
+<% info.values.forEach((value) => { %>
+	<%= value %>,<%
+}); %>
+
+/*FOXB-AFTER*/
+/*FOXE-AFTER*/
+}

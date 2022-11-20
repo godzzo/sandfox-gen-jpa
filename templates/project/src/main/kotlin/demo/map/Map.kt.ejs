@@ -3,7 +3,9 @@ package <%= options.package %>.map
 import java.time.*<%
 if ( options.hints.includes('postgis') ) { %>
 import org.geolatte.geom.*<% } %>
-import <%= options.package %>.domain.*
+import <%= options.package %>.domain.*<%
+if ( Object.keys(enums).length > 0 ) { %>
+import <%= options.package %>.enum.*<% } %>
 
 class <%= table.camelName %>Map {
 <%

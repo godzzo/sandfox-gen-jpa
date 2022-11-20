@@ -9,6 +9,7 @@ import { GenerateAuthentication } from './auth';
 import { GenerateHibernate } from './hibernate';
 import { GenerateMap } from './map';
 import { GenerateWebHandler } from './web-handler';
+import { GenerateEnums } from './enum';
 
 export async function JpaGenerateProject(
 	register: Register,
@@ -19,13 +20,15 @@ export async function JpaGenerateProject(
 ) {
 	await GenerateProject(register, options, project, tables, groups);
 
-	await GenerateTables(register, options, tables, project);
+	const enums = await GenerateEnums(register, options, tables, project);
+
+	await GenerateTables(register, options, tables, project, enums);
 
 	await GenerateGroups(register, options, tables, project, groups);
 
 	await GenerateAuthentication(register, options, project, tables, groups);
 
-	await GenerateMap(register, options, project, tables, groups);
+	await GenerateMap(register, options, project, tables, groups, enums);
 
 	await GenerateHibernate(register, options, project, tables, groups);
 

@@ -2,12 +2,14 @@ import { TableInfo } from '../config';
 import { render } from 'gdut-generate';
 import { MkDir, Warn } from '../lib/common';
 import { Options, Register } from '../proc/common';
+import { EnumSet } from './enum';
 
 export async function GenerateTables(
 	reg: Register,
 	options: Options,
 	tables: TableInfo[],
-	project: string
+	project: string,
+	enums: EnumSet
 ) {
 	for (const table of tables) {
 		if (table.primary) {
@@ -15,6 +17,7 @@ export async function GenerateTables(
 				table,
 				options,
 				project,
+				enums,
 			});
 		} else {
 			Warn(`Could not generate without primary: ${table.name}`);

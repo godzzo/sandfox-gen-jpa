@@ -2,7 +2,9 @@ package <%= options.package %>.projection
 
 import <%= options.package %>.domain.*<%
 if ( options.hints.includes('postgis') ) { %>
-import org.geolatte.geom.*<% } %>
+import org.geolatte.geom.*<% } %><%
+if ( Object.keys(enums).length > 0 ) { %>
+import <%= options.package %>.enum.*<% } %>
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.rest.core.config.Projection
 import java.time.*
