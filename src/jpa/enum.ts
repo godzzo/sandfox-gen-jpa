@@ -45,8 +45,15 @@ export async function GenerateEnums(
 						.flatMap((el) => el.values)
 				),
 			];
+			let ctor = '';
 
-			return { ...en, values };
+			if (values.length > 0 && values[0].includes('(')) {
+				const isStr = values[0].includes('"');
+
+				ctor = isStr ? '(val value: String)' : '(val value: Int)';
+			}
+
+			return { ...en, ctor, values };
 		})
 		.reduce((prev: EnumSet, el) => ({ ...prev, [el.name]: el }), {});
 
