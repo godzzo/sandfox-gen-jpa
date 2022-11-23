@@ -2,7 +2,7 @@ import { TableInfo } from '../config';
 import { render } from 'gdut-generate';
 import { MkDir } from '../lib/common';
 import { Options, Register } from '../proc/common';
-import { EnumSet } from './enum';
+import { EnumSet } from '../data/enum';
 
 export async function GenerateMap(
 	reg: Register,

@@ -166,6 +166,17 @@ function PrepareTsType(column: ColumnConfig): any {
 		if (column.type.startsWith('primary')) {
 			column.tsType = 'number';
 		}
+
+		if (column.type.startsWith('enum.')) {
+			if (!column.ktType) {
+				console.error(
+					'Column ktType node found for enumeration!',
+					column
+				);
+			}
+
+			column.tsType = column.ktType;
+		}
 	}
 }
 

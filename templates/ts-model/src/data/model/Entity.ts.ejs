@@ -1,14 +1,15 @@
-<%	// B:Generate imports
+<%- enumImports.join('\n');
+%><%	// B:Generate imports
 const imports = {};
 
 table.columns.forEach((column, idx) => {
-	if (column.type.startsWith('relation') 
+	if (column.type.startsWith('relation')
 		&& column.relation.camelName !== table.camelName
 		&& !imports[column.relation.camelName]
 	) {
 		imports[column.relation.camelName] = true;
 %>
-import { <%= column.relation.camelName %> } from './<%= column.relation.camelName %>';<% 
+import { <%= column.relation.camelName %> } from './<%= column.relation.camelName %>';<%
 	}
 });
 	// E:Generate imports %>
@@ -19,26 +20,26 @@ export interface <%= table.camelName %>Base {
 /*FOXB-BEGIN*/
 /*FOXE-BEGIN*/
 <%	// B:gen PRIMARY fields
-table.columns.forEach((column, idx) => { 
-	if (column.type.startsWith('primary')) { 
+table.columns.forEach((column, idx) => {
+	if (column.type.startsWith('primary')) {
 %>
 	// <%= column.caption %>
 	<%= column.lowerCamelName %>: <%= column.tsType %>;
 <%
 	}
-}); 
+});
 	// E:gen PRIMARY fields %>
 <%	// B:gen BASIC fields
-table.columns.forEach((column, idx) => { 
-	if (!column.type.startsWith('relation') 
+table.columns.forEach((column, idx) => {
+	if (!column.type.startsWith('relation')
 		&& !column.type.startsWith('primary')
 	) {
 %>
 	// <%= column.caption %>
 	<%= column.lowerCamelName %>: <%= column.tsType %>;
-<%	
+<%
 	}
-}); 
+});
 	// gen BASIC fields %>
 }
 
@@ -46,14 +47,14 @@ export interface <%= table.camelName %> extends <%= table.camelName %>Base {
 /*FOXB-MODEL*/
 /*FOXE-MODEL*/
 <%	// B:gen Relation ONE fields
-table.columns.forEach((column, idx) => { 
-	if (column.type.startsWith('relation.one')) { 
+table.columns.forEach((column, idx) => {
+	if (column.type.startsWith('relation.one')) {
 %>
 	// <%= column.caption %>
 	<%= column.relName %>: <%= column.relation.camelName %><%= column.needed !== 'yes'? ' | null': ''  %>;
 <%
 	}
-}); 
+});
 	// E:gen Relation ONE fields %>
 <%	// B:gen Relation MANY fields
 table.columns.forEach((column, idx) => {
@@ -61,7 +62,7 @@ table.columns.forEach((column, idx) => {
 %>
 	// TODO: Need to handle with function - getter? Default projection not serialize this!
 	<%= column.lowerCamelName %>: <%= column.relation.camelName %>[];
-<% 
+<%
 	}
 });
 	// E:gen Relation MANY fields %>
@@ -71,13 +72,13 @@ export interface <%= table.camelName %>Save extends <%= table.camelName %>Base {
 /*FOXB-SAVE*/
 /*FOXE-SAVE*/
 <%	// B:gen Relation ONE fields
-table.columns.forEach((column, idx) => { 
-	if (column.type.startsWith('relation.one')) { 
+table.columns.forEach((column, idx) => {
+	if (column.type.startsWith('relation.one')) {
 %>
 	// <%= column.caption %>
 	<%= column.relName %>: string<%= column.needed !== 'yes'? ' | null': ''  %>;
 <%
 	}
-}); 
+});
 	// E:gen Relation ONE fields %>
 }
