@@ -37,6 +37,10 @@ export type Register = {
 	copies: CopyData[];
 };
 
+export type PluralDictionary = {
+	irregulars: { single: string; plural: string }[];
+};
+
 export type Options = {
 	command: string;
 	config: string;
@@ -56,6 +60,7 @@ export type Options = {
 	templatePaths: string[];
 	packagePath: string;
 	templateConfig: TemplateConfig;
+	plural?: PluralDictionary;
 };
 
 export type TemplateConfig = { type: string };

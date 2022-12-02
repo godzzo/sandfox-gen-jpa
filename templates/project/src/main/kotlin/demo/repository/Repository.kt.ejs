@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 /*FOXE-IMPORT*/
 
 @Repository
-@RepositoryRestResource(exported = <%= '' + !table.nested %>, excerptProjection = <%= table.camelName %>BaseProjection::class)
+@RepositoryRestResource(exported = <%= '' + !table.nested %>, path = "<%= table.pluralLowerCamelName %>", excerptProjection = <%= table.camelName %>BaseProjection::class)
 @CrossOrigin(methods = [RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE])
 interface <%= table.camelName %>Repository : JpaRepository<<%= table.camelName %>, <%= table.primary.ktType %>>, JpaSpecificationExecutor<<%= table.camelName %>><%
 if ( options.hints.includes('envers') && table.audit ) { %>, RevisionRepository<<%= table.camelName %>, Long, Int><% } %>
