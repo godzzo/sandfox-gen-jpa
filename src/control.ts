@@ -7,7 +7,6 @@ import { Options } from './proc/common';
 import { Log, LogObj, WriteJsonFile, MkDir, ReadJsonFile } from './lib/common';
 import { ProcGenerate } from './proc/proc';
 import { LoadMeta, LoadGSMeta } from './lib/meta';
-import { initPlural } from './data/plural';
 
 export async function Main(options: Options) {
 	if (options.showArgs === 'yes') {
@@ -15,8 +14,6 @@ export async function Main(options: Options) {
 	}
 
 	await PrintLogo(options);
-
-	initPlural(options);
 
 	try {
 		if (options.command === 'info') {

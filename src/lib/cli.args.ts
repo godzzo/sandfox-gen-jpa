@@ -1,7 +1,9 @@
-import CliArgs from 'command-line-args';
-import { Options } from '../proc/common';
-import { ReadJsonFile, FileExists } from './common';
 import path from 'path';
+import CliArgs from 'command-line-args';
+
+import { ReadJsonFile, FileExists } from './common';
+import { Options } from '../proc/common';
+import { initPlural } from '../data/plural';
 
 export async function ParseCliArgs(
 	procPath: string,
@@ -55,6 +57,8 @@ export async function ParseCliArgs(
 	CalculateTemplateLocations(procPath, templateLocations, options);
 
 	options.hints = options.hint.split(',');
+
+	initPlural(options);
 
 	return options;
 }
