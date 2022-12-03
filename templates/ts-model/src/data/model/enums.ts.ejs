@@ -1,0 +1,7 @@
+<%- imports.join('\n'); %>
+
+export const enums = {<%
+names.forEach((name) => { %>
+	"<%= name %>": <%= name %>,<% });
+%>
+};

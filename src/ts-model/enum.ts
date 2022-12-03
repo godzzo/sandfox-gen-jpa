@@ -20,6 +20,8 @@ export async function GenerateEnums(
 
 		await GenerateEnum(info, reg, options, project);
 	}
+
+	await GenerateEnumsTs(enums, reg, options, project);
 }
 
 export function CollectEnumImports(table: TableInfo) {
@@ -61,6 +63,31 @@ async function GenerateEnum(
 		`/src/data/model/Enum.ts.ejs`,
 		{ info, values, options, project },
 		`${out}/src/data/model/enum/${info.name}.ts`,
+		options
+	);
+}
+
+async function GenerateEnumsTs(
+	enums: EnumSet,
+	reg: Register,
+	options: Options,
+	project: string
+) {
+	// console.log('GenerateEnum', JSON.stringify(info, null, 4));
+
+	const out = options.directory;
+
+	const names = Object.keys(enums);
+
+	const imports = names
+		.map((e) => enums[e])
+		.map((e) => `import { ${e.name} } from './${e.name}';`);
+
+	await render(
+		reg,
+		`/src/data/model/enums.ts.ejs`,
+		{ imports, names, options, project },
+		`${out}/src/data/model/enum/enums.ts`,
 		options
 	);
 }
