@@ -1,8 +1,9 @@
-import { TableInfo } from '../config';
+import { TableInfo, ColumnInfo } from '../config';
 import { render } from 'gdut-generate';
 import { MkDir, Warn } from '../lib/common';
 import { Options, Register } from '../proc/common';
 import { EnumSet } from '../data/enum';
+import { parseColumnsForAnnotation } from './annotation';
 
 export async function GenerateTables(
 	reg: Register,
@@ -13,7 +14,7 @@ export async function GenerateTables(
 ) {
 	for (const table of tables) {
 		if (table.primary) {
-			await GenerateTable(reg, options, project, {
+			await GenerateTable(table, reg, options, project, {
 				table,
 				options,
 				project,
@@ -26,6 +27,7 @@ export async function GenerateTables(
 }
 
 async function GenerateTable(
+	table: TableInfo,
 	reg: Register,
 	options: Options,
 	project: string,
@@ -35,6 +37,8 @@ async function GenerateTable(
 
 	const domainPath = `${options.directory}/src/main/kotlin/${options.packagePath}/domain`;
 	await MkDir(domainPath);
+
+	meta.annotations = parseColumnsForAnnotation(table);
 
 	await render(
 		reg,

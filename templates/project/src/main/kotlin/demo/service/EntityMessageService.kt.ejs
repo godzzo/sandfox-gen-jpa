@@ -32,7 +32,7 @@ class EntityMessageService(
 
         log.info("Send: /topic/entity", message)
 
-        messagingTemplate.convertAndSend("/topic/entity", message);
+        messagingTemplate.convertAndSend("/topic/entity", message)
     }
 
 /*FOXB-CODE-AFTER*/
