@@ -38,7 +38,7 @@ async function GenerateTable(
 	const domainPath = `${options.directory}/src/main/kotlin/${options.packagePath}/domain`;
 	await MkDir(domainPath);
 
-	meta.annotations = parseColumnsForAnnotation(table);
+	meta.columnAnnotations = parseColumnsForAnnotation(table);
 
 	await render(
 		reg,

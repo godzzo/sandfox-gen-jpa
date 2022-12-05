@@ -4,12 +4,6 @@ export function parseColumnsForAnnotation(table: TableInfo) {
 	const imports: string[] = [];
 
 	const annotatedCols = table.columns.filter((col) => {
-		if (!col.options) {
-			console.log(
-				`>>> Column ${col.lowerCamelName} does not have annotation!!! <<<`
-			);
-		}
-
 		return (
 			col.options &&
 			col.options.filter((opt) => opt.startsWith('@')).length > 0
@@ -26,7 +20,18 @@ export function parseColumnsForAnnotation(table: TableInfo) {
 		return prev;
 	}, {} as { [key: string]: string[] });
 
-	return { imports, cols: colAnnotations };
+	table.columns.forEach((col) => {
+		if (colAnnotations[col.name]) {
+			const anns = colAnnotations[col.name].join('\n\t');
+			col.annotations += `\n\t${anns}`;
+		}
+	});
+
+	return {
+		imports,
+		allImports: imports.length > 0 ? '\n' + imports.join('\n') : '',
+		cols: colAnnotations,
+	};
 }
 
 function parseColumnAnnotations(option: string, imports: string[]) {
@@ -39,14 +44,17 @@ function parseColumnAnnotations(option: string, imports: string[]) {
 	if (option.includes('.')) {
 		const tags = option.split('.');
 		const annotation = '@' + tags.slice(-1)[0];
-		const importDef = 'import ' + option.replace('@', '');
+		const importDef =
+			'import ' + option.replace('@', '').replace(/\(.*/, '');
 
 		add(importDef);
 
 		return annotation;
 	} else {
-		if (knownAnnotations[option]) {
-			add('import ' + knownAnnotations[option]);
+		const onlyName = option.replace(/\(.*/, '');
+
+		if (knownAnnotations[onlyName]) {
+			add('import ' + knownAnnotations[onlyName]);
 		}
 
 		return option;
