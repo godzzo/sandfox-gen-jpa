@@ -64,4 +64,5 @@ function parseColumnAnnotations(option: string, imports: string[]) {
 const knownAnnotations: { [key: string]: string } = {
 	'@CreationTimestamp': 'org.hibernate.annotations.CreationTimestamp',
 	'@UpdateTimestamp': 'org.hibernate.annotations.UpdateTimestamp',
+	'@ReadOnlyProperty': 'org.springframework.data.annotation.ReadOnlyProperty',
 };
