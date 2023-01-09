@@ -70,27 +70,39 @@ ${rel.relType}: ${rel.srcTbl.name} >> ${rel.trgTbl.name} // ${rel.srcCol.name}
 			);
 
 			if (!found) {
-				const colName = pluralize.plural(rel.srcTbl.name);
-
-				const newCol: any = {
-					name: colName,
-					caption: rel.srcTbl.caption,
-					type: `relation.many.${rel.trgTbl.name}`,
-					relation: rel.srcTbl,
-				};
-
-				SetNames(newCol);
-
-				/*
-				Warn(`Bidirectional relation not Found!
-				rf.srcTbl.name == ${rel.trgTbl.name} &&
-				rf.trgTbl.name == ${rel.srcTbl.name} &&
-				rf.relType == 'many'
-				${colName}
-				`);*/
-
-				rel.trgTbl.columns.push(newCol);
+				setupMultiColumn(rel);
 			}
 		}
 	});
+}
+
+function setupMultiColumn(rel: RelationInfo) {
+	const columns = rel.trgTbl.columns;
+	const colName = pluralize.plural(rel.srcTbl.name);
+
+	const foundColumn = columns.find((el) => el.name === colName);
+
+	const presetColumn = foundColumn ?? {};
+
+	const newCol: any = {
+		...presetColumn,
+		name: colName,
+		caption: rel.srcTbl.caption,
+		type: `relation.many.${rel.trgTbl.name}`,
+		relation: rel.srcTbl,
+	};
+
+	SetNames(newCol);
+
+	/*
+	Warn(`Bidirectional relation not Found!
+	rf.srcTbl.name == ${rel.trgTbl.name} &&
+	rf.trgTbl.name == ${rel.srcTbl.name} &&
+	rf.relType == 'many'
+	${colName}
+	`);*/
+
+	if (!foundColumn) {
+		columns.push(newCol);
+	}
 }
