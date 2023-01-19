@@ -47,7 +47,7 @@ class <%= table.camelName %>FilterController(
 <%
 if ( options.hints.includes('envers') && table.audit ) { %>
 	@RequestMapping(value = ["/{repository}/revision<%= table.pluralCamelName %>"], method = [RequestMethod.GET])
-	fun versions(id : Long, pageable: Pageable, assembler: PagedResourcesAssembler<<%= table.camelName %>Revision>)
+	fun versions(id : <%= table.primary.ktType %>, pageable: Pageable, assembler: PagedResourcesAssembler<<%= table.camelName %>Revision>)
 			: ResponseEntity<PagedModel<EntityModel<<%= table.camelName %>Revision>>> {
 
 		val result = repository.findRevisions(id, pageable)
