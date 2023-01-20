@@ -11,14 +11,14 @@ class AuthUserDetails(val userDetails: User) : UserDetails {
     private val log = LoggerFactory.getLogger(AuthUserDetails::class.java)
 
     override fun getAuthorities(): Collection<GrantedAuthority?> {
-        val role = userDetails.roleType!!.toUpperCase()
+        val role = userDetails.roleType!!.toString().uppercase()
         val roleDef = "ROLE_${role}"
 
         val authorities = mutableListOf<GrantedAuthority>(SimpleGrantedAuthority(roleDef))
 
         log.info("ADD ${role}")
 <%
-tables.forEach((table, idx) => { 
+tables.forEach((table, idx) => {
 %>
         addPrivilegesForRole(authorities, "<%= table.pluralLowerCamelName %>", listOf(role), """<%= table.authority %>""".trimIndent())
 <%
