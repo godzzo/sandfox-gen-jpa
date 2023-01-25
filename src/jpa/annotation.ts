@@ -66,4 +66,6 @@ const knownAnnotations: { [key: string]: string } = {
 	'@UpdateTimestamp': 'org.hibernate.annotations.UpdateTimestamp',
 	'@ReadOnlyProperty': 'org.springframework.data.annotation.ReadOnlyProperty',
 	'@JsonIgnore': 'import com.fasterxml.jackson.annotation.JsonIgnore',
+	// TODO: writeOnly prop - @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	'@JsonProperty': 'com.fasterxml.jackson.annotation.JsonProperty',
 };
