@@ -41,15 +41,25 @@ function parseColumnAnnotations(option: string, imports: string[]) {
 		}
 	};
 
-	if (option.includes('.')) {
-		const tags = option.split('.');
+	let name = option;
+	let parms = '';
+
+	if (option.includes('(')) {
+		const tags = option.split('(');
+
+		name = tags[0];
+
+		parms = '(' + tags.slice(1).join('(');
+	}
+
+	if (name.includes('.')) {
+		const tags = name.split('.');
 		const annotation = '@' + tags.slice(-1)[0];
-		const importDef =
-			'import ' + option.replace('@', '').replace(/\(.*/, '');
+		const importDef = 'import ' + name.replace('@', '').replace(/\(.*/, '');
 
 		add(importDef);
 
-		return annotation;
+		return annotation + parms;
 	} else {
 		const onlyName = option.replace(/\(.*/, '');
 

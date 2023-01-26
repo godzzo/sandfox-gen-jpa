@@ -128,6 +128,14 @@ export function SetupColumn(columnConfig: ColumnConfig, table?: any) {
 		? (columnConfig.writeOnly as any) === true || columnConfig.writeOnly === 'yes'
 		: false;
 
+	column.options = SplitOpts(columnConfig.opts);
+
+	if (column.writeOnly && !columnConfig.opts?.includes('@JsonProperty')) {
+		column.options.push(
+			'@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)'
+		);
+	}
+
 	column.unique = columnConfig.unique
 		? (columnConfig.unique as any) === true || columnConfig.unique === 'yes'
 		: false;
@@ -135,7 +143,6 @@ export function SetupColumn(columnConfig: ColumnConfig, table?: any) {
 	column.resultMode = columnConfig.resultMode
 		? columnConfig.resultMode
 		: 'NONE';
-	column.options = SplitOpts(columnConfig.opts);
 
 	if (columnConfig.type) {
 		if (columnConfig.type.startsWith('primary') && table) {
