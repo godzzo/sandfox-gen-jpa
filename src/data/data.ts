@@ -130,7 +130,11 @@ export function SetupColumn(columnConfig: ColumnConfig, table?: any) {
 
 	column.options = SplitOpts(columnConfig.opts);
 
-	if (column.writeOnly && !columnConfig.opts?.includes('@JsonProperty')) {
+	if (
+		column.writeOnly &&
+		!columnConfig.opts?.includes('@JsonProperty') &&
+		!columnConfig.opts?.includes('@JsonIgnore')
+	) {
 		column.options.push(
 			'@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)'
 		);
