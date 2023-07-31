@@ -119,7 +119,7 @@ table.columns.forEach((column, idx) => {
 		foreignKey = ForeignKey(name = "fk_<%= column.relation.name %>_<%= table.name %>")
 	)
 	var <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf()
-<% } else {%>
+<% } else if (table.name === column.relation.owner) {%>
 	@OneToMany(mappedBy = "<%= table.lowerCamelName %>", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
 	var <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf()
 <%
