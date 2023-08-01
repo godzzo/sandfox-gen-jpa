@@ -83,10 +83,12 @@ if (extraNameTag === '') {
 }
 %><%
 // Az egy (N:1) oldalu relációk getter -ként berakása
-// Revision -nél az összes many relation
+// Revision -nél az összes owned (saját) many relation berakása
 if (extraNameTag === 'Revision') {
 	table.columns.forEach((column, idx) => {
-		if (column.type.startsWith('relation.many')) {
+		if (column.type.startsWith('relation.many')
+			&& (table.name === column.relation.owner)
+		) {
 %>
 	fun get<%= column.camelName %>(): List<<%= column.relation.camelName %>BaseProjection>
 <%

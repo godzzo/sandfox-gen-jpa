@@ -91,8 +91,10 @@ table.primaries.forEach((column, idx) => {
 <%
 table.columns.forEach((column, idx) => {
 %><%
+	const isOwnerColumnAndNested = column.name.startsWith(table.owner) && column.relation.name === table.owner && table.nested
+
 	if (column.type.startsWith('relation.one')
-		&& !(column.name.startsWith(table.owner) && column.relation.name === table.owner && table.nested)
+		&& !isOwnerColumnAndNested
 	) {
 %>
 	@Comment("<%= column.caption %>")
@@ -100,8 +102,9 @@ table.columns.forEach((column, idx) => {
 	@JoinColumn(name = "<%= column.name + (column.name.endsWith('_id')? '': '_id') %>", nullable=<%= column.needed != 'yes'? 'true': 'false'  %>,
 		foreignKey = ForeignKey(name = "fk_<%= table.name%>_<%= (column.name.endsWith('_id')? column.name.substring(0, column.name.length-3): column.name) %>")
 	)<%
-if ( options.hints.includes('envers') && table.audit && !column.relation.audit) { %>
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)<% } %>
+		if ( options.hints.includes('envers') && table.audit && !column.relation.audit) { %>
+	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)<%
+		} %>
 	<%=
 		(column.group || column.options.includes('override')? 'override ' : '')
 	%>var <%= column.relName %>: <%= column.relation.camelName %>? = null
