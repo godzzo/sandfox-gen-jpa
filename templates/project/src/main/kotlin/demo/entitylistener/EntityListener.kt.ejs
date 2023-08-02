@@ -35,19 +35,7 @@ if (options.hints.includes('hibernate-interceptor')) { %>
         return message
     }<%
 } %>
-    fun preSave(type: String, entity: <%= table.camelName %>) {<%
-table.columns.forEach((column, idx) => {
-	if (column.type.startsWith('relation.many')) {
-		if (table.name === column.relation.owner && column.relation.nested) {
-%>
-		entity.<%= column.lowerCamelName %>.forEach {
-			it.<%= table.lowerCamelName %> = entity
-		}
-<%
-		}
-	}
-});
-%>
+    fun preSave(type: String, entity: <%= table.camelName %>) {
 /*FOXB-PRE*/
 /*FOXE-PRE*/
     }
