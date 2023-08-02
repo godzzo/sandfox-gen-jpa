@@ -96,19 +96,26 @@ table.columns.forEach((column, idx) => {
 	if (column.type.startsWith('relation.one')
 		&& !isOwnerColumnAndNested
 	) {
+		const columnNameWithId = column.name + (column.name.endsWith('_id')? '': '_id');
+		const nullable = column.needed != 'yes';
+
+		const columnNameWithoutId = column.name.endsWith('_id')? column.name.substring(0, column.name.length-3): column.name;
+		const foreignKeyName = `fk_${table.name}_${columnNameWithoutId}`;
+
+		const overrideTag = column.group || column.options.includes('override')? 'override ' : '';
+
 %>
 	@Comment("<%= column.caption %>")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "<%= column.name + (column.name.endsWith('_id')? '': '_id') %>", nullable=<%= column.needed != 'yes'? 'true': 'false'  %>,
-		foreignKey = ForeignKey(name = "fk_<%= table.name%>_<%= (column.name.endsWith('_id')? column.name.substring(0, column.name.length-3): column.name) %>")
+	@JoinColumn(name = "<%= columnNameWithId %>", nullable=<%= nullable  %>,
+		foreignKey = ForeignKey(name = "<%= foreignKeyName %>")
 	)<%
 		if ( options.hints.includes('envers') && table.audit && !column.relation.audit) { %>
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)<%
 		} %>
-	<%=
-		(column.group || column.options.includes('override')? 'override ' : '')
-	%>var <%= column.relName %>: <%= column.relation.camelName %>? = null
+	<%= overrideTag %>var <%= column.relName %>: <%= column.relation.camelName %>? = null
 <%
+
 	}
 %><%
 });
@@ -116,13 +123,18 @@ table.columns.forEach((column, idx) => {
 table.columns.forEach((column, idx) => {
 	if (column.type.startsWith('relation.many')) {
 		if (table.name === column.relation.owner && column.relation.nested) {
+
+			const foreignKey = `fk_${column.relation.name}_${table.name}`
+
 %>
 	@OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
 	@JoinColumn(name = "<%= table.lowerCamelName %>_id", nullable=false,
-		foreignKey = ForeignKey(name = "fk_<%= column.relation.name %>_<%= table.name %>")
+		foreignKey = ForeignKey(name = <%= foreignKey %>)
 	)
 	var <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf()
-<% } else if (table.name === column.relation.owner) {%>
+<%
+		} else if (table.name === column.relation.owner) {
+%>
 	@OneToMany(mappedBy = "<%= table.lowerCamelName %>", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
 	var <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf()
 <%
@@ -140,10 +152,12 @@ if (table.primaries.length > 1) {
 data class <%= table.camelName %>Id (
 <%
 table.primaries.forEach((column, idx) => {
-%>	<%if (idx>0) {%>,<%}%>
-	val <%= column.lowerCamelName.endsWith('Id')?
+	const propName = column.lowerCamelName.endsWith('Id')?
 		column.lowerCamelName.substring(0, column.lowerCamelName.length-2):
-		column.lowerCamelName %>: Long = 0
+		column.lowerCamelName;
+
+%>	<%if (idx>0) {%>,<%}%>
+	val <%= propName %>: Long = 0
 <%
 });
 %>
