@@ -91,11 +91,7 @@ table.primaries.forEach((column, idx) => {
 <%
 table.columns.forEach((column, idx) => {
 %><%
-	const isOwnerColumnAndNested = column.name.startsWith(table.owner) && column.relation.name === table.owner && table.nested
-
-	if (column.type.startsWith('relation.one')
-		&& !isOwnerColumnAndNested
-	) {
+	if (column.type.startsWith('relation.one')) {
 		const columnNameWithId = column.name + (column.name.endsWith('_id')? '': '_id');
 		const nullable = column.needed != 'yes';
 
@@ -122,18 +118,7 @@ table.columns.forEach((column, idx) => {
 %><%
 table.columns.forEach((column, idx) => {
 	if (column.type.startsWith('relation.many')) {
-		if (table.name === column.relation.owner && column.relation.nested) {
-
-			const foreignKey = `fk_${column.relation.name}_${table.name}`
-
-%>
-	@OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-	@JoinColumn(name = "<%= table.lowerCamelName %>_id", nullable=false,
-		foreignKey = ForeignKey(name = <%= foreignKey %>)
-	)
-	var <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf()
-<%
-		} else if (table.name === column.relation.owner) {
+		if (table.name === column.relation.owner) {
 %>
 	@OneToMany(mappedBy = "<%= table.lowerCamelName %>", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
 	var <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf()

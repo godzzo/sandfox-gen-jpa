@@ -26,8 +26,7 @@ if (table.primaries.length < 2) {%>
 %>
 <%
 table.columns.forEach((column, idx) => {
-	if (column.type.startsWith('relation.one')
-			&& !(column.relation.name === table.owner && table.nested)) {
+	if (column.type.startsWith('relation.one')) {
 		if (column.relation.owner === table.name) {
 %>
 	var <%= column.relName %>: <%= column.relation.camelName %>? = null<%
@@ -78,8 +77,7 @@ table.columns.forEach((column, idx) => {
 	fun applyROneForObject(item : <%= table.camelName %>Map, entity: <%= table.camelName %>) {
 <%
 table.columns.forEach((column, idx) => {
-	if (column.type.startsWith('relation.one')
-			&& !(column.relation.name === table.owner && table.nested)) {
+	if (column.type.startsWith('relation.one')) {
 		if (column.relation.owner === table.name) {
 %>
 		if (entity.<%= column.relName %> != null) {
@@ -139,8 +137,7 @@ table.columns.forEach((column, idx) => {
 	fun applyROneForMap(item : MutableMap<String, Any?>, entity: <%= table.camelName %>) {
 <%
 table.columns.forEach((column, idx) => {
-	if (column.type.startsWith('relation.one')
-			&& !(column.relation.name === table.owner && table.nested)) {
+	if (column.type.startsWith('relation.one')) {
 		if (column.relation.owner === table.name) {
 %>
 		if (entity.<%= column.relName %> != null) {
