@@ -8,6 +8,7 @@ export type JpaContext = {
 	controller: string;
 	filter: string;
 	util: string;
+	projection: string;
 	test: string;
 	testUtil: string;
 };
@@ -18,16 +19,18 @@ export function PreparePath(options: Options): JpaContext {
 	const service = `${source}/service`;
 	const controller = `${source}/controller`;
 	const filter = `${source}/filter`;
+	const projection = `${source}/projection`;
 	const util = `${source}/util`;
 	const testUtil = `${test}/util`;
 
 	return {
 		source,
-		test,
 		service,
 		controller,
 		filter,
 		util,
+		projection,
+		test,
 		testUtil,
 	};
 }
@@ -102,6 +105,10 @@ export async function GenerateProject(
 			[
 				`/src/main/kotlin/demo/util/BaseUtil.kt.ejs`,
 				`${ctx.util}/BaseUtil.kt`,
+			],
+			[
+				`/src/main/kotlin/demo/projection/IdProjection.kt.ejs`,
+				`${ctx.projection}/IdProjection.kt`,
 			],
 		],
 		'',

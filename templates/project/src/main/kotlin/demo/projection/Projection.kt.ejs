@@ -12,10 +12,14 @@ import javax.persistence.*
 /*FOXB-IMPORT*/
 /*FOXE-IMPORT*/
 
-@Projection(name = "<%= table.camelName %>Projection", types = [<%= table.camelName %>::class])
+@Projection(name = "<%= table.camelName %><%= extraNameTag %>Projection", types = [<%= table.camelName %>::class])
 interface <%= table.camelName %><%= extraNameTag %>Projection {
 	@Value("#{target.<%= table.primary.lowerCamelName %>}")
 	fun get<%= table.primary.camelName %>(): <%= table.primary.ktType %>
+<% if ( options.hints.includes('info') ) { %>
+	@Value("<%= table.camelName %><%= extraNameTag %>Projection")
+	fun getProjectionName(): String<%
+} %>
 
 /*FOXB-BLOCK*/
 /*FOXE-BLOCK*/

@@ -11,6 +11,7 @@ import org.hibernate.envers.*<% } %>
 import org.hibernate.annotations.ColumnDefault
 import org.hibernate.annotations.Comment
 import org.hibernate.annotations.Table as HibernateTable
+import com.fasterxml.jackson.annotation.*
 import <%= options.package %>.group.*
 import <%= options.package %>.entitylistener.<%= table.camelName %>EntityListener<%
 if ( Object.keys(enums).length > 0 ) { %>
@@ -91,6 +92,8 @@ table.primaries.forEach((column, idx) => {
 <%
 table.columns.forEach((column, idx) => {
 %><%
+	const isOwnerColumn = column.name.startsWith(table.owner) && column.relation.name === table.owner
+
 	if (column.type.startsWith('relation.one')) {
 		const columnNameWithId = column.name + (column.name.endsWith('_id')? '': '_id');
 		const nullable = column.needed != 'yes';
@@ -108,7 +111,12 @@ table.columns.forEach((column, idx) => {
 	)<%
 		if ( options.hints.includes('envers') && table.audit && !column.relation.audit) { %>
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)<%
-		} %>
+		} %><%
+		if (isOwnerColumn || column.relation.name === table.name) {
+	%>
+	@JsonBackReference<%
+		}
+	%>
 	<%= overrideTag %>var <%= column.relName %>: <%= column.relation.camelName %>? = null
 <%
 
@@ -121,6 +129,7 @@ table.columns.forEach((column, idx) => {
 		if (table.name === column.relation.owner) {
 %>
 	@OneToMany(mappedBy = "<%= table.lowerCamelName %>", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+	@JsonManagedReference
 	var <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf()
 <%
 		}

@@ -1,0 +1,14 @@
+package <%= options.package %>.projection
+
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.rest.core.config.Projection
+
+@Projection(name = "id", types = [Any::class])
+interface IdProjection {
+	@Value("#{target.id}")
+	fun getId(): Int
+<% if ( options.hints.includes('info') ) { %>
+	@Value("IdProjection")
+	fun getProjectionName(): String<%
+} %>
+}
