@@ -29,11 +29,28 @@ if (options.hints.includes('websocket')) { %>
 table.columns.forEach((column, idx) => {
 	if (column.type.startsWith('relation.many')) {
 		if (table.name === column.relation.owner && column.relation.nested) {
+			const subTable = column.relation;
+// B:1
 %>
 		entity.<%= column.lowerCamelName %>.forEach {
 			it.<%= table.lowerCamelName %> = entity
+<%
+			subTable.columns.filter(
+				(e) => e.type.startsWith('relation.many')
+				&& subTable.name === e.relation.owner && e.relation.nested
+			).forEach((subCol) => {
+// B:2
+%>
+			it.<%= subCol.lowerCamelName %>.forEach { sub ->
+				sub.<%= subTable.lowerCamelName %> = it
+			}
+<%
+// E:2
+			});
+%>
 		}
 <%
+// E:1
 		}
 	}
 });
