@@ -27,7 +27,7 @@ if (table.primaries.length < 2) {%>
 <%
 table.columns.forEach((column, idx) => {
 	if (column.type.startsWith('relation.one')
-			&& !(column.relation.name === table.owner && table.nested)) {
+			&& !(column.relation.name === table.owner)) {
 		if (column.relation.owner === table.name) {
 %>
 	var <%= column.relName %>: <%= column.relation.camelName %>? = null<%
@@ -79,7 +79,7 @@ table.columns.forEach((column, idx) => {
 <%
 table.columns.forEach((column, idx) => {
 	if (column.type.startsWith('relation.one')
-			&& !(column.relation.name === table.owner && table.nested)) {
+			&& !(column.relation.name === table.owner)) {
 		if (column.relation.owner === table.name) {
 %>
 		if (entity.<%= column.relName %> != null) {
@@ -140,7 +140,7 @@ table.columns.forEach((column, idx) => {
 <%
 table.columns.forEach((column, idx) => {
 	if (column.type.startsWith('relation.one')
-			&& !(column.relation.name === table.owner && table.nested)) {
+			&& !(column.relation.name === table.owner)) {
 		if (column.relation.owner === table.name) {
 %>
 		if (entity.<%= column.relName %> != null) {
