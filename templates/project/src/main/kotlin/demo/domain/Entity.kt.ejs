@@ -112,7 +112,7 @@ table.columns.forEach((column, idx) => {
 		if ( options.hints.includes('envers') && table.audit && !column.relation.audit) { %>
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)<%
 		} %><%
-		if (isOwnerColumn || column.relation.name === table.name) {
+		if ((isOwnerColumn || column.relation.name === table.name) && table.nested) {
 	%>
 	@JsonBackReference<%
 		}
@@ -128,8 +128,12 @@ table.columns.forEach((column, idx) => {
 	if (column.type.startsWith('relation.many')) {
 		if (table.name === column.relation.owner) {
 %>
-	@OneToMany(mappedBy = "<%= table.lowerCamelName %>", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-	@JsonManagedReference
+	@OneToMany(mappedBy = "<%= table.lowerCamelName %>", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)<%
+			if (column.relation.nested) {
+%>
+	@JsonManagedReference<%
+			}
+%>
 	var <%= column.lowerCamelName %>: MutableList<<%= column.relation.camelName %>> = mutableListOf()
 <%
 		}
