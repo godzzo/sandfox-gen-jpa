@@ -27,7 +27,7 @@ interface <%= table.camelName %><%= extraNameTag %>Projection {
 table.columns.forEach((column, idx) => {
 	if (!column.type.startsWith('relation')
 		&& !column.type.startsWith('primary')
-		&& !column.writeOnly
+		&& (!column.writeOnly || extraNameTag === 'Revision')
 	) {
 %>
 	// <%= column.caption %>
