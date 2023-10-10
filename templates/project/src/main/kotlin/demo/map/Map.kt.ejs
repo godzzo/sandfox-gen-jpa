@@ -26,9 +26,13 @@ if (table.primaries.length < 2) {%>
 %>
 <%
 table.columns.forEach((column, idx) => {
-	if (column.type.startsWith('relation.one')
-			&& !(column.relation.name === table.owner)) {
-		if (column.relation.owner === table.name) {
+	const isRelationOne = column.type.startsWith('relation.one');
+	const isParentObject = isRelationOne && column.relation.name === table.owner && column.name.startsWith(table.owner);
+
+	if (isRelationOne && !isParentObject) {
+		const isChildProperty = column.relation.owner === table.name;
+
+		if (isChildProperty) {
 %>
 	var <%= column.relName %>: <%= column.relation.camelName %>? = null<%
 		} else {
@@ -78,9 +82,13 @@ table.columns.forEach((column, idx) => {
 	fun applyROneForObject(item : <%= table.camelName %>Map, entity: <%= table.camelName %>) {
 <%
 table.columns.forEach((column, idx) => {
-	if (column.type.startsWith('relation.one')
-			&& !(column.relation.name === table.owner)) {
-		if (column.relation.owner === table.name) {
+	const isRelationOne = column.type.startsWith('relation.one');
+	const isParentObject = isRelationOne && column.relation.name === table.owner && column.name.startsWith(table.owner);
+
+	if (isRelationOne && !isParentObject) {
+		const isChildProperty = column.relation.owner === table.name;
+
+		if (isChildProperty) {
 %>
 		if (entity.<%= column.relName %> != null) {
 			item.<%= column.relName %> = <%= column.relation.camelName %>Mapper.toObject(entity.<%= column.relName %>)
@@ -139,9 +147,13 @@ table.columns.forEach((column, idx) => {
 	fun applyROneForMap(item : MutableMap<String, Any?>, entity: <%= table.camelName %>) {
 <%
 table.columns.forEach((column, idx) => {
-	if (column.type.startsWith('relation.one')
-			&& !(column.relation.name === table.owner)) {
-		if (column.relation.owner === table.name) {
+	const isRelationOne = column.type.startsWith('relation.one');
+	const isParentObject = isRelationOne && column.relation.name === table.owner && column.name.startsWith(table.owner);
+
+	if (isRelationOne && !isParentObject) {
+		const isChildProperty = column.relation.owner === table.name;
+
+		if (isChildProperty) {
 %>
 		if (entity.<%= column.relName %> != null) {
 			item["<%= column.relName %>"] = <%= column.relation.camelName %>Mapper.toObject(entity.<%= column.relName %>)

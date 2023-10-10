@@ -112,6 +112,7 @@ table.columns.forEach((column, idx) => {
 		if ( options.hints.includes('envers') && table.audit && !column.relation.audit) { %>
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)<%
 		} %><%
+		// TODO: review `|| column.relation.name === table.name` it is recursive tree hierarchy handling but still no use case for BackReference
 		if ((isOwnerColumn || column.relation.name === table.name) && table.nested) {
 	%>
 	@JsonBackReference<%
