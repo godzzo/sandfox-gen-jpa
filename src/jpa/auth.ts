@@ -1,7 +1,9 @@
-import { TableInfo } from '../config';
 import { render } from 'gdut-generate';
-import { MkDir } from '../lib/common';
+
+import { TableInfo } from '../config';
 import { Options, Register } from '../proc/common';
+import { MkDir } from '../lib/common';
+import { hasColumn, hasTable } from '../lib/config.utils';
 
 export async function GenerateAuthentication(
 	reg: Register,
@@ -11,9 +13,21 @@ export async function GenerateAuthentication(
 	groups: any
 ) {
 	const out = options.directory;
-	const meta = { options, tables, project, groups, reg };
+	const meta = {
+		options,
+		tables,
+		project,
+		groups,
+		reg,
+
+		hasNick: false,
+		hasRoles: false,
+	};
 
 	if (options.hints.includes('auth')) {
+		meta.hasNick = hasNick(tables);
+		meta.hasRoles = hasTable(tables, 'user_role');
+
 		await render(
 			reg,
 			`/src/main/kotlin/demo/SecurityConfiguration.kt.ejs`,
@@ -42,4 +56,8 @@ export async function GenerateAuthentication(
 			options
 		);
 	}
+}
+
+function hasNick(tables: TableInfo[]) {
+	return hasColumn(tables, 'user', 'nick');
 }

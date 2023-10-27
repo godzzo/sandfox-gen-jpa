@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession
 class UserDetailsServiceImpl : UserDetailsService {
 /*FOXB-INIT*/
 /*FOXE-INIT*/
-<% if (options.hints.includes('auth-roles')) { %>
+<% if (hasRoles) { %>
     @Autowired
     private val session: HttpSession? = null
 <% } %>
@@ -30,16 +30,16 @@ class UserDetailsServiceImpl : UserDetailsService {
 
     @Transactional(readOnly = true)
     @Throws(UsernameNotFoundException::class)
-    override fun loadUserByUsername(email: String): UserDetails {
+    override fun loadUserByUsername(loginName: String): UserDetails {
         val where: Specification<User>? = Specification.where { root, query, cb ->
-            cb.equal(root.get<String>("email"), email)
+            cb.equal(root.get<String>("<%= hasNick? 'nick': 'email' %>"), loginName)
         }
 
         val user: User = userRepository?.findOne(where)?.get()
             ?: throw UsernameNotFoundException("User not found.")
 
-        log.info("loadUserByUsername() : {}", email)
-		<% if (options.hints.includes('auth-roles')) { %>
+        log.info("loadUserByUsername() : {}", loginName)
+		<% if (hasRoles) { %>
         val roles = user.userRoles.filter {
             it.logicRemove == 0
         }.map {
@@ -56,7 +56,7 @@ class UserDetailsServiceImpl : UserDetailsService {
 		<% } %>
 /*FOXB-FOUND*/
 /*FOXE-FOUND*/
-		<% if (!options.hints.includes('auth-roles')) { %>
+		<% if (!hasRoles) { %>
 		val roles = listOf(user.roleType)
 		<% } %>
 		return AuthUserDetails(UserData(
