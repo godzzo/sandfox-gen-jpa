@@ -2,6 +2,7 @@ package <%= options.package %>.service
 
 import <%= options.package %>.domain.User
 import <%= options.package %>.map.AuthUserDetails
+import <%= options.package %>.map.UserData
 import <%= options.package %>.repository.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.criteria.Predicate
+import javax.servlet.http.HttpSession
 /*FOXB-IMPORT*/
 /*FOXE-IMPORT*/
 
@@ -19,9 +21,13 @@ import javax.persistence.criteria.Predicate
 class UserDetailsServiceImpl : UserDetailsService {
 /*FOXB-INIT*/
 /*FOXE-INIT*/
+<% if (options.hints.includes('auth-roles')) { %>
+    @Autowired
+    private val session: HttpSession? = null
+<% } %>
     @Autowired
     private val userRepository: UserRepository? = null
-    
+
     @Transactional(readOnly = true)
     @Throws(UsernameNotFoundException::class)
     override fun loadUserByUsername(email: String): UserDetails {
@@ -33,11 +39,32 @@ class UserDetailsServiceImpl : UserDetailsService {
             ?: throw UsernameNotFoundException("User not found.")
 
         log.info("loadUserByUsername() : {}", email)
+		<% if (options.hints.includes('auth-roles')) { %>
+        val roles = user.userRoles.filter {
+            it.logicRemove == 0
+        }.map {
+            it.roleType.toString()
+        }
 
+        session?.setAttribute("user.id", user.id)
+        session?.setAttribute("user.name", user.name)
+        session?.setAttribute("user.roles", roles)
+
+        if (user.logicRemove != 0) {
+            throw UsernameNotFoundException("This user removed. ($user.name)")
+        }
+		<% } %>
 /*FOXB-FOUND*/
 /*FOXE-FOUND*/
-
-        return AuthUserDetails(user)
+		<% if (!options.hints.includes('auth-roles')) { %>
+		val roles = listOf(user.roleType)
+		<% } %>
+		return AuthUserDetails(UserData(
+			user.id,
+			user.name!!,
+			roles,
+			user.passwd!!,
+		))
     }
 
     companion object {

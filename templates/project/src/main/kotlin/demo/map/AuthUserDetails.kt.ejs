@@ -1,26 +1,31 @@
 package <%= options.package %>.map
 
-import <%= options.package %>.domain.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.slf4j.LoggerFactory
 
 
-class AuthUserDetails(val userDetails: User) : UserDetails {
+data class UserData(
+    val id: Int,
+    val name: String,
+    val roles: List<String>,
+    val passwd: String,
+)
+
+class AuthUserDetails(val userDetails: UserData) : UserDetails {
     private val log = LoggerFactory.getLogger(AuthUserDetails::class.java)
 
     override fun getAuthorities(): Collection<GrantedAuthority?> {
-        val role = userDetails.roleType!!.toString().uppercase()
-        val roleDef = "ROLE_${role}"
+        val roles = userDetails.roles.map { it.uppercase() }
+        val authorities: MutableList<GrantedAuthority> =
+            roles.map{ SimpleGrantedAuthority("ROLE_${it}") }.toMutableList()
 
-        val authorities = mutableListOf<GrantedAuthority>(SimpleGrantedAuthority(roleDef))
-
-        log.info("ADD ${role}")
+        log.info("ADD ${roles}")
 <%
 tables.forEach((table, idx) => {
 %>
-        addPrivilegesForRole(authorities, "<%= table.pluralLowerCamelName %>", listOf(role), """<%= table.authority %>""".trimIndent())
+        addPrivilegesForRole(authorities, "<%= table.pluralLowerCamelName %>", roles, """<%= table.authority %>""".trimIndent())
 <%
 });
 %>
@@ -70,7 +75,7 @@ tables.forEach((table, idx) => {
     }
 
     override fun getUsername(): String {
-        return userDetails.email!!
+        return userDetails.name!!
     }
 
     override fun isAccountNonExpired(): Boolean {
