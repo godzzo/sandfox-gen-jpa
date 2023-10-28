@@ -41,6 +41,10 @@ function parseColumnAnnotations(option: string, imports: string[]) {
 		}
 	};
 
+	if (shortHands[option]) {
+		option = shortHands[option];
+	}
+
 	let name = option;
 	let parms = '';
 
@@ -70,6 +74,11 @@ function parseColumnAnnotations(option: string, imports: string[]) {
 		return option;
 	}
 }
+
+const shortHands: { [key: string]: string } = {
+	'@SdrReadOnly': '@JsonProperty(access = JsonProperty.Access.READ_ONLY)',
+	'@SdrWriteOnly': '@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)',
+};
 
 const knownAnnotations: { [key: string]: string } = {
 	'@CreationTimestamp': 'org.hibernate.annotations.CreationTimestamp',
