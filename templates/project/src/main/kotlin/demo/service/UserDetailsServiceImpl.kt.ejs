@@ -57,7 +57,7 @@ class UserDetailsServiceImpl : UserDetailsService {
 /*FOXB-FOUND*/
 /*FOXE-FOUND*/
 		<% if (!hasRoles) { %>
-		val roles = listOf(user.roleType)
+		val roles = listOf(user.roleType.toString())
 		<% } %>
 		return AuthUserDetails(UserData(
 			user.id,
