@@ -4,6 +4,7 @@ export * from './data/data';
 export * from './data/plural';
 export * from './jpa/jpa';
 export * from './lib/cli.args';
+export * from './lib/config.utils';
 export * from './lib/common';
 export * from './lib/meta';
 export * from './proc/common';
