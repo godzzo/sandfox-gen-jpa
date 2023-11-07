@@ -16,6 +16,7 @@ export async function GenerateTables(
 		if (table.primary) {
 			await GenerateTable(table, reg, options, project, {
 				table,
+				tables,
 				options,
 				project,
 				enums,

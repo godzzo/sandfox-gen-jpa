@@ -13,9 +13,11 @@ object FilterHelper {
 /*FOXB-BLOCK*/
 /*FOXE-BLOCK*/
 
-        fun between(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
-            predicates: MutableList<Predicate>, name: String?,
-            fromValue: ZonedDateTime?, toValue: ZonedDateTime?) {
+    fun between(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?,
+        fromValue: ZonedDateTime?, toValue: ZonedDateTime?
+    ) {
         if (fromValue != null && toValue != null) {
             val startingFrom =  cb.greaterThanOrEqualTo(root.get(name), fromValue)
             val endingAt = cb.lessThanOrEqualTo(root.get(name), toValue)
@@ -28,15 +30,93 @@ object FilterHelper {
         }
     }
 
-    fun inList(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
-                   predicates: MutableList<Predicate>, name: String?, value: String?, isNot: Boolean = false, type: String = "String") {
-        val inClause: In<Any> = cb.`in`(root.get(name))
+    fun between(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?,
+        fromValue: String?, toValue: String?
+    ) {
+        if (!fromValue.isNullOrEmpty() && !toValue.isNullOrEmpty()) {
+            val startDate = ZonedDateTime.parse(fromValue)
+            val endDate = ZonedDateTime.parse(toValue)
 
-        if (value != null) {
+            val startingFrom =  cb.greaterThanOrEqualTo(root.get(name), startDate)
+            val endingAt = cb.lessThanOrEqualTo(root.get(name), endDate)
+
+            predicates.add(cb.and(startingFrom, endingAt))
+        } else if (!fromValue.isNullOrEmpty()) {
+            val startDate = ZonedDateTime.parse(fromValue)
+
+            predicates.add(cb.greaterThanOrEqualTo(root.get(name), startDate))
+        } else if (!toValue.isNullOrEmpty()) {
+            val endDate = ZonedDateTime.parse(toValue)
+
+            predicates.add(cb.lessThanOrEqualTo(root.get(name), endDate))
+        }
+    }
+
+    fun <T : Comparable<T>> range(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?,
+        fromValue: T?, toValue: T?
+    ) {
+        if (fromValue != null && toValue != null) {
+            val startingFrom =  cb.greaterThanOrEqualTo(root.get(name), fromValue)
+            val endingAt = cb.lessThanOrEqualTo(root.get(name), toValue)
+
+            predicates.add(cb.and(startingFrom, endingAt))
+        } else if (fromValue != null) {
+            predicates.add(cb.greaterThanOrEqualTo(root.get(name), fromValue))
+        } else if (toValue != null) {
+            predicates.add(cb.lessThanOrEqualTo(root.get(name), toValue))
+        }
+    }
+
+    fun inList(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?, value: String?,
+        isNot: Boolean = false, type: String = "String"
+    ) {
+        val inClause: In<Any> = if (type !== "Enum") cb.`in`(root.get(name))
+            else cb.`in`(root.get<Enum<*>?>(name).`as`(String::class.java))
+
+        if (!value.isNullOrEmpty()) {
             val values = value.split(',')
 
             for (item in values) {
-                if (type.equals("String")) {
+                if (type == "String" || type == "Enum") {
+                    inClause.value(item)
+                } else {
+                    inClause.value(item.toInt())
+                }
+            }
+
+            predicates.add(if (isNot) inClause.not() else inClause)
+        }
+    }
+
+    fun subEqual(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>,
+        attrName: String?, name: String?, value: Int?
+    ) {
+        if (value != null) {
+            predicates.add(cb.equal(root.join<Any, Any>(attrName).get<Int>(name), value))
+        }
+    }
+
+    fun subInList(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?, value: String?,
+        isNot: Boolean = false, type: String = "String"
+    ) {
+        if (!value.isNullOrEmpty()) {
+            val sq = root.join<Any, Any>(name).get<Int>("id")
+            val inClause: In<Any> = cb.`in`(sq)
+
+            val values = value.split(',')
+
+            for (item in values) {
+                if (type == "String") {
                     inClause.value(item)
                 } else {
                     inClause.value(item.toInt())
@@ -53,7 +133,7 @@ object FilterHelper {
         prs: MutableList<Predicate>, name: String?, value: String?,
         isNot: Boolean = false, type: String = "String"
     ) {
-        if (value != null) {
+        if (!value.isNullOrEmpty()) {
             val sq = query.subquery(entityType)
             val project = sq.from(subEntityType)
             val sqEmp = project.join<X, Y>(joinProp)
@@ -62,7 +142,11 @@ object FilterHelper {
 
             inList(project, query, cb, predicates, name, value, isNot, type)
 
-            sq.select(sqEmp.get("id")).where(cb.and(*predicates.toTypedArray()))
+            // TODO: optional logicRemove check
+            sq.select(sqEmp.get("id")).where(
+                cb.and(*predicates.toTypedArray(),
+                cb.equal(project.get<Int>("logicRemove"), 0))
+            )
 
             val inClause: In<X> = cb.`in`(root) as In<X>
 
@@ -70,57 +154,117 @@ object FilterHelper {
         }
     }
 
-    fun greaterThan(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
-             predicates: MutableList<Predicate>, name: String?, value: Int?) {
+    fun greaterThan(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?, value: Int?
+    ) {
         if (value != null) {
             predicates.add(cb.greaterThan(root.get(name), value))
         }
     }
 
-    fun lessThan(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
-            predicates: MutableList<Predicate>, name: String?, value: Int?) {
+    fun lessThan(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?, value: Int?
+    ) {
         if (value != null) {
             predicates.add(cb.lessThan(root.get(name), value))
         }
     }
 
-    fun like(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
-             predicates: MutableList<Predicate>, name: String?, value: String?) {
+    fun like(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?, value: String?
+    ) {
         if (value != null) {
             predicates.add(cb.like(cb.lower(root.get(name)), "${value.lowercase()}%"))
         }
     }
 
-    fun fullLike(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
-            predicates: MutableList<Predicate>, name: String?, value: String?) {
+    fun fullLike(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?, value: String?
+    ) {
         if (value != null) {
             predicates.add(cb.like(cb.lower(root.get(name)), "%${value.lowercase()}%"))
         }
     }
 
-    fun equal(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
-            predicates: MutableList<Predicate>, name: String?, value: String?) {
+    fun likeEnum(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?, value: String?
+    ) {
+        if (value != null) {
+            predicates.add(cb.like(root.get<Enum<*>?>(name).`as`(String::class.java), "${value}%"))
+        }
+    }
+
+    fun equal(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?, value: String?
+    ) {
         if (value != null) {
             predicates.add(cb.equal(root.get<String>(name), value))
         }
     }
 
-	fun equal(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
-			  predicates: MutableList<Predicate>, name: String?, value: Boolean?) {
-		if (value != null) {
-			predicates.add(cb.equal(root.get<String>(name), value))
-		}
-	}
+    fun isNull(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?, value: Boolean?
+    ) {
+        if (value != null) {
+            if (value == true) {
+                predicates.add(cb.isNull(root.get<String>(name)))
+            } else {
+                predicates.add(cb.isNotNull(root.get<String>(name)))
+            }
+        }
+    }
 
-    fun equal(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
-            predicates: MutableList<Predicate>, name: String?, value: Int?) {
+    fun isNotNull(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?, value: Boolean?
+    ) {
+        if (value != null) {
+            if (value == true) {
+                predicates.add(cb.isNotNull(root.get<String>(name)))
+            } else {
+                predicates.add(cb.isNull(root.get<String>(name)))
+            }
+        }
+    }
+
+    fun equal(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?, value: Boolean?
+    ) {
         if (value != null) {
             predicates.add(cb.equal(root.get<String>(name), value))
         }
     }
 
-    fun equal(root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
-            predicates: MutableList<Predicate>, name: String?, value: Long?) {
+    fun equal(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?, value: Int?
+    ) {
+        if (value != null) {
+            predicates.add(cb.equal(root.get<String>(name), value))
+        }
+    }
+
+    fun equal(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?, value: Long?
+    ) {
+        if (value != null) {
+            predicates.add(cb.equal(root.get<String>(name), value))
+        }
+    }
+
+    fun equal(
+        root: Root<*>, q: CriteriaQuery<*>, cb: CriteriaBuilder,
+        predicates: MutableList<Predicate>, name: String?, value: Enum<*>?
+    ) {
         if (value != null) {
             predicates.add(cb.equal(root.get<String>(name), value))
         }
