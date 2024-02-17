@@ -2,7 +2,7 @@ package <%= options.package %>.group
 
 import <%= options.package %>.domain.*
 import java.time.ZonedDateTime
-import javax.persistence.*<%
+import jakarta.persistence.*<%
 if ( options.hints.includes('postgis') ) { %>
 import org.geolatte.geom.*<% } %>
 import org.springframework.validation.Validator

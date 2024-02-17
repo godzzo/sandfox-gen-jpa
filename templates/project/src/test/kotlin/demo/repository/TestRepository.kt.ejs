@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.data.projection.ProjectionFactory
-import javax.persistence.criteria.Predicate
+import jakarta.persistence.criteria.Predicate
 
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -23,7 +23,7 @@ class Test<%= table.camelName %>Repository(
 ) {
 /*FOXB-INIT*/
 /*FOXE-INIT*/
-    
+
     @Test
     fun testFindById() {
         val entity = repository?.findById(1)

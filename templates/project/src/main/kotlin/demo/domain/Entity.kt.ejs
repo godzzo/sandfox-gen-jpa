@@ -2,8 +2,8 @@ package <%= options.package %>.domain
 
 import java.io.Serializable
 import java.time.*
-import javax.persistence.*
-import javax.validation.constraints.*<%
+import jakarta.persistence.*
+import jakarta.validation.constraints.*<%
 if ( options.hints.includes('postgis') ) { %>
 import org.geolatte.geom.*<% } %><%
 if ( options.hints.includes('envers') && table.audit ) { %>
