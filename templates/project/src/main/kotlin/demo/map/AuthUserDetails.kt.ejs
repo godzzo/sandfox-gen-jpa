@@ -16,7 +16,7 @@ data class UserData(
 class AuthUserDetails(val userDetails: UserData) : UserDetails {
     private val log = LoggerFactory.getLogger(AuthUserDetails::class.java)
 
-    override fun getAuthorities(): Collection<GrantedAuthority?> {
+    override fun getAuthorities(): Collection<GrantedAuthority> {
         val roles = userDetails.roles.map { it.uppercase() }
         val authorities: MutableList<GrantedAuthority> =
             roles.map{ SimpleGrantedAuthority("ROLE_${it}") }.toMutableList()

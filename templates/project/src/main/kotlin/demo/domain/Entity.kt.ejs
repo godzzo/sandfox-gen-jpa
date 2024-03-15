@@ -24,7 +24,7 @@ columnAnnotations.allImports %>
 if ( options.hints.includes('envers') && table.audit ) {%>
 @Audited<%}%>
 @EntityListeners(<%= table.camelName %>EntityListener::class)
-@Table(name = "<%= table.tableName %>")
+@Table(name = "<%= table.tableName %>"<%- uniques? `, ${uniques}`: ''%>)
 @HibernateTable(comment = "<%= table.caption %>", appliesTo = "<%= table.tableName %>")<%
 if (table.primaries.length > 1) { %>
 @IdClass(<%= table.camelName %>Id::class)<%

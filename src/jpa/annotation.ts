@@ -1,5 +1,26 @@
 import { TableInfo } from '../config';
 
+export function parseUniques(table: TableInfo) {
+	table.hints = table.hints ?? {};
+
+	const uniqueKeys = Object.keys(table.hints)
+		.filter((key) => key.startsWith('uk/'))
+		.map((key) => {
+			const columns = key.replace('uk/', '').split(',');
+
+			const name = columns.join('_');
+			const list = columns.join('", "');
+
+			return `UniqueConstraint(name = "uk_${table.name}_${name}", columnNames = [ "${list}" ])`;
+		});
+
+	if (uniqueKeys.length > 0) {
+		return `uniqueConstraints = [ ${uniqueKeys.join(', ')} ]`;
+	} else {
+		return null;
+	}
+}
+
 export function parseColumnsForAnnotation(table: TableInfo) {
 	const imports: string[] = [];
 

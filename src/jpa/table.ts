@@ -1,9 +1,9 @@
-import { TableInfo, ColumnInfo } from '../config';
+import { TableInfo } from '../config';
 import { render } from 'gdut-generate';
 import { MkDir, Warn } from '../lib/common';
 import { Options, Register } from '../proc/common';
 import { EnumSet } from '../data/enum';
-import { parseColumnsForAnnotation } from './annotation';
+import { parseColumnsForAnnotation, parseUniques } from './annotation';
 
 export async function GenerateTables(
 	reg: Register,
@@ -40,6 +40,7 @@ async function GenerateTable(
 	await MkDir(domainPath);
 
 	meta.columnAnnotations = parseColumnsForAnnotation(table);
+	meta.uniques = parseUniques(table);
 
 	await render(
 		reg,
