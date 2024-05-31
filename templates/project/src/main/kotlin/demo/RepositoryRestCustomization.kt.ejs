@@ -19,7 +19,7 @@ for (const groupName in groups) {
     const group = groups[groupName];
 
     echo(`,\n    @Autowired val ${group.lowerCamelName}Create: ${group.camelName}Create,\n`);
-    echo(`    @Autowired val ${group.lowerCamelName}Save: ${group.camelName}Save\n`);
+    echo(`    @Autowired val ${group.lowerCamelName}Save: ${group.camelName}Save`);
 }
 %>) : RepositoryRestConfigurer {
     private val log = LoggerFactory.getLogger(RepositoryRestCustomization::class.java)
@@ -32,11 +32,11 @@ for (const groupName in groups) {
         log.info("configureRepositoryRestConfiguration: CALLED")
 
         config?.projectionConfiguration
-			?.addProjection(IdProjection::class.java)<%
+            ?.addProjection(IdProjection::class.java)<%
 tables.forEach((table, idx) => {
 %>
             ?.addProjection(<%= table.camelName %>Projection::class.java)
-			?.addProjection(<%= table.camelName %>BaseProjection::class.java)<%
+            ?.addProjection(<%= table.camelName %>BaseProjection::class.java)<%
 });%>
 /*FOXB-PROJ*/
 /*FOXE-PROJ*/
