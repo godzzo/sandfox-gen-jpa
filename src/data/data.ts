@@ -121,6 +121,10 @@ export function SetupColumn(columnConfig: ColumnConfig, table?: any) {
 	// column.ktType = column.kttype;
 	column.ktValue = columnConfig.ktType === 'String' ? '""' : '0';
 
+	if (table) {
+		column.type = column.type.replace(/#table/g, table.name);
+	}
+
 	PrepareTsType(columnConfig);
 
 	// prettier-ignore
